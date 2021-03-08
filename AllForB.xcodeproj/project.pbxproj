@@ -21,6 +21,9 @@
 		5C2C1A7D25E8F1ED00CEBE3A /* RootController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5C2C1A7C25E8F1ED00CEBE3A /* RootController.swift */; };
 		5C2C1A9C25E8F54E00CEBE3A /* Extensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5C2C1A9B25E8F54E00CEBE3A /* Extensions.swift */; };
 		5C56C91A25EF3D50000CEF1B /* LoginController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5C56C91925EF3D50000CEF1B /* LoginController.swift */; };
+		5CD64E4B25F5BDC9002CD116 /* LoginInfo.xcdatamodeld in Sources */ = {isa = PBXBuildFile; fileRef = 5CD64E4925F5BDC9002CD116 /* LoginInfo.xcdatamodeld */; };
+		5CD64E8A25F5C93A002CD116 /* LoginInfo+CoreDataClass.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5CD64E8825F5C93A002CD116 /* LoginInfo+CoreDataClass.swift */; };
+		5CD64E8B25F5C93A002CD116 /* LoginInfo+CoreDataProperties.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5CD64E8925F5C93A002CD116 /* LoginInfo+CoreDataProperties.swift */; };
 		640C9C321E0746F635F41360 /* Pods_AllForBTests.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = F102D28939902F2880C58AAA /* Pods_AllForBTests.framework */; };
 		650E0A81DF1256D42003AD96 /* Pods_AllForB.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 950F01FDE4436B4F197CA44D /* Pods_AllForB.framework */; };
 		C3C550991226833299176C01 /* Pods_AllForB_AllForBUITests.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 3911779880935EA9F2E4371F /* Pods_AllForB_AllForBUITests.framework */; };
@@ -66,6 +69,9 @@
 		5C2C1A7C25E8F1ED00CEBE3A /* RootController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RootController.swift; sourceTree = "<group>"; };
 		5C2C1A9B25E8F54E00CEBE3A /* Extensions.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Extensions.swift; sourceTree = "<group>"; };
 		5C56C91925EF3D50000CEF1B /* LoginController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LoginController.swift; sourceTree = "<group>"; };
+		5CD64E4A25F5BDC9002CD116 /* LoginInfo.xcdatamodel */ = {isa = PBXFileReference; lastKnownFileType = wrapper.xcdatamodel; path = LoginInfo.xcdatamodel; sourceTree = "<group>"; };
+		5CD64E8825F5C93A002CD116 /* LoginInfo+CoreDataClass.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = "LoginInfo+CoreDataClass.swift"; sourceTree = "<group>"; };
+		5CD64E8925F5C93A002CD116 /* LoginInfo+CoreDataProperties.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = "LoginInfo+CoreDataProperties.swift"; sourceTree = "<group>"; };
 		69CEB25CEF80934290A27501 /* Pods-AllForB-AllForBUITests.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-AllForB-AllForBUITests.debug.xcconfig"; path = "Target Support Files/Pods-AllForB-AllForBUITests/Pods-AllForB-AllForBUITests.debug.xcconfig"; sourceTree = "<group>"; };
 		84F3A4D0E2BE9472DEA05D76 /* Pods-AllForB.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-AllForB.debug.xcconfig"; path = "Target Support Files/Pods-AllForB/Pods-AllForB.debug.xcconfig"; sourceTree = "<group>"; };
 		950F01FDE4436B4F197CA44D /* Pods_AllForB.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_AllForB.framework; sourceTree = BUILT_PRODUCTS_DIR; };
@@ -116,6 +122,8 @@
 		5C1C929425F0A07D00C0AA9E /* Model */ = {
 			isa = PBXGroup;
 			children = (
+				5CD64E8825F5C93A002CD116 /* LoginInfo+CoreDataClass.swift */,
+				5CD64E8925F5C93A002CD116 /* LoginInfo+CoreDataProperties.swift */,
 				5C1C929525F0A08800C0AA9E /* Model.swift */,
 			);
 			path = Model;
@@ -166,6 +174,7 @@
 				5C2C1A4F25E8F0EE00CEBE3A /* Assets.xcassets */,
 				5C2C1A5125E8F0EE00CEBE3A /* LaunchScreen.storyboard */,
 				5C2C1A5425E8F0EE00CEBE3A /* Info.plist */,
+				5CD64E4925F5BDC9002CD116 /* LoginInfo.xcdatamodeld */,
 			);
 			path = AllForB;
 			sourceTree = "<group>";
@@ -466,11 +475,14 @@
 			files = (
 				5C1C92A725F0BDAB00C0AA9E /* MainPageController.swift in Sources */,
 				5C2C1A9C25E8F54E00CEBE3A /* Extensions.swift in Sources */,
+				5CD64E8A25F5C93A002CD116 /* LoginInfo+CoreDataClass.swift in Sources */,
 				5C2C1A4B25E8F0ED00CEBE3A /* ViewController.swift in Sources */,
+				5CD64E4B25F5BDC9002CD116 /* LoginInfo.xcdatamodeld in Sources */,
 				5C2C1A4725E8F0ED00CEBE3A /* AppDelegate.swift in Sources */,
 				5C56C91A25EF3D50000CEF1B /* LoginController.swift in Sources */,
 				5C2C1A4925E8F0ED00CEBE3A /* SceneDelegate.swift in Sources */,
 				5C2C1A7D25E8F1ED00CEBE3A /* RootController.swift in Sources */,
+				5CD64E8B25F5C93A002CD116 /* LoginInfo+CoreDataProperties.swift in Sources */,
 				5C1C92A225F0B1AB00C0AA9E /* APIService.swift in Sources */,
 				5C1C929625F0A08800C0AA9E /* Model.swift in Sources */,
 			);
@@ -811,6 +823,19 @@
 			defaultConfigurationName = Release;
 		};
 /* End XCConfigurationList section */
+
+/* Begin XCVersionGroup section */
+		5CD64E4925F5BDC9002CD116 /* LoginInfo.xcdatamodeld */ = {
+			isa = XCVersionGroup;
+			children = (
+				5CD64E4A25F5BDC9002CD116 /* LoginInfo.xcdatamodel */,
+			);
+			currentVersion = 5CD64E4A25F5BDC9002CD116 /* LoginInfo.xcdatamodel */;
+			path = LoginInfo.xcdatamodeld;
+			sourceTree = "<group>";
+			versionGroupType = wrapper.xcdatamodel;
+		};
+/* End XCVersionGroup section */
 	};
 	rootObject = 5C2C1A3B25E8F0ED00CEBE3A /* Project object */;
 }

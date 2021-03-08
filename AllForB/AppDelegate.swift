@@ -6,6 +6,7 @@
 //
 
 import UIKit
+import CoreData
 
 @main
 class AppDelegate: UIResponder, UIApplicationDelegate {
@@ -31,6 +32,93 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
         // Use this method to release any resources that were specific to the discarded scenes, as they will not return.
     }
 
+    
+    // MARK: - Core Data stack
 
+    lazy var persistentContainer: NSPersistentContainer = {
+        /*
+         The persistent container for the application. This implementation
+         creates and returns a container, having loaded the store for the
+         application to it. This property is optional since there are legitimate
+         error conditions that could cause the creation of the store to fail.
+        */
+        let container = NSPersistentContainer(name: "LoginInfo")
+        container.loadPersistentStores(completionHandler: { (storeDescription, error) in
+            if let error = error as NSError? {
+                // Replace this implementation with code to handle the error appropriately.
+                // fatalError() causes the application to generate a crash log and terminate. You should not use this function in a shipping application, although it may be useful during development.
+                 
+                /*
+                 Typical reasons for an error here include:
+                 * The parent directory does not exist, cannot be created, or disallows writing.
+                 * The persistent store is not accessible, due to permissions or data protection when the device is locked.
+                 * The device is out of space.
+                 * The store could not be migrated to the current model version.
+                 Check the error message to determine what the actual problem was.
+                 */
+                fatalError("Unresolved error \(error), \(error.userInfo)")
+            }
+        })
+        return container
+    }()
+
+    // MARK: - Core Data Saving support
+
+    func saveContext () {
+        let context = persistentContainer.viewContext
+        if context.hasChanges {
+            do {
+                try context.save()
+            } catch {
+                // Replace this implementation with code to handle the error appropriately.
+                // fatalError() causes the application to generate a crash log and terminate. You should not use this function in a shipping application, although it may be useful during development.
+                let nserror = error as NSError
+                fatalError("Unresolved error \(nserror), \(nserror.userInfo)")
+            }
+        }
+    }
+    
+    func saveLoginDataToCoreData(data: LoginData){
+        
+        let context: NSManagedObjectContext = self.persistentContainer.viewContext
+        let entity: NSEntityDescription = NSEntityDescription.entity(forEntityName: "LoginInfo", in: context)!
+        let mngdObj: NSManagedObject = NSManagedObject(entity: entity, insertInto: context)
+        
+        mngdObj.setValue(data.LoginToken, forKeyPath: "loginToken")
+        mngdObj.setValue(data.UserId, forKeyPath: "userId")
+        mngdObj.setValue(data.AccountId, forKey: "accountId")
+        mngdObj.setValue(data.ExceptionMessage, forKey: "exceptionMessage")
+        mngdObj.setValue(data.PersonId, forKey: "personId")
+        mngdObj.setValue(data.NewExpireDateTime, forKey: "newExpireDateTime")
+        mngdObj.setValue(data.ReturnCode, forKey: "returnCode")
+        mngdObj.setValue(data.ThrownException, forKey: "thrownException")
+                 
+        do {
+            try context.save(); print("LoginData has been saved to CoreData")
+        }
+        catch {
+            print("An error has occurred: \(error.localizedDescription)")
+            
+        }
+    }
+    
+//    public func getLoginData() -> LoginData? {
+//        let context: NSManagedObjectContext = self.persistentContainer.viewContext
+//        let loginDataFetchRequest: NSFetchRequest = NSFetchRequest<NSManagedObject>(entityName: "LoginInfo")
+//        do {
+//            let fetchedData: [Any] = try context.fetch(loginDataFetchRequest)
+//            let loginDataObjectArray = fetchedData as! [NSManagedObject]
+//            let loginDataObject: NSManagedObject = loginDataObjectArray[0]
+//            let loginData: LoginData = LoginData()
+//            loginData.AccountId = loginDataObject.value(forKey: "accountId") as! String
+//            //Set all your values
+//
+//            return loginData
+//
+//        } catch {
+//            //Handle errors
+//            return nil
+//        }
+//    }
 }
 

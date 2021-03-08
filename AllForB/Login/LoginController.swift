@@ -7,6 +7,7 @@
 
 import UIKit
 import Alamofire
+import CoreData
 
 class LoginController: UIViewController {
     
@@ -141,6 +142,9 @@ class LoginController: UIViewController {
         view.backgroundColor = mainBackgroundColor
         setupContainer()
     }
+    
+//    let database = DatabaseHandler()
+    
 }
 
 extension LoginController {
@@ -164,15 +168,20 @@ extension LoginController {
         } else {
             APIService.shared.loginRequest(username: username, password: password, IsLoginSave: IsLoginSave) { (result, error) in
                 if let result = result {
+                    
                     if result["ReturnCode"] as! Int == 0 && result["AccountId"] as! String == username {
                         DispatchQueue.main.async {
                             let mainController  = MainPageController()
+                            mainController.modalPresentationStyle = .fullScreen
                             self.present(mainController, animated: false, completion: nil)
                         }
                     }
                     else {
                         SharedClass.sharedInstance.alert(view: self, title: "Incorrect !", message: "")
                     }
+                    
+                    print("Documents Directory: ", FileManager.default.urls(for: .applicationSupportDirectory, in: .userDomainMask).last ?? "Not Found!")
+
                 }
                 else if let error = error {
                     print("error: \(error.localizedDescription)")
@@ -180,6 +189,9 @@ extension LoginController {
             }
         }
     }
+    
+    
+    
     
     @objc fileprivate func handleSeePassword() {
         if seePasswordStatus {
