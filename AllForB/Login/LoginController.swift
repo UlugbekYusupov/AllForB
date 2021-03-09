@@ -16,7 +16,6 @@ class LoginController: UIViewController {
         iv.clipsToBounds = true
         iv.translatesAutoresizingMaskIntoConstraints = false
         iv.contentMode = .scaleAspectFit
-//        iv.backgroundColor = .red
         return iv
     }()
     
@@ -31,7 +30,6 @@ class LoginController: UIViewController {
         label.textAlignment = .left
         label.textColor = mainColor
         label.text = "아이디"
-//        label.backgroundColor = .yellow
         label.numberOfLines  = 0
         label.font = UIFont(name: "Verdana-Bold", size: 28)
         return label
@@ -65,7 +63,6 @@ class LoginController: UIViewController {
         button.setImage(#imageLiteral(resourceName: "eye-o"), for: .normal)
         button.clipsToBounds = true
         button.contentMode = .scaleAspectFit
-//        button.backgroundColor = .red'
         button.addTarget(self, action: #selector(handleSeePassword), for: .touchUpInside)
         return button
     }()
@@ -74,7 +71,6 @@ class LoginController: UIViewController {
         let iv = UIImageView(image: #imageLiteral(resourceName: "lock"))
         iv.clipsToBounds = true
         iv.contentMode = .scaleAspectFit
-//        iv.backgroundColor = .red
         return iv
     }()
     
@@ -142,9 +138,6 @@ class LoginController: UIViewController {
         view.backgroundColor = mainBackgroundColor
         setupContainer()
     }
-    
-//    let database = DatabaseHandler()
-    
 }
 
 extension LoginController {
@@ -154,6 +147,17 @@ extension LoginController {
     }
     override open var shouldAutorotate: Bool {
         return false
+    }
+    
+    fileprivate func handleLoginResponse(_ username: String, _ password: String, _ IsLoginSave: Bool) {
+        APIService.shared.loginRequest(username: username, password: password, IsLoginSave: IsLoginSave) { (result, error) in
+            if result != nil {
+                self.checkReturnCode()
+            }
+            else if let error = error {
+                print("error: \(error.localizedDescription)")
+            }
+        }
     }
     
     @objc fileprivate func handleLogin() {
@@ -166,32 +170,9 @@ extension LoginController {
             SharedClass.sharedInstance.alert(view: self, title: "Please enter", message: "")
             return
         } else {
-            APIService.shared.loginRequest(username: username, password: password, IsLoginSave: IsLoginSave) { (result, error) in
-                if let result = result {
-                    
-                    if result["ReturnCode"] as! Int == 0 && result["AccountId"] as! String == username {
-                        DispatchQueue.main.async {
-                            let mainController  = MainPageController()
-                            mainController.modalPresentationStyle = .fullScreen
-                            self.present(mainController, animated: false, completion: nil)
-                        }
-                    }
-                    else {
-                        SharedClass.sharedInstance.alert(view: self, title: "Incorrect !", message: "")
-                    }
-                    
-                    print("Documents Directory: ", FileManager.default.urls(for: .applicationSupportDirectory, in: .userDomainMask).last ?? "Not Found!")
-
-                }
-                else if let error = error {
-                    print("error: \(error.localizedDescription)")
-                }
-            }
+            handleLoginResponse(username, password, IsLoginSave)
         }
     }
-    
-    
-    
     
     @objc fileprivate func handleSeePassword() {
         if seePasswordStatus {
@@ -204,6 +185,20 @@ extension LoginController {
             seePasswordStatus = true
             yourPasswordTextField.isSecureTextEntry = true
         }
+    }
+    
+    
+    func checkReturnCode(){
+        let returnCode = application.getReturnCode()!
+        if returnCode == 0 {
+            DispatchQueue.main.async {
+                let mainController  = MainPageController()
+                mainController.modalPresentationStyle = .fullScreen
+                self.present(mainController, animated: false, completion: nil)
+            }
+         } else {
+            SharedClass.sharedInstance.alert(view: self, title: "Incorrect !", message: "")
+         }
     }
 }
 

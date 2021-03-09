@@ -102,8 +102,15 @@ class RootController: UIViewController {
     }
     
     @objc fileprivate func handleLogin() {
-        let login = LoginController()
-        login.modalPresentationStyle = .fullScreen
-        present(login, animated: true, completion: nil)
+        if application.getCurrentLoginToken() == nil {
+            let login = LoginController()
+            login.modalPresentationStyle = .fullScreen
+            present(login, animated: true, completion: nil)
+        }
+        else {
+            let mainPageController = MainPageController()
+            mainPageController.modalPresentationStyle = .fullScreen
+            present(mainPageController, animated: true, completion: nil)
+        }
     }
 }

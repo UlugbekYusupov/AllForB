@@ -151,9 +151,8 @@ extension UIImage {
 
 let mainBackgroundColor: UIColor = .init(red: 16/244, green: 24/244, blue: 32/244, alpha: 1)
 let mainColor: UIColor = .init(red: 241/244, green: 170/244, blue: 76/244, alpha: 1)
+let application = (UIApplication.shared.delegate as! AppDelegate)
 
-
-import UIKit
 class SharedClass: NSObject {//This is shared class
 static let sharedInstance = SharedClass()
 
@@ -171,3 +170,18 @@ static let sharedInstance = SharedClass()
     private override init() {
     }
 }
+
+extension Date {
+    static func getFormattedDate(string: String , formatter:String) -> String{
+        let dateFormatterGet = DateFormatter()
+        dateFormatterGet.dateFormat = "yyyy-MM-dd'T'HH:mm:ssZ"
+
+        let dateFormatterPrint = DateFormatter()
+        dateFormatterPrint.dateFormat = "MMM,dd,yyyy"
+
+        let date: Date? = dateFormatterGet.date(from: string)
+        print("Date",dateFormatterPrint.string(from: date!)) // Feb 01,2018
+        return dateFormatterPrint.string(from: date!);
+    }
+}
+// 2021-03-09T11:44:04.523

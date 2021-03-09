@@ -7,7 +7,7 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
-		5C1C929625F0A08800C0AA9E /* Model.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5C1C929525F0A08800C0AA9E /* Model.swift */; };
+		5C1C929625F0A08800C0AA9E /* LoginModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5C1C929525F0A08800C0AA9E /* LoginModel.swift */; };
 		5C1C92A225F0B1AB00C0AA9E /* APIService.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5C1C92A125F0B1AB00C0AA9E /* APIService.swift */; };
 		5C1C92A725F0BDAB00C0AA9E /* MainPageController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5C1C92A625F0BDAB00C0AA9E /* MainPageController.swift */; };
 		5C2C1A4725E8F0ED00CEBE3A /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5C2C1A4625E8F0ED00CEBE3A /* AppDelegate.swift */; };
@@ -21,6 +21,15 @@
 		5C2C1A7D25E8F1ED00CEBE3A /* RootController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5C2C1A7C25E8F1ED00CEBE3A /* RootController.swift */; };
 		5C2C1A9C25E8F54E00CEBE3A /* Extensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5C2C1A9B25E8F54E00CEBE3A /* Extensions.swift */; };
 		5C56C91A25EF3D50000CEF1B /* LoginController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5C56C91925EF3D50000CEF1B /* LoginController.swift */; };
+		5CC64BDB25F710A400E1FF25 /* QRCodeModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5CC64BDA25F710A400E1FF25 /* QRCodeModel.swift */; };
+		5CC64BE125F71BFA00E1FF25 /* MenuLauncher.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5CC64BE025F71BFA00E1FF25 /* MenuLauncher.swift */; };
+		5CC64BF325F7469700E1FF25 /* MenuCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5CC64BF225F7469700E1FF25 /* MenuCell.swift */; };
+		5CC64BF925F770A600E1FF25 /* HomeController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5CC64BF825F770A600E1FF25 /* HomeController.swift */; };
+		5CC64C0125F770B000E1FF25 /* ProfileController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5CC64C0025F770B000E1FF25 /* ProfileController.swift */; };
+		5CC64C0625F770CA00E1FF25 /* CalendarController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5CC64C0525F770CA00E1FF25 /* CalendarController.swift */; };
+		5CC64C0B25F770E300E1FF25 /* InOutAttendanceController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5CC64C0A25F770E300E1FF25 /* InOutAttendanceController.swift */; };
+		5CC64C1025F770EF00E1FF25 /* SettingsController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5CC64C0F25F770EF00E1FF25 /* SettingsController.swift */; };
+		5CC64C1525F7711000E1FF25 /* ContainerController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5CC64C1425F7711000E1FF25 /* ContainerController.swift */; };
 		5CD64E4B25F5BDC9002CD116 /* LoginInfo.xcdatamodeld in Sources */ = {isa = PBXBuildFile; fileRef = 5CD64E4925F5BDC9002CD116 /* LoginInfo.xcdatamodeld */; };
 		5CD64E8A25F5C93A002CD116 /* LoginInfo+CoreDataClass.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5CD64E8825F5C93A002CD116 /* LoginInfo+CoreDataClass.swift */; };
 		5CD64E8B25F5C93A002CD116 /* LoginInfo+CoreDataProperties.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5CD64E8925F5C93A002CD116 /* LoginInfo+CoreDataProperties.swift */; };
@@ -49,7 +58,7 @@
 /* Begin PBXFileReference section */
 		003E5956F369BF0786F63144 /* Pods-AllForB-AllForBUITests.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-AllForB-AllForBUITests.release.xcconfig"; path = "Target Support Files/Pods-AllForB-AllForBUITests/Pods-AllForB-AllForBUITests.release.xcconfig"; sourceTree = "<group>"; };
 		3911779880935EA9F2E4371F /* Pods_AllForB_AllForBUITests.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_AllForB_AllForBUITests.framework; sourceTree = BUILT_PRODUCTS_DIR; };
-		5C1C929525F0A08800C0AA9E /* Model.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Model.swift; sourceTree = "<group>"; };
+		5C1C929525F0A08800C0AA9E /* LoginModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LoginModel.swift; sourceTree = "<group>"; };
 		5C1C92A125F0B1AB00C0AA9E /* APIService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = APIService.swift; sourceTree = "<group>"; };
 		5C1C92A625F0BDAB00C0AA9E /* MainPageController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MainPageController.swift; sourceTree = "<group>"; };
 		5C2C1A4325E8F0ED00CEBE3A /* AllForB.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = AllForB.app; sourceTree = BUILT_PRODUCTS_DIR; };
@@ -69,6 +78,15 @@
 		5C2C1A7C25E8F1ED00CEBE3A /* RootController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RootController.swift; sourceTree = "<group>"; };
 		5C2C1A9B25E8F54E00CEBE3A /* Extensions.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Extensions.swift; sourceTree = "<group>"; };
 		5C56C91925EF3D50000CEF1B /* LoginController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LoginController.swift; sourceTree = "<group>"; };
+		5CC64BDA25F710A400E1FF25 /* QRCodeModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = QRCodeModel.swift; sourceTree = "<group>"; };
+		5CC64BE025F71BFA00E1FF25 /* MenuLauncher.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MenuLauncher.swift; sourceTree = "<group>"; };
+		5CC64BF225F7469700E1FF25 /* MenuCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MenuCell.swift; sourceTree = "<group>"; };
+		5CC64BF825F770A600E1FF25 /* HomeController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HomeController.swift; sourceTree = "<group>"; };
+		5CC64C0025F770B000E1FF25 /* ProfileController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ProfileController.swift; sourceTree = "<group>"; };
+		5CC64C0525F770CA00E1FF25 /* CalendarController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CalendarController.swift; sourceTree = "<group>"; };
+		5CC64C0A25F770E300E1FF25 /* InOutAttendanceController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = InOutAttendanceController.swift; sourceTree = "<group>"; };
+		5CC64C0F25F770EF00E1FF25 /* SettingsController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SettingsController.swift; sourceTree = "<group>"; };
+		5CC64C1425F7711000E1FF25 /* ContainerController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ContainerController.swift; sourceTree = "<group>"; };
 		5CD64E4A25F5BDC9002CD116 /* LoginInfo.xcdatamodel */ = {isa = PBXFileReference; lastKnownFileType = wrapper.xcdatamodel; path = LoginInfo.xcdatamodel; sourceTree = "<group>"; };
 		5CD64E8825F5C93A002CD116 /* LoginInfo+CoreDataClass.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = "LoginInfo+CoreDataClass.swift"; sourceTree = "<group>"; };
 		5CD64E8925F5C93A002CD116 /* LoginInfo+CoreDataProperties.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = "LoginInfo+CoreDataProperties.swift"; sourceTree = "<group>"; };
@@ -122,9 +140,8 @@
 		5C1C929425F0A07D00C0AA9E /* Model */ = {
 			isa = PBXGroup;
 			children = (
-				5CD64E8825F5C93A002CD116 /* LoginInfo+CoreDataClass.swift */,
-				5CD64E8925F5C93A002CD116 /* LoginInfo+CoreDataProperties.swift */,
-				5C1C929525F0A08800C0AA9E /* Model.swift */,
+				5CC64BD925F7109000E1FF25 /* QR Code Model */,
+				5CE4137925F708B900D7A26F /* Login Model */,
 			);
 			path = Model;
 			sourceTree = "<group>";
@@ -162,6 +179,7 @@
 		5C2C1A4525E8F0ED00CEBE3A /* AllForB */ = {
 			isa = PBXGroup;
 			children = (
+				5CC64BDF25F71BE300E1FF25 /* Menu */,
 				5C1C92A025F0B19D00C0AA9E /* APIService */,
 				5C1C929425F0A07D00C0AA9E /* Model */,
 				5C2C1AA425E8F5C800CEBE3A /* Login */,
@@ -174,7 +192,6 @@
 				5C2C1A4F25E8F0EE00CEBE3A /* Assets.xcassets */,
 				5C2C1A5125E8F0EE00CEBE3A /* LaunchScreen.storyboard */,
 				5C2C1A5425E8F0EE00CEBE3A /* Info.plist */,
-				5CD64E4925F5BDC9002CD116 /* LoginInfo.xcdatamodeld */,
 			);
 			path = AllForB;
 			sourceTree = "<group>";
@@ -220,6 +237,48 @@
 				5C56C91925EF3D50000CEF1B /* LoginController.swift */,
 			);
 			path = Login;
+			sourceTree = "<group>";
+		};
+		5CC64BD925F7109000E1FF25 /* QR Code Model */ = {
+			isa = PBXGroup;
+			children = (
+				5CC64BDA25F710A400E1FF25 /* QRCodeModel.swift */,
+			);
+			path = "QR Code Model";
+			sourceTree = "<group>";
+		};
+		5CC64BDF25F71BE300E1FF25 /* Menu */ = {
+			isa = PBXGroup;
+			children = (
+				5CC64BE025F71BFA00E1FF25 /* MenuLauncher.swift */,
+				5CC64BF225F7469700E1FF25 /* MenuCell.swift */,
+				5CC64BF725F7708D00E1FF25 /* MenuItems */,
+			);
+			path = Menu;
+			sourceTree = "<group>";
+		};
+		5CC64BF725F7708D00E1FF25 /* MenuItems */ = {
+			isa = PBXGroup;
+			children = (
+				5CC64BF825F770A600E1FF25 /* HomeController.swift */,
+				5CC64C0025F770B000E1FF25 /* ProfileController.swift */,
+				5CC64C0525F770CA00E1FF25 /* CalendarController.swift */,
+				5CC64C0A25F770E300E1FF25 /* InOutAttendanceController.swift */,
+				5CC64C0F25F770EF00E1FF25 /* SettingsController.swift */,
+				5CC64C1425F7711000E1FF25 /* ContainerController.swift */,
+			);
+			path = MenuItems;
+			sourceTree = "<group>";
+		};
+		5CE4137925F708B900D7A26F /* Login Model */ = {
+			isa = PBXGroup;
+			children = (
+				5CD64E8825F5C93A002CD116 /* LoginInfo+CoreDataClass.swift */,
+				5CD64E8925F5C93A002CD116 /* LoginInfo+CoreDataProperties.swift */,
+				5CD64E4925F5BDC9002CD116 /* LoginInfo.xcdatamodeld */,
+				5C1C929525F0A08800C0AA9E /* LoginModel.swift */,
+			);
+			path = "Login Model";
 			sourceTree = "<group>";
 		};
 		9864BED9DB2DFE48DADF3D97 /* Pods */ = {
@@ -475,16 +534,25 @@
 			files = (
 				5C1C92A725F0BDAB00C0AA9E /* MainPageController.swift in Sources */,
 				5C2C1A9C25E8F54E00CEBE3A /* Extensions.swift in Sources */,
+				5CC64BDB25F710A400E1FF25 /* QRCodeModel.swift in Sources */,
 				5CD64E8A25F5C93A002CD116 /* LoginInfo+CoreDataClass.swift in Sources */,
 				5C2C1A4B25E8F0ED00CEBE3A /* ViewController.swift in Sources */,
 				5CD64E4B25F5BDC9002CD116 /* LoginInfo.xcdatamodeld in Sources */,
 				5C2C1A4725E8F0ED00CEBE3A /* AppDelegate.swift in Sources */,
+				5CC64C0625F770CA00E1FF25 /* CalendarController.swift in Sources */,
 				5C56C91A25EF3D50000CEF1B /* LoginController.swift in Sources */,
 				5C2C1A4925E8F0ED00CEBE3A /* SceneDelegate.swift in Sources */,
 				5C2C1A7D25E8F1ED00CEBE3A /* RootController.swift in Sources */,
+				5CC64C1525F7711000E1FF25 /* ContainerController.swift in Sources */,
+				5CC64BE125F71BFA00E1FF25 /* MenuLauncher.swift in Sources */,
+				5CC64BF325F7469700E1FF25 /* MenuCell.swift in Sources */,
+				5CC64C0B25F770E300E1FF25 /* InOutAttendanceController.swift in Sources */,
+				5CC64BF925F770A600E1FF25 /* HomeController.swift in Sources */,
 				5CD64E8B25F5C93A002CD116 /* LoginInfo+CoreDataProperties.swift in Sources */,
+				5CC64C1025F770EF00E1FF25 /* SettingsController.swift in Sources */,
 				5C1C92A225F0B1AB00C0AA9E /* APIService.swift in Sources */,
-				5C1C929625F0A08800C0AA9E /* Model.swift in Sources */,
+				5C1C929625F0A08800C0AA9E /* LoginModel.swift in Sources */,
+				5CC64C0125F770B000E1FF25 /* ProfileController.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

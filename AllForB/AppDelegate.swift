@@ -36,26 +36,9 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
     // MARK: - Core Data stack
 
     lazy var persistentContainer: NSPersistentContainer = {
-        /*
-         The persistent container for the application. This implementation
-         creates and returns a container, having loaded the store for the
-         application to it. This property is optional since there are legitimate
-         error conditions that could cause the creation of the store to fail.
-        */
         let container = NSPersistentContainer(name: "LoginInfo")
         container.loadPersistentStores(completionHandler: { (storeDescription, error) in
             if let error = error as NSError? {
-                // Replace this implementation with code to handle the error appropriately.
-                // fatalError() causes the application to generate a crash log and terminate. You should not use this function in a shipping application, although it may be useful during development.
-                 
-                /*
-                 Typical reasons for an error here include:
-                 * The parent directory does not exist, cannot be created, or disallows writing.
-                 * The persistent store is not accessible, due to permissions or data protection when the device is locked.
-                 * The device is out of space.
-                 * The store could not be migrated to the current model version.
-                 Check the error message to determine what the actual problem was.
-                 */
                 fatalError("Unresolved error \(error), \(error.userInfo)")
             }
         })
@@ -70,8 +53,6 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
             do {
                 try context.save()
             } catch {
-                // Replace this implementation with code to handle the error appropriately.
-                // fatalError() causes the application to generate a crash log and terminate. You should not use this function in a shipping application, although it may be useful during development.
                 let nserror = error as NSError
                 fatalError("Unresolved error \(nserror), \(nserror.userInfo)")
             }
@@ -100,25 +81,64 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
             print("An error has occurred: \(error.localizedDescription)")
             
         }
+        let currentLoginToken = data.LoginToken
+        mngdObj.setValue(currentLoginToken, forKeyPath: "loginToken")
+        self.saveCurrentLoginToken(currentLoginToken!)
     }
     
-//    public func getLoginData() -> LoginData? {
-//        let context: NSManagedObjectContext = self.persistentContainer.viewContext
-//        let loginDataFetchRequest: NSFetchRequest = NSFetchRequest<NSManagedObject>(entityName: "LoginInfo")
-//        do {
-//            let fetchedData: [Any] = try context.fetch(loginDataFetchRequest)
-//            let loginDataObjectArray = fetchedData as! [NSManagedObject]
-//            let loginDataObject: NSManagedObject = loginDataObjectArray[0]
-//            let loginData: LoginData = LoginData()
-//            loginData.AccountId = loginDataObject.value(forKey: "accountId") as! String
-//            //Set all your values
-//
-//            return loginData
-//
-//        } catch {
-//            //Handle errors
-//            return nil
-//        }
-//    }
+    func saveCurrentLoginToken(_ token:String){
+        let defaults = UserDefaults.standard
+        defaults.set(token, forKey: "currentLoginToken")
+        defaults.synchronize()
+        print("Successfully saved the current login token...")
+    }
+    
+    func getCurrentLoginToken() -> String? {
+        let defaults = UserDefaults.standard
+        let token = defaults.object(forKey: "currentLoginToken") as? String
+        if token != nil {
+            return token!
+        }
+        else {
+            return nil
+        }
+    }
+    
+    func getAnyValueFromCoreData(_ loginToken:String,_ key:String) -> Any? { // key = data you want to retrieve the value of
+
+        guard let appDel = UIApplication.shared.delegate as? AppDelegate else { return nil }
+        let context = appDel.persistentContainer.viewContext
+        let fetchReq = NSFetchRequest<NSManagedObject>(entityName: "LoginInfo")
+        fetchReq.predicate = NSPredicate(format: "loginToken==%@",loginToken)
+        
+        var anyVal: Any?
+        
+        do {
+            let result = try context.fetch(fetchReq)
+            for data in result {
+                let val = data.value(forKey: key)
+                if val != nil {
+                    anyVal = val!
+                }
+                else {
+                    anyVal = nil
+                }
+            }
+        }
+        
+        catch {
+            anyVal = nil // Set value to nil in case of error (not always recommended)
+            print("An error has occurred: \(error.localizedDescription)")
+        }
+        return anyVal
+    }
+    
+    func getReturnCode() -> Int? {
+         let token = getCurrentLoginToken() // retrieve from UserDefaults
+        print(token)
+         let returnCode = getAnyValueFromCoreData(token!,"returnCode") as? Int
+         return returnCode
+    }
+
 }
 

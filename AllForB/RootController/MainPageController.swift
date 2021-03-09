@@ -70,11 +70,10 @@ class MainPageController: UIViewController {
     
     let qrImageView: UIImageView = {
         let iv = UIImageView()
-//        iv.backgroundColor = .red
         return iv
     }()
     
-    let segmentItems = ["Chulgin", "Tvegin"]
+    let segmentItems = ["출근", "퇴근"]
     lazy var chulTeginSegmentControl: UISegmentedControl = {
         let segment = UISegmentedControl(items: segmentItems)
         segment.selectedSegmentIndex = 0
@@ -117,15 +116,27 @@ class MainPageController: UIViewController {
         return button
     }()
     
+    var time = 0
+    let menuLauncher = MenuLauncher()
+    let token = application.getCurrentLoginToken()
+    var userId: Int?
     
     override func viewDidLoad() {
         super.viewDidLoad()
         view.backgroundColor = mainBackgroundColor
         setupViews()
+        
+        userId = (application.getAnyValueFromCoreData(token!, "userId") as! Int)
+        handleCreateQRCode(userId!, 1, "122234234535", 3)
+        
     }
 }
 
+
+
 extension MainPageController {
+    
+    // Setup views
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
         
@@ -154,6 +165,7 @@ extension MainPageController {
         qrLabel.anchor(top: nil, leading: nil, bottom: headerView.bottomAnchor, trailing: nil, padding: .init(top: 0, left: 0, bottom: 0, right: 0), size: CGSize(width: 150, height: 50))
         headerView.addSubview(menuButton)
         menuButton.anchor(top: nil, leading: headerView.leadingAnchor, bottom: headerView.bottomAnchor, trailing: nil, padding: .init(top: 0, left: 15, bottom: 12, right: 0), size: CGSize(width: 25, height: 25))
+        menuButton.addTarget(self, action: #selector(handleMenuButton), for: .touchUpInside)
         
         footerView.addSubview(startButton)
         startButton.centerXInSuperview()
@@ -164,9 +176,6 @@ extension MainPageController {
     fileprivate func setupContainerView() {
         containerView.addSubview(qrImageView)
         qrImageView.anchor(top: containerView.topAnchor, leading: containerView.leadingAnchor, bottom: nil, trailing: containerView.trailingAnchor, padding: .init(top: 50, left: 100, bottom: 0, right: 100), size: CGSize(width: 0, height: view.frame.size.width / 2))
-        
-        qrImageView.image = generateQRCode(qrString: "Ulugbek")
-        
         containerView.addSubview(timeFinishedLabel)
         timeFinishedLabel.anchor(top: qrImageView.bottomAnchor, leading: qrImageView.leadingAnchor, bottom: nil, trailing: qrImageView.trailingAnchor,size: CGSize(width: 0, height: 50))
         containerView.addSubview(chulTeginSegmentControl)
@@ -178,17 +187,46 @@ extension MainPageController {
         
         containerView.addSubview(qrCodeButton)
         qrCodeButton.anchor(top: nil, leading: footerLine.leadingAnchor, bottom: footerLine.topAnchor, trailing: footerLine.trailingAnchor,padding: .init(top: 0, left: 100, bottom: 100, right: 100), size: CGSize(width: 0, height: 40))
+        qrCodeButton.addTarget(self, action: #selector(handleQRCodeButton), for: .touchUpInside)
     }
+}
+
+extension MainPageController {
     
+    // methods
     @objc fileprivate func handleSegmentChange(_ sender: UISegmentedControl) {
         switch sender.selectedSegmentIndex {
+
+        // change the userId getting it from LoginData when getAnyValueFromCoreData works!
         case 0:
-            print("Chulgin")
+            DispatchQueue.main.async {
+                self.handleCreateQRCode(self.userId!, 1, "123214235", 3)
+            }
         case 1:
-            print("Tvegin")
+            DispatchQueue.main.async {
+                self.handleCreateQRCode(self.userId!, 1, "123214235", 4)
+            }
         default:
             break
         }
+    }
+    
+    @objc fileprivate func handleQRCodeButton() {
+        if time == 0 {
+            DispatchQueue.main.async {
+                self.handleCreateQRCode(self.userId!, 1, "124234", 4)
+            }
+            time = 5
+        } else {
+            DispatchQueue.main.async {
+                self.handleCreateQRCode(self.userId!, 1, "124234", 3)
+            }
+            time = 0
+        }
+    }
+    
+    @objc fileprivate func handleMenuButton() {
+        menuLauncher.showSettings()
     }
     
     fileprivate func generateQRCode(qrString: String) -> UIImage? {
@@ -201,5 +239,18 @@ extension MainPageController {
             }
         }
         return nil
+    }
+    
+    fileprivate func handleCreateQRCode(_ userId: Int, _ companyId: Int, _ phoneNo: String, _ inOutTypeId: Int) {
+        APIService.shared.qrCodeCreate(userId: userId, companyId: companyId, phoneNo: phoneNo, inOutTypeId: inOutTypeId) { (result, error) in
+            if let result = result {
+                DispatchQueue.main.async {
+                    self.qrImageView.image = self.generateQRCode(qrString: result["InoutQRValue"] as! String)
+                }
+            }
+            else if let error = error {
+                print("error: \(error.localizedDescription)")
+            }
+        }
     }
 }
