@@ -71,7 +71,20 @@ class MainPageController: UIViewController {
         super.viewDidLoad()
         view.backgroundColor = mainBackgroundColor
         setupViews()
+        
     }
+    
+    func remove() {
+        willMove(toParent: nil)
+        view.removeFromSuperview()
+        removeFromParent()
+    }
+    
+    let menuView: UIView = {
+        let cv = UIView()
+        cv.backgroundColor = mainBackgroundColor
+        return cv
+    }()
 }
 
 extension MainPageController {
@@ -124,6 +137,11 @@ extension MainPageController {
         footerView.addSubview(startButton)
         startButton.centerXInSuperview()
         startButton.anchor(top: footerView.topAnchor, leading: nil, bottom: nil, trailing: nil, padding: .init(top: 5, left: 0, bottom: 0, right: 0), size: CGSize(width: 100, height: 50))
+    }
+    
+    func showViewController() {
+        present(UIViewController(), animated: true, completion: nil)
+
     }
 }
 

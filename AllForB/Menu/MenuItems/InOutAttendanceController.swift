@@ -92,9 +92,9 @@ class InOutAttendanceController: UIViewController {
         inchinShiganView.centerXInSuperview()
         inchinShiganView.anchor(top: chulTeginSegmentControl.bottomAnchor, leading: nil, bottom: nil, trailing: nil,padding: .init(top: 20, left: 0, bottom: 0, right: 0),size: CGSize(width: 100, height: 30))
         
-//        containerView.addSubview(qrCodeButton)
-//        qrCodeButton.anchor(top: nil, leading: footerLine.leadingAnchor, bottom: footerLine.topAnchor, trailing: footerLine.trailingAnchor,padding: .init(top: 0, left: 100, bottom: 100, right: 100), size: CGSize(width: 0, height: 40))
-//        qrCodeButton.addTarget(self, action: #selector(handleQRCodeButton), for: .touchUpInside)
+        containerView.addSubview(qrCodeButton)
+        qrCodeButton.anchor(top: nil, leading: view.leadingAnchor, bottom: view.bottomAnchor, trailing: view.trailingAnchor,padding: .init(top: 0, left: 100, bottom: 100, right: 100), size: CGSize(width: 0, height: 40))
+        qrCodeButton.addTarget(self, action: #selector(handleQRCodeButton), for: .touchUpInside)
     }
     
     @objc fileprivate func handleSegmentChange(_ sender: UISegmentedControl) {

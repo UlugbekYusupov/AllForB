@@ -7,11 +7,25 @@
 
 import UIKit
 
-class MenuLauncher: UIViewController {
+class Setting: NSObject {
+    let name: String
+    let imageName: String
+    
+    init(name: String, imageName: String) {
+        self.imageName = imageName
+        self.name = name
+    }
+}
+
+class MenuLauncher: NSObject {
     
     fileprivate let blackView = UIView()
     fileprivate let cellID = "cellID"
-
+    
+    let settings: [Setting] = {
+       return [Setting(name: "홈", imageName: "home1"),Setting(name: "프로필", imageName: "profile"),Setting(name: "근무일정", imageName: "calendar"),Setting(name: "출퇴근인증", imageName: "qrcode"),Setting(name: "설정", imageName: "setting")]
+    }()
+     
     let menuView: UIView = {
         let cv = UIView()
         cv.backgroundColor = mainBackgroundColor
@@ -37,7 +51,7 @@ class MenuLauncher: UIViewController {
     }()
     
     let profileImageView: UIImageView = {
-        let iv = UIImageView(image: #imageLiteral(resourceName: "photo_2021-02-22 18.51.39"))
+        let iv = UIImageView(image: #imageLiteral(resourceName: "my"))
         iv.clipsToBounds = true
         iv.contentMode = .scaleAspectFill
         iv.backgroundColor = .black
@@ -129,17 +143,11 @@ class MenuLauncher: UIViewController {
     
     
     private var menuTableView: UITableView!
-    private let tableSize: CGFloat = 50
-    private let tableNumber: Int = 5
-    private var imageStackView: UIStackView!
-    let icons = [#imageLiteral(resourceName: "home1"),#imageLiteral(resourceName: "profile"),#imageLiteral(resourceName: "clander"),#imageLiteral(resourceName: "qrcode"),#imageLiteral(resourceName: "setting")]
-    var iconImageViews = [UIImageView]()
-    let labels = ["홈","프로필","근무일정","출퇴근인증","설정"]
+    private let tableHeight: CGFloat = 40
    
-    
-    override func viewDidLoad() {
-        super.viewDidLoad()
-//        setupContainerViews()
+    override init() {
+        super.init()
+        
     }
     
     func showSettings() {
@@ -171,11 +179,10 @@ class MenuLauncher: UIViewController {
             }
         } completion: { (flag) in }
     }
-
 }
 
 extension MenuLauncher {
-    fileprivate func setupContainerViews() {
+    func setupContainerViews() {
         menuView.addSubview(headerView)
         headerView.anchor(top: menuView.topAnchor, leading: menuView.leadingAnchor, bottom: nil, trailing: menuView.trailingAnchor,size: CGSize(width: 0, height: 150))
         headerView.addSubview(profileImageView)
@@ -195,7 +202,7 @@ extension MenuLauncher {
         menuView.addSubview(headerLine)
         headerLine.anchor(top: headerView.bottomAnchor, leading: menuView.leadingAnchor, bottom: nil, trailing: menuView.trailingAnchor,size: CGSize(width: 0, height: 1))
         
-        setupImageStackView()
+//        setupImageStackView()
         setupTabelView()
         
         menuView.addSubview(tableLine)
@@ -223,29 +230,29 @@ extension MenuLauncher {
 
     }
     
-    fileprivate func setupImageStackView() {
-        
-        icons.forEach {
-            let imgView = UIImageView()
-            imgView.image = $0
-            imgView.clipsToBounds = true
-            imgView.contentMode = .scaleAspectFit
-            imgView.translatesAutoresizingMaskIntoConstraints = false
-            imgView.heightAnchor.constraint(equalToConstant: 40).isActive = true
-            imgView.widthAnchor.constraint(equalToConstant: 40).isActive = true
-            iconImageViews.append(imgView)
-        }
-        
-        imageStackView = UIStackView(arrangedSubviews: iconImageViews)
-        imageStackView.axis  = .vertical
-        imageStackView.distribution  = .equalSpacing
-        imageStackView.alignment = .center
-        imageStackView.spacing = 5
-        imageStackView.translatesAutoresizingMaskIntoConstraints = false
-        imageStackView.backgroundColor = .clear
-        menuView.addSubview(imageStackView)
-        imageStackView.anchor(top: headerLine.bottomAnchor, leading: menuView.leadingAnchor, bottom: nil, trailing: nil, padding: .init(top: 10, left: 10, bottom: 0, right: 0), size: CGSize(width: 40, height: 250))
-    }
+//    fileprivate func setupImageStackView() {
+//
+//        icons.forEach {
+//            let imgView = UIImageView()
+//            imgView.image = $0
+//            imgView.clipsToBounds = true
+//            imgView.contentMode = .scaleAspectFit
+//            imgView.translatesAutoresizingMaskIntoConstraints = false
+//            imgView.heightAnchor.constraint(equalToConstant: 40).isActive = true
+//            imgView.widthAnchor.constraint(equalToConstant: 40).isActive = true
+//            iconImageViews.append(imgView)
+//        }
+//
+//        imageStackView = UIStackView(arrangedSubviews: iconImageViews)
+//        imageStackView.axis  = .vertical
+//        imageStackView.distribution  = .equalSpacing
+//        imageStackView.alignment = .center
+//        imageStackView.spacing = 5
+//        imageStackView.translatesAutoresizingMaskIntoConstraints = false
+//        imageStackView.backgroundColor = .clear
+//        menuView.addSubview(imageStackView)
+//        imageStackView.anchor(top: headerLine.bottomAnchor, leading: menuView.leadingAnchor, bottom: nil, trailing: nil, padding: .init(top: 10, left: 10, bottom: 0, right: 0), size: CGSize(width: 40, height: 250))
+//    }
     
     fileprivate func setupTabelView() {
         menuTableView = UITableView(frame: .zero, style: .plain)
@@ -256,10 +263,11 @@ extension MenuLauncher {
         menuView.addSubview(menuTableView)
         menuTableView.separatorStyle = .none
         menuTableView.isScrollEnabled = false
-        menuTableView.anchor(top: headerLine.bottomAnchor, leading: imageStackView.trailingAnchor, bottom: nil, trailing: menuView.trailingAnchor, padding: .init(top: 10, left: 0, bottom: 0, right: 0), size: CGSize(width: 0, height: Int(tableSize)*tableNumber))
+        let height = Int(tableHeight) * settings.count
+        menuTableView.anchor(top: headerLine.bottomAnchor, leading: menuView.leadingAnchor, bottom: nil, trailing: menuView.trailingAnchor, padding: .init(top: 10, left: 0, bottom: 0, right: 0), size: CGSize(width: 0, height: height))
     }
     
-    fileprivate func uiRemoverWithAnimation() {
+    fileprivate func menuRemover() {
         UIView.animate(withDuration: 0.7, delay: 0, usingSpringWithDamping: 0.7, initialSpringVelocity: 0.7, options: .curveEaseOut) {
             if let window = UIApplication.shared.windows.first(where: { $0.isKeyWindow }) {
                 self.blackView.alpha = 0
@@ -269,44 +277,40 @@ extension MenuLauncher {
     }
 
     @objc fileprivate func handleLogoutButton() {
-//        uiRemoverWithAnimation()
-        MainPageController.shared.self.dismiss(animated: true, completion: nil)
+        
     }
+    
 }
 
 extension MenuLauncher: UITableViewDelegate, UITableViewDataSource {
     
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-        return tableNumber
+        return settings.count
     }
     
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         let cell = tableView.dequeueReusableCell(withIdentifier: cellID, for: indexPath) as! MenuCell
-        cell.selectionStyle = .none
-        cell.itemLabel.text = labels[indexPath.row]
+//        cell.selectionStyle = .none
+        let setting = settings[indexPath.item]
+        cell.setting = setting
         return cell
     }
     
     func tableView(_ tableView: UITableView, heightForRowAt indexPath: IndexPath) -> CGFloat {
-        return tableSize
+        return tableHeight
     }
     
-    func tableView(_ tableView: UITableView, didUnhighlightRowAt indexPath: IndexPath) {
-        let cell  = tableView.cellForRow(at: indexPath)
-        cell!.contentView.backgroundColor = .clear
-    }
-    
-    func tableView(_ tableView: UITableView, didHighlightRowAt indexPath: IndexPath) {
-        let cell  = tableView.cellForRow(at: indexPath)
-        cell!.contentView.backgroundColor = #colorLiteral(red: 0.0355408527, green: 0, blue: 0.1415036023, alpha: 1)
-    }
-    
+//    func tableView(_ tableView: UITableView, didUnhighlightRowAt indexPath: IndexPath) {
+//        let cell  = tableView.cellForRow(at: indexPath)
+//        cell!.contentView.backgroundColor = .clear
+//    }
+//
+//    func tableView(_ tableView: UITableView, didHighlightRowAt indexPath: IndexPath) {
+//        let cell  = tableView.cellForRow(at: indexPath)
+////        cell!.contentView.backgroundColor = #colorLiteral(red: 0.0355408527, green: 0, blue: 0.1415036023, alpha: 1)
+//    }
     
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
-        uiRemoverWithAnimation()
-        let view = UIView()
-        view.backgroundColor = .red
-        
-        MainPageController.shared.dismiss(animated: true, completion: nil )
+        print(indexPath.row)
     }
 }
