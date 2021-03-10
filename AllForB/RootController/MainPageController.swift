@@ -37,7 +37,6 @@ class MainPageController: UIViewController {
         let button = UIButton()
         button.clipsToBounds = true
         button.contentMode = .scaleAspectFit
-//        button.backgroundColor = .red
         button.setImage(#imageLiteral(resourceName: "menu"), for: .normal)
         return button
     }()
@@ -64,6 +63,7 @@ class MainPageController: UIViewController {
     
     static let shared = MainPageController()
     let menuLauncher = MenuLauncher()
+    
     var inOutController: InOutAttendanceController!
     var inOutView: UIView!
 
@@ -71,33 +71,14 @@ class MainPageController: UIViewController {
         super.viewDidLoad()
         view.backgroundColor = mainBackgroundColor
         setupViews()
-        
     }
     
-    func remove() {
-        willMove(toParent: nil)
-        view.removeFromSuperview()
-        removeFromParent()
-    }
-    
-    let menuView: UIView = {
-        let cv = UIView()
-        cv.backgroundColor = mainBackgroundColor
-        return cv
-    }()
-}
-
-extension MainPageController {
-    
-    // Setup views
-    override func viewWillAppear(_ animated: Bool) {
-        super.viewWillAppear(animated)
-        
-    }
     override open var shouldAutorotate: Bool {
         return false
     }
-    
+}
+
+extension MainPageController {
     fileprivate func setupMainViews() {
         
         view.addSubview(headerView)
@@ -114,13 +95,12 @@ extension MainPageController {
 
         inOutController = InOutAttendanceController()
         inOutView = inOutController.view
-        
         view.addSubview(inOutView)
         inOutView.anchor(top: headerLine.bottomAnchor, leading: view.leadingAnchor, bottom: footerLine.topAnchor, trailing: view.trailingAnchor, padding: .init(), size: CGSize(width: 0, height: 0))
     }
     
     func addCustomSubView(View: UIView) {
-        view.willRemoveSubview(inOutView)
+        inOutView.removeFromSuperview()
         view.addSubview(View)
         View.anchor(top: headerLine.bottomAnchor, leading: view.leadingAnchor, bottom: footerLine.topAnchor, trailing: view.trailingAnchor, padding: .init(), size: CGSize(width: 0, height: 0))
     }
@@ -138,15 +118,22 @@ extension MainPageController {
         startButton.centerXInSuperview()
         startButton.anchor(top: footerView.topAnchor, leading: nil, bottom: nil, trailing: nil, padding: .init(top: 5, left: 0, bottom: 0, right: 0), size: CGSize(width: 100, height: 50))
     }
-    
-    func showViewController() {
-        present(UIViewController(), animated: true, completion: nil)
-
-    }
 }
 
 extension MainPageController {
     @objc fileprivate func handleMenuButton() {
         menuLauncher.showSettings()
+        //this is fucking thing that i needed from morning ttill nght, fuuck programming
+        menuLauncher.mainPageController = self
+    }
+    
+    func showController() {
+        let dummyController = UIViewController()
+        dummyController.view.backgroundColor = .red
+        addChild(dummyController)
+        view.addSubview(dummyController.view)
+        dummyController.view.anchor(top: headerLine.bottomAnchor, leading: view.leadingAnchor, bottom: footerLine.topAnchor, trailing: view.trailingAnchor, padding: .init(), size: CGSize(width: 0, height: 0))
+        dummyController.didMove(toParent: self)
+
     }
 }

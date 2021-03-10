@@ -23,7 +23,11 @@ class MenuLauncher: NSObject {
     fileprivate let cellID = "cellID"
     
     let settings: [Setting] = {
-       return [Setting(name: "홈", imageName: "home1"),Setting(name: "프로필", imageName: "profile"),Setting(name: "근무일정", imageName: "calendar"),Setting(name: "출퇴근인증", imageName: "qrcode"),Setting(name: "설정", imageName: "setting")]
+       return [Setting(name: "홈", imageName: "home1"),
+               Setting(name: "프로필", imageName: "profile"),
+               Setting(name: "근무일정", imageName: "calendar"),
+               Setting(name: "출퇴근인증", imageName: "qrcode"),
+               Setting(name: "설정", imageName: "setting")]
     }()
      
     let menuView: UIView = {
@@ -53,7 +57,7 @@ class MenuLauncher: NSObject {
     let profileImageView: UIImageView = {
         let iv = UIImageView(image: #imageLiteral(resourceName: "my"))
         iv.clipsToBounds = true
-        iv.contentMode = .scaleAspectFill
+        iv.contentMode = .scaleAspectFit
         iv.backgroundColor = .black
         iv.translatesAutoresizingMaskIntoConstraints = false
         return iv
@@ -66,7 +70,6 @@ class MenuLauncher: NSObject {
         label.font = UIFont(name: "Verdana-Bold", size: 16)
         label.clipsToBounds = true
         label.text = "Ulugbek"
-//        label.backgroundColor = .black
         label.contentMode = .scaleAspectFit
         label.translatesAutoresizingMaskIntoConstraints = false
         return label
@@ -78,7 +81,6 @@ class MenuLauncher: NSObject {
         label.textColor = mainColor
         label.font = UIFont(name: "Verdana", size: 13)
         label.clipsToBounds = true
-//        label.backgroundColor = .black
         label.text = "bilmadim.uz@gmail.com"
         label.contentMode = .scaleAspectFit
         label.translatesAutoresizingMaskIntoConstraints = false
@@ -101,7 +103,6 @@ class MenuLauncher: NSObject {
         let iv = UIImageView(image: #imageLiteral(resourceName: "qrcode"))
         iv.clipsToBounds = true
         iv.contentMode = .scaleAspectFit
-//        iv.backgroundColor = .red
         iv.translatesAutoresizingMaskIntoConstraints = false
         return iv
     }()
@@ -110,7 +111,6 @@ class MenuLauncher: NSObject {
         let iv = UIImageView(image: #imageLiteral(resourceName: "signout"))
         iv.clipsToBounds = true
         iv.contentMode = .scaleAspectFit
-//        iv.backgroundColor = .red
         iv.translatesAutoresizingMaskIntoConstraints = false
         return iv
     }()
@@ -141,10 +141,10 @@ class MenuLauncher: NSObject {
         return cv
     }()
     
-    
     private var menuTableView: UITableView!
     private let tableHeight: CGFloat = 40
-   
+    var mainPageController: MainPageController?
+
     override init() {
         super.init()
         
@@ -170,14 +170,14 @@ class MenuLauncher: NSObject {
             } completion: { (flag) in }
         }
     }
-    
-    @objc func handleBlackTapDismiss(gesture: UITapGestureRecognizer) {
-        UIView.animate(withDuration: 0.7, delay: 0, usingSpringWithDamping: 0.7, initialSpringVelocity: 0.7, options: .curveEaseOut) {
+
+    fileprivate func menuRemover() {
+        UIView.animate(withDuration: 1, delay: 0, usingSpringWithDamping: 1, initialSpringVelocity: 0.8, options: .curveEaseOut) {
             if let window = UIApplication.shared.windows.first(where: { $0.isKeyWindow }) {
                 self.blackView.alpha = 0
                 self.menuView.frame = CGRect(x: -window.frame.width, y: 0, width: self.menuView.frame.width, height: self.menuView.frame.height)
             }
-        } completion: { (flag) in }
+        } completion: { (flag) in}
     }
 }
 
@@ -194,15 +194,16 @@ extension MenuLauncher {
         
         headerView.addSubview(profileEmail)
         profileEmail.anchor(top: profileName.bottomAnchor, leading: profileImageView.trailingAnchor, bottom: nil, trailing: headerView.trailingAnchor,padding: .init(top: 5, left: 10, bottom: 0, right: 0),size: CGSize(width: 0, height: 20))
+        
         let token = application.getCurrentLoginToken()
         let accountId = application.getAnyValueFromCoreData(token!, "accountId")
         DispatchQueue.main.async { [self] in
             profileEmail.text = (accountId as! String)
         }
+        
         menuView.addSubview(headerLine)
         headerLine.anchor(top: headerView.bottomAnchor, leading: menuView.leadingAnchor, bottom: nil, trailing: menuView.trailingAnchor,size: CGSize(width: 0, height: 1))
         
-//        setupImageStackView()
         setupTabelView()
         
         menuView.addSubview(tableLine)
@@ -217,6 +218,7 @@ extension MenuLauncher {
         
         menuView.addSubview(qrScanButton)
         qrScanButton.anchor(top: qrScanImageView.topAnchor, leading: qrScanImageView.trailingAnchor, bottom: nil, trailing: nil, padding: .init(top: 5, left: 0, bottom: 0, right: 0), size: CGSize(width: 100, height: 30))
+        qrScanButton.addTarget(self, action: #selector(handleQRscan), for: .touchUpInside)
         
         menuView.addSubview(footerLine)
         footerLine.anchor(top: nil, leading: menuView.leadingAnchor, bottom: menuView.bottomAnchor, trailing: menuView.trailingAnchor, padding: .init(top: 0, left: 0, bottom: 100, right: 0), size: CGSize(width: 0, height: 1))
@@ -229,30 +231,6 @@ extension MenuLauncher {
         logOutButton.addTarget(self, action: #selector(handleLogoutButton), for: .touchUpInside)
 
     }
-    
-//    fileprivate func setupImageStackView() {
-//
-//        icons.forEach {
-//            let imgView = UIImageView()
-//            imgView.image = $0
-//            imgView.clipsToBounds = true
-//            imgView.contentMode = .scaleAspectFit
-//            imgView.translatesAutoresizingMaskIntoConstraints = false
-//            imgView.heightAnchor.constraint(equalToConstant: 40).isActive = true
-//            imgView.widthAnchor.constraint(equalToConstant: 40).isActive = true
-//            iconImageViews.append(imgView)
-//        }
-//
-//        imageStackView = UIStackView(arrangedSubviews: iconImageViews)
-//        imageStackView.axis  = .vertical
-//        imageStackView.distribution  = .equalSpacing
-//        imageStackView.alignment = .center
-//        imageStackView.spacing = 5
-//        imageStackView.translatesAutoresizingMaskIntoConstraints = false
-//        imageStackView.backgroundColor = .clear
-//        menuView.addSubview(imageStackView)
-//        imageStackView.anchor(top: headerLine.bottomAnchor, leading: menuView.leadingAnchor, bottom: nil, trailing: nil, padding: .init(top: 10, left: 10, bottom: 0, right: 0), size: CGSize(width: 40, height: 250))
-//    }
     
     fileprivate func setupTabelView() {
         menuTableView = UITableView(frame: .zero, style: .plain)
@@ -267,20 +245,20 @@ extension MenuLauncher {
         menuTableView.anchor(top: headerLine.bottomAnchor, leading: menuView.leadingAnchor, bottom: nil, trailing: menuView.trailingAnchor, padding: .init(top: 10, left: 0, bottom: 0, right: 0), size: CGSize(width: 0, height: height))
     }
     
-    fileprivate func menuRemover() {
-        UIView.animate(withDuration: 0.7, delay: 0, usingSpringWithDamping: 0.7, initialSpringVelocity: 0.7, options: .curveEaseOut) {
-            if let window = UIApplication.shared.windows.first(where: { $0.isKeyWindow }) {
-                self.blackView.alpha = 0
-                self.menuView.frame = CGRect(x: -window.frame.width, y: 0, width: self.menuView.frame.width, height: self.menuView.frame.height)
-            }
-        } completion: { (flag) in}
-    }
-
     @objc fileprivate func handleLogoutButton() {
-        
+        print("Log out pressed")
+    }
+    
+    @objc fileprivate func handleBlackTapDismiss(gesture: UITapGestureRecognizer) {
+        menuRemover()
+    }
+    
+    @objc fileprivate func handleQRscan() {
+        print("QR scan pressed")
     }
     
 }
+
 
 extension MenuLauncher: UITableViewDelegate, UITableViewDataSource {
     
@@ -290,7 +268,7 @@ extension MenuLauncher: UITableViewDelegate, UITableViewDataSource {
     
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         let cell = tableView.dequeueReusableCell(withIdentifier: cellID, for: indexPath) as! MenuCell
-//        cell.selectionStyle = .none
+        cell.selectionStyle = .none
         let setting = settings[indexPath.item]
         cell.setting = setting
         return cell
@@ -300,17 +278,25 @@ extension MenuLauncher: UITableViewDelegate, UITableViewDataSource {
         return tableHeight
     }
     
-//    func tableView(_ tableView: UITableView, didUnhighlightRowAt indexPath: IndexPath) {
-//        let cell  = tableView.cellForRow(at: indexPath)
-//        cell!.contentView.backgroundColor = .clear
-//    }
-//
-//    func tableView(_ tableView: UITableView, didHighlightRowAt indexPath: IndexPath) {
-//        let cell  = tableView.cellForRow(at: indexPath)
-////        cell!.contentView.backgroundColor = #colorLiteral(red: 0.0355408527, green: 0, blue: 0.1415036023, alpha: 1)
-//    }
+    func tableView(_ tableView: UITableView, didUnhighlightRowAt indexPath: IndexPath) {
+        let cell  = tableView.cellForRow(at: indexPath)
+        cell!.contentView.backgroundColor = .clear
+    }
+
+    func tableView(_ tableView: UITableView, didHighlightRowAt indexPath: IndexPath) {
+        let cell  = tableView.cellForRow(at: indexPath)
+        cell!.contentView.backgroundColor = #colorLiteral(red: 0.0355408527, green: 0, blue: 0.1415036023, alpha: 1)
+    }
+    
     
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
-        print(indexPath.row)
+        UIView.animate(withDuration: 0.5, delay: 0, usingSpringWithDamping: 1, initialSpringVelocity: 1, options: .curveEaseOut) {
+            if let window = UIApplication.shared.windows.first(where: { $0.isKeyWindow }) {
+                self.blackView.alpha = 0
+                self.menuView.frame = CGRect(x: -window.frame.width, y: 0, width: self.menuView.frame.width, height: self.menuView.frame.height)
+            }
+        } completion: { (flag) in
+            self.mainPageController?.showController()
+        }
     }
 }

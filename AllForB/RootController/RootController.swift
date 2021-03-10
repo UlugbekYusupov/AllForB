@@ -113,9 +113,6 @@ class RootController: UIViewController {
         else {
             let mainPageController = MainPageController()
             mainPageController.modalPresentationStyle = .fullScreen
-//            addChild(mainPageController)
-//            view.addSubview(mainPageController.view)
-//            mainPageController.didMove(toParent: self)
 
             present(mainPageController, animated: true, completion: nil)
         }

@@ -10,10 +10,9 @@ import UIKit
 class MenuCell: UITableViewCell {
     
     let itemImageView: UIImageView = {
-        let iv = UIImageView(image: #imageLiteral(resourceName: "setting"))
+        let iv = UIImageView()
         iv.clipsToBounds = true
         iv.contentMode = .scaleAspectFit
-//        iv.backgroundColor = .black
         iv.translatesAutoresizingMaskIntoConstraints = false
         return iv
     }()
@@ -22,23 +21,23 @@ class MenuCell: UITableViewCell {
         didSet {
             itemLabel.text = setting?.name
             itemImageView.image = UIImage(named: setting!.imageName)
+            itemImageView.tintColor = mainColor
         }
     }
     
-    override var isHighlighted: Bool {
-        didSet{
-            itemLabel.textColor = !isHighlighted ? mainColor : #colorLiteral(red: 0.0355408527, green: 0, blue: 0.1415036023, alpha: 1)
-            itemImageView.tintColor = isHighlighted ? .clear : #colorLiteral(red: 0.0355408527, green: 0, blue: 0.1415036023, alpha: 1)
-        }
-    }
-    
+//    override var isHighlighted: Bool {
+//        didSet{
+//            itemLabel.textColor = !isHighlighted ? mainColor : .clear
+//            itemImageView.tintColor = isHighlighted ? .clear : mainColor
+//        }
+//    }
+//    
     let itemLabel: UILabel = {
         let label = UILabel()
         label.textAlignment = .left
-//        label.textColor = mainColor
+        label.textColor = mainColor
         label.font = UIFont(name: "Verdana", size: 16)
         label.clipsToBounds = true
-        label.text = "Ulugbek"
         label.backgroundColor = .clear
         label.contentMode = .scaleAspectFill
         label.translatesAutoresizingMaskIntoConstraints = false
