@@ -29,7 +29,6 @@
 		5CC64C0625F770CA00E1FF25 /* CalendarController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5CC64C0525F770CA00E1FF25 /* CalendarController.swift */; };
 		5CC64C0B25F770E300E1FF25 /* InOutAttendanceController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5CC64C0A25F770E300E1FF25 /* InOutAttendanceController.swift */; };
 		5CC64C1025F770EF00E1FF25 /* SettingsController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5CC64C0F25F770EF00E1FF25 /* SettingsController.swift */; };
-		5CC64C1525F7711000E1FF25 /* ContainerController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5CC64C1425F7711000E1FF25 /* ContainerController.swift */; };
 		5CD64E4B25F5BDC9002CD116 /* LoginInfo.xcdatamodeld in Sources */ = {isa = PBXBuildFile; fileRef = 5CD64E4925F5BDC9002CD116 /* LoginInfo.xcdatamodeld */; };
 		5CD64E8A25F5C93A002CD116 /* LoginInfo+CoreDataClass.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5CD64E8825F5C93A002CD116 /* LoginInfo+CoreDataClass.swift */; };
 		5CD64E8B25F5C93A002CD116 /* LoginInfo+CoreDataProperties.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5CD64E8925F5C93A002CD116 /* LoginInfo+CoreDataProperties.swift */; };
@@ -86,7 +85,6 @@
 		5CC64C0525F770CA00E1FF25 /* CalendarController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CalendarController.swift; sourceTree = "<group>"; };
 		5CC64C0A25F770E300E1FF25 /* InOutAttendanceController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = InOutAttendanceController.swift; sourceTree = "<group>"; };
 		5CC64C0F25F770EF00E1FF25 /* SettingsController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SettingsController.swift; sourceTree = "<group>"; };
-		5CC64C1425F7711000E1FF25 /* ContainerController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ContainerController.swift; sourceTree = "<group>"; };
 		5CD64E4A25F5BDC9002CD116 /* LoginInfo.xcdatamodel */ = {isa = PBXFileReference; lastKnownFileType = wrapper.xcdatamodel; path = LoginInfo.xcdatamodel; sourceTree = "<group>"; };
 		5CD64E8825F5C93A002CD116 /* LoginInfo+CoreDataClass.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = "LoginInfo+CoreDataClass.swift"; sourceTree = "<group>"; };
 		5CD64E8925F5C93A002CD116 /* LoginInfo+CoreDataProperties.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = "LoginInfo+CoreDataProperties.swift"; sourceTree = "<group>"; };
@@ -265,7 +263,6 @@
 				5CC64C0525F770CA00E1FF25 /* CalendarController.swift */,
 				5CC64C0A25F770E300E1FF25 /* InOutAttendanceController.swift */,
 				5CC64C0F25F770EF00E1FF25 /* SettingsController.swift */,
-				5CC64C1425F7711000E1FF25 /* ContainerController.swift */,
 			);
 			path = MenuItems;
 			sourceTree = "<group>";
@@ -543,7 +540,6 @@
 				5C56C91A25EF3D50000CEF1B /* LoginController.swift in Sources */,
 				5C2C1A4925E8F0ED00CEBE3A /* SceneDelegate.swift in Sources */,
 				5C2C1A7D25E8F1ED00CEBE3A /* RootController.swift in Sources */,
-				5CC64C1525F7711000E1FF25 /* ContainerController.swift in Sources */,
 				5CC64BE125F71BFA00E1FF25 /* MenuLauncher.swift in Sources */,
 				5CC64BF325F7469700E1FF25 /* MenuCell.swift in Sources */,
 				5CC64C0B25F770E300E1FF25 /* InOutAttendanceController.swift in Sources */,

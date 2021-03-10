@@ -121,19 +121,37 @@ extension MainPageController {
 }
 
 extension MainPageController {
+    
     @objc fileprivate func handleMenuButton() {
         menuLauncher.showSettings()
-        //this is fucking thing that i needed from morning ttill nght, fuuck programming
         menuLauncher.mainPageController = self
     }
     
-    func showController() {
-        let dummyController = UIViewController()
-        dummyController.view.backgroundColor = .red
-        addChild(dummyController)
-        view.addSubview(dummyController.view)
-        dummyController.view.anchor(top: headerLine.bottomAnchor, leading: view.leadingAnchor, bottom: footerLine.topAnchor, trailing: view.trailingAnchor, padding: .init(), size: CGSize(width: 0, height: 0))
-        dummyController.didMove(toParent: self)
-
+    func showController(indexPath: IndexPath) {
+        switch indexPath.row {
+        case 0:
+            let homeController = HomeController()
+            self.controllerCreation(viewController: homeController)
+        case 1:
+            let profileController = ProfileController()
+            self.controllerCreation(viewController: profileController)
+        case 2:
+            let calendarController = CalendarController()
+            self.controllerCreation(viewController: calendarController)
+        case 3:
+            self.controllerCreation(viewController: inOutController)
+        case 4:
+            let settingsController = SettingsController()
+            self.controllerCreation(viewController: settingsController)
+        default:
+            break
+        }
+    }
+    
+    func controllerCreation(viewController: UIViewController) {
+        addChild(viewController)
+        view.addSubview(viewController.view)
+        viewController.view.anchor(top: headerLine.bottomAnchor, leading: view.leadingAnchor, bottom: footerLine.topAnchor, trailing: view.trailingAnchor, padding: .init(), size: CGSize(width: 0, height: 0))
+        viewController.didMove(toParent: self)
     }
 }

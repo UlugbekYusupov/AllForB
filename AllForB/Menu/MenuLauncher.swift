@@ -296,7 +296,7 @@ extension MenuLauncher: UITableViewDelegate, UITableViewDataSource {
                 self.menuView.frame = CGRect(x: -window.frame.width, y: 0, width: self.menuView.frame.width, height: self.menuView.frame.height)
             }
         } completion: { (flag) in
-            self.mainPageController?.showController()
+            self.mainPageController?.showController(indexPath: indexPath)
         }
     }
 }
