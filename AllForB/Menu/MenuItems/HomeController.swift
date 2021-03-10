@@ -7,5 +7,5 @@
 
 import UIKit
 
-class HomeController: ContainerController {
+class HomeController: UIViewController {
 }

@@ -7,7 +7,7 @@
 
 import UIKit
 
-class MenuLauncher: NSObject {
+class MenuLauncher: UIViewController {
     
     fileprivate let blackView = UIView()
     fileprivate let cellID = "cellID"
@@ -92,17 +92,41 @@ class MenuLauncher: NSObject {
         return iv
     }()
     
+    let logoutImageView: UIImageView = {
+        let iv = UIImageView(image: #imageLiteral(resourceName: "signout"))
+        iv.clipsToBounds = true
+        iv.contentMode = .scaleAspectFit
+//        iv.backgroundColor = .red
+        iv.translatesAutoresizingMaskIntoConstraints = false
+        return iv
+    }()
+    
     let qrScanButton: UIButton = {
         let button = UIButton()
         button.clipsToBounds = true
         button.setTitle("QR Scan", for: .normal)
         button.setTitleColor(mainColor, for: .normal)
         button.contentMode = .scaleAspectFit
-        
-//        button.backgroundColor = .yellow
         button.translatesAutoresizingMaskIntoConstraints = false
         return button
     }()
+    
+    let logOutButton: UIButton = {
+        let button = UIButton()
+        button.clipsToBounds = true
+        button.setTitle("로그아웃", for: .normal)
+        button.setTitleColor(mainColor, for: .normal)
+        button.contentMode = .scaleAspectFit
+        button.translatesAutoresizingMaskIntoConstraints = false
+        return button
+    }()
+    
+    let footerLine: UIView = {
+        let cv = UIView()
+        cv.backgroundColor = mainColor
+        return cv
+    }()
+    
     
     private var menuTableView: UITableView!
     private let tableSize: CGFloat = 50
@@ -111,21 +135,23 @@ class MenuLauncher: NSObject {
     let icons = [#imageLiteral(resourceName: "home1"),#imageLiteral(resourceName: "profile"),#imageLiteral(resourceName: "clander"),#imageLiteral(resourceName: "qrcode"),#imageLiteral(resourceName: "setting")]
     var iconImageViews = [UIImageView]()
     let labels = ["홈","프로필","근무일정","출퇴근인증","설정"]
+   
     
-    override init() {
-        super.init()
-        setupContainerViews()
+    override func viewDidLoad() {
+        super.viewDidLoad()
+//        setupContainerViews()
     }
     
     func showSettings() {
-        
         if let window = UIApplication.shared.windows.first(where: { $0.isKeyWindow }) {
+            setupContainerViews()
+
             blackView.backgroundColor = UIColor(white: 0, alpha: 0.5)
             window.addSubview(blackView)
             blackView.frame = window .frame
             blackView.alpha = 0
             blackView.addGestureRecognizer(UITapGestureRecognizer(target: self, action: #selector(handleBlackTapDismiss)))
-            
+
             window.addSubview(menuView)
             let width: CGFloat = window.frame.size.width / 1.4
             menuView.frame = CGRect(x: -window.frame.width, y: 0, width: width, height: window.frame.height)
@@ -185,6 +211,16 @@ extension MenuLauncher {
         menuView.addSubview(qrScanButton)
         qrScanButton.anchor(top: qrScanImageView.topAnchor, leading: qrScanImageView.trailingAnchor, bottom: nil, trailing: nil, padding: .init(top: 5, left: 0, bottom: 0, right: 0), size: CGSize(width: 100, height: 30))
         
+        menuView.addSubview(footerLine)
+        footerLine.anchor(top: nil, leading: menuView.leadingAnchor, bottom: menuView.bottomAnchor, trailing: menuView.trailingAnchor, padding: .init(top: 0, left: 0, bottom: 100, right: 0), size: CGSize(width: 0, height: 1))
+        
+        menuView.addSubview(logoutImageView)
+        logoutImageView.anchor(top: nil, leading: menuView.leadingAnchor, bottom: menuView.safeAreaLayoutGuide.bottomAnchor, trailing: nil, padding: .init(top: 0, left: 10, bottom: 0, right: 0), size: CGSize(width: 40, height: 40))
+        
+        menuView.addSubview(logOutButton)
+        logOutButton.anchor(top: logoutImageView.topAnchor, leading: logoutImageView.trailingAnchor, bottom: nil, trailing: nil, padding: .init(top: 5, left: 0, bottom: 0, right: 0), size: CGSize(width: 100, height: 30))
+        logOutButton.addTarget(self, action: #selector(handleLogoutButton), for: .touchUpInside)
+
     }
     
     fileprivate func setupImageStackView() {
@@ -201,14 +237,12 @@ extension MenuLauncher {
         }
         
         imageStackView = UIStackView(arrangedSubviews: iconImageViews)
-        
         imageStackView.axis  = .vertical
         imageStackView.distribution  = .equalSpacing
         imageStackView.alignment = .center
         imageStackView.spacing = 5
         imageStackView.translatesAutoresizingMaskIntoConstraints = false
         imageStackView.backgroundColor = .clear
-        
         menuView.addSubview(imageStackView)
         imageStackView.anchor(top: headerLine.bottomAnchor, leading: menuView.leadingAnchor, bottom: nil, trailing: nil, padding: .init(top: 10, left: 10, bottom: 0, right: 0), size: CGSize(width: 40, height: 250))
     }
@@ -223,6 +257,20 @@ extension MenuLauncher {
         menuTableView.separatorStyle = .none
         menuTableView.isScrollEnabled = false
         menuTableView.anchor(top: headerLine.bottomAnchor, leading: imageStackView.trailingAnchor, bottom: nil, trailing: menuView.trailingAnchor, padding: .init(top: 10, left: 0, bottom: 0, right: 0), size: CGSize(width: 0, height: Int(tableSize)*tableNumber))
+    }
+    
+    fileprivate func uiRemoverWithAnimation() {
+        UIView.animate(withDuration: 0.7, delay: 0, usingSpringWithDamping: 0.7, initialSpringVelocity: 0.7, options: .curveEaseOut) {
+            if let window = UIApplication.shared.windows.first(where: { $0.isKeyWindow }) {
+                self.blackView.alpha = 0
+                self.menuView.frame = CGRect(x: -window.frame.width, y: 0, width: self.menuView.frame.width, height: self.menuView.frame.height)
+            }
+        } completion: { (flag) in}
+    }
+
+    @objc fileprivate func handleLogoutButton() {
+//        uiRemoverWithAnimation()
+        MainPageController.shared.self.dismiss(animated: true, completion: nil)
     }
 }
 
@@ -250,15 +298,15 @@ extension MenuLauncher: UITableViewDelegate, UITableViewDataSource {
     
     func tableView(_ tableView: UITableView, didHighlightRowAt indexPath: IndexPath) {
         let cell  = tableView.cellForRow(at: indexPath)
-        cell!.contentView.backgroundColor = .black
+        cell!.contentView.backgroundColor = #colorLiteral(red: 0.0355408527, green: 0, blue: 0.1415036023, alpha: 1)
     }
     
+    
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
-        UIView.animate(withDuration: 0.7, delay: 0, usingSpringWithDamping: 0.7, initialSpringVelocity: 0.7, options: .curveEaseOut) {
-            if let window = UIApplication.shared.windows.first(where: { $0.isKeyWindow }) {
-                self.blackView.alpha = 0
-                self.menuView.frame = CGRect(x: -window.frame.width, y: 0, width: self.menuView.frame.width, height: self.menuView.frame.height)
-            }
-        } completion: { (flag) in}
+        uiRemoverWithAnimation()
+        let view = UIView()
+        view.backgroundColor = .red
+        
+        MainPageController.shared.dismiss(animated: true, completion: nil )
     }
 }
