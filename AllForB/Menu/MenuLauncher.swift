@@ -306,6 +306,9 @@ extension MenuLauncher: UITableViewDelegate, UITableViewDataSource {
         UIView.animate(withDuration: 0.5, delay: 0, usingSpringWithDamping: 1, initialSpringVelocity: 1, options: .curveEaseOut) {
             self.uiViewAnimation()
         } completion: { (flag) in
+
+            let setting = self.settings[indexPath.item]
+            self.mainPageController?.setting = setting
             self.mainPageController?.showController(indexPath: indexPath)
         }
     }

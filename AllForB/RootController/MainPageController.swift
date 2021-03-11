@@ -48,7 +48,7 @@ class MainPageController: UIViewController {
         label.textAlignment = .center
         label.textColor = mainColor
         label.font = UIFont(name: "Verdana-Bold", size: 20)
-        label.text = "QR Scan"
+        label.text = "출퇴근인증"
         return label
     }()
     
@@ -56,10 +56,16 @@ class MainPageController: UIViewController {
         let button = UIButton(type: .system)
         button.clipsToBounds = true
         button.contentMode = .scaleAspectFit
-        let attributedText = NSAttributedString(string: "Start", attributes: [.foregroundColor: mainColor,.font: UIFont(name: "Verdana", size: 18) as Any])
+        let attributedText = NSAttributedString(string: "출퇴근", attributes: [.foregroundColor: mainColor,.font: UIFont(name: "Verdana", size: 18) as Any])
         button.setAttributedTitle(attributedText, for: .normal)
         return button
     }()
+    
+    var setting: Setting? {
+        didSet {
+            qrLabel.text = setting?.name
+        }
+    }
     
     static let shared = MainPageController()
     let menuLauncher = MenuLauncher()
@@ -79,10 +85,7 @@ class MainPageController: UIViewController {
         setupViews()
     }
     
-    override open var shouldAutorotate: Bool {
-        return false
-    }
-    var qrFlag: Bool?
+    override open var shouldAutorotate: Bool { return false }
 
 }
 
@@ -105,12 +108,6 @@ extension MainPageController {
         inOutView = inOutController.view
         view.addSubview(inOutView)
         inOutView.anchor(top: headerLine.bottomAnchor, leading: view.leadingAnchor, bottom: footerLine.topAnchor, trailing: view.trailingAnchor, padding: .init(), size: CGSize(width: 0, height: 0))
-    }
-    
-    func addCustomSubView(View: UIView) {
-        inOutView.removeFromSuperview()
-        view.addSubview(View)
-        View.anchor(top: headerLine.bottomAnchor, leading: view.leadingAnchor, bottom: footerLine.topAnchor, trailing: view.trailingAnchor, padding: .init(), size: CGSize(width: 0, height: 0))
     }
     
     fileprivate func setupViews() {
@@ -138,13 +135,6 @@ extension MainPageController {
     
     func showController(indexPath: IndexPath) {
         
-//        if let qrFlag = qrFlag {
-//            if qrFlag {
-//                menuLauncher.qrScannerController?.removeFromParent()
-//                menuLauncher.qrScannerController?.view.removeFromSuperview()
-//            }
-//        }
-        
         removeQrScannerController()
         
         switch indexPath.row {
@@ -161,8 +151,6 @@ extension MainPageController {
         default:
             break
         }
-        
-//        qrFlag = nil
     }
     
     func removeQrScannerController() {
@@ -171,7 +159,6 @@ extension MainPageController {
     }
     
     func showQRScannerController() {
-//        qrFlag = true
         qrScannerController = QRScannerController()
         menuLauncher.qrScannerController = qrScannerController
         self.qrScannerController!.mainPageController = self

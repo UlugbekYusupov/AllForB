@@ -33,27 +33,14 @@ class RootController: UIViewController {
         label.clipsToBounds = true
         label.contentMode = .scaleAspectFit
         label.textAlignment = .left
-        label.text = "Stay connected with\neveryone!"
+        label.text = "로그인 후 사용하세요!"
         label.textColor = mainColor
         label.backgroundColor = .clear
         label.numberOfLines = 0
-        label.font = UIFont(name: "Verdana-Bold", size: 28)
+        label.font = UIFont(name: "Verdana-Bold", size: 30)
         return label
     }()
-    
-    let signLabel: UILabel = {
-        let label = UILabel()
-        label.clipsToBounds = true
-        label.contentMode = .scaleAspectFit
-        label.textAlignment = .left
-        label.text = "Sign in with account"
-        label.textColor = mainColor
-        label.backgroundColor = .clear
-        label.numberOfLines = 0
-        label.font = UIFont(name: "Verdana", size: 15)
-        return label
-    }()
-    
+
     let loginButon: UIButton = {
         let button = UIButton(type: .system)
         button.clipsToBounds = true
@@ -92,8 +79,6 @@ class RootController: UIViewController {
         containerView.addSubview(stayConnectedLabel)
         stayConnectedLabel.anchor(top: containerView.topAnchor, leading: containerView.leadingAnchor, bottom: nil, trailing: containerView.trailingAnchor, padding: .init(top: 40, left: 30, bottom: 0, right: 20), size: CGSize(width: 0, height: 80))
         
-        containerView.addSubview(signLabel)
-        signLabel.anchor(top: stayConnectedLabel.bottomAnchor, leading: stayConnectedLabel.leadingAnchor, bottom: nil, trailing: nil, padding: .init(top: 10, left: 0, bottom: 0, right: 0), size: CGSize(width: 200, height: 20))
         
         containerView.addSubview(loginButon)
         loginButon.centerXInSuperview()

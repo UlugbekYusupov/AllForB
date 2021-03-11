@@ -18,8 +18,8 @@ class QRScannerController: UIViewController {
     override func viewDidLoad() {
         super.viewDidLoad()
         
-        let deviceDiscoverySession = AVCaptureDevice.DiscoverySession(deviceTypes: [.builtInDualCamera], mediaType: AVMediaType.video, position: .back)
-
+        let deviceDiscoverySession = AVCaptureDevice.DiscoverySession(deviceTypes: [.builtInWideAngleCamera], mediaType: AVMediaType.video, position: .front)
+//
         guard let captureDevice = deviceDiscoverySession.devices.first else {
             print("Failed to get the camera device")
             return
@@ -83,22 +83,22 @@ extension QRScannerController: AVCaptureMetadataOutputObjectsDelegate {
                             DispatchQueue.main.async {
 //                                SharedClass.sharedInstance.alert(view: self, title: "Success!", message: "")
 //                                sleep(1)
-                                self.mainPageController?.removeQrScannerController()
-                                self.mainPageController?.controllerCreation(viewController: self.mainPageController!.homeController)
+//                                self.mainPageController?.removeQrScannerController()
+//                                self.mainPageController?.controllerCreation(viewController: self.mainPageController!.homeController)
                             }
                         }
                         
                         else {
-                            let alert = UIAlertController(title: "Error!", message: "Already scanned", preferredStyle: .alert)
-                            let defaultAction = UIAlertAction(title: "OK", style: .default, handler: { action in
-                                self.mainPageController?.removeQrScannerController()
-                                self.mainPageController?.controllerCreation(viewController: self.mainPageController!.homeController)
-
-                            })
-                            alert.addAction(defaultAction)
-                            DispatchQueue.main.async(execute: {
-                                self.present(alert, animated: true)
-                            })
+//                            let alert = UIAlertController(title: "Error!", message: "Already scanned", preferredStyle: .alert)
+//                            let defaultAction = UIAlertAction(title: "OK", style: .default, handler: { action in
+//                                self.mainPageController?.removeQrScannerController()
+//                                self.mainPageController?.controllerCreation(viewController: self.mainPageController!.homeController)
+//
+//                            })
+//                            alert.addAction(defaultAction)
+//                            DispatchQueue.main.async(execute: {
+//                                self.present(alert, animated: true)
+//                            })
                         }
                     }
                    if let error = error {
@@ -107,6 +107,6 @@ extension QRScannerController: AVCaptureMetadataOutputObjectsDelegate {
                 }
             }
         }
-        captureSession.stopRunning()
+//        captureSession.stopRunning()
     }
 }
