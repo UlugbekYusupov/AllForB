@@ -63,8 +63,14 @@ class MainPageController: UIViewController {
     
     static let shared = MainPageController()
     let menuLauncher = MenuLauncher()
+    var qrScannerController: QRScannerController?
     
+    let homeController = HomeController()
+    let profileController = ProfileController()
+    let settingsController = SettingsController()
+    let calendarController = CalendarController()
     var inOutController: InOutAttendanceController!
+
     var inOutView: UIView!
 
     override func viewDidLoad() {
@@ -122,6 +128,7 @@ extension MainPageController {
     }
 }
 
+
 extension MainPageController {
     
     @objc fileprivate func handleMenuButton() {
@@ -131,40 +138,44 @@ extension MainPageController {
     
     func showController(indexPath: IndexPath) {
         
-        if let qrFlag = qrFlag {
-            if qrFlag {
-                menuLauncher.qrScannerController?.removeFromParent()
-                menuLauncher.qrScannerController?.view.removeFromSuperview()
-            }
-        }
+//        if let qrFlag = qrFlag {
+//            if qrFlag {
+//                menuLauncher.qrScannerController?.removeFromParent()
+//                menuLauncher.qrScannerController?.view.removeFromSuperview()
+//            }
+//        }
+        
+        removeQrScannerController()
         
         switch indexPath.row {
         case 0:
-            let homeController = HomeController()
             self.controllerCreation(viewController: homeController)
         case 1:
-            let profileController = ProfileController()
             self.controllerCreation(viewController: profileController)
         case 2:
-            let calendarController = CalendarController()
             self.controllerCreation(viewController: calendarController)
         case 3:
             self.controllerCreation(viewController: inOutController)
         case 4:
-            let settingsController = SettingsController()
             self.controllerCreation(viewController: settingsController)
         default:
             break
         }
         
-        qrFlag = nil
+//        qrFlag = nil
+    }
+    
+    func removeQrScannerController() {
+        menuLauncher.qrScannerController?.removeFromParent()
+        menuLauncher.qrScannerController?.view.removeFromSuperview()
     }
     
     func showQRScannerController() {
-        qrFlag = true
-        let qrScannerController = QRScannerController()
+//        qrFlag = true
+        qrScannerController = QRScannerController()
         menuLauncher.qrScannerController = qrScannerController
-        self.controllerCreation(viewController: qrScannerController)
+        self.qrScannerController!.mainPageController = self
+        self.controllerCreation(viewController: self.qrScannerController!)
     }
     
     func controllerCreation(viewController: UIViewController) {

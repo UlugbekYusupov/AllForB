@@ -165,7 +165,7 @@ class MenuLauncher: NSObject {
             let width: CGFloat = window.frame.size.width / 1.4
             menuView.frame = CGRect(x: -window.frame.width, y: 0, width: width, height: window.frame.height)
 
-            UIView.animate(withDuration: 0.7, delay: 0, usingSpringWithDamping: 1, initialSpringVelocity: 1, options: .curveEaseOut) {
+            UIView.animate(withDuration: 0.5, delay: 0, usingSpringWithDamping: 1, initialSpringVelocity: 1, options: .curveEaseOut) {
                 self.blackView.alpha = 1
                 self.menuView.frame = CGRect(x: 0, y: 0, width: width, height: self.menuView.frame.height)
             } completion: { (flag) in }
@@ -249,23 +249,21 @@ extension MenuLauncher {
     }
     
     @objc fileprivate func handleBlackTapDismiss(gesture: UITapGestureRecognizer) {
-        UIView.animate(withDuration: 0.7, delay: 0, usingSpringWithDamping: 1, initialSpringVelocity: 1, options: .curveEaseOut) {
+        UIView.animate(withDuration: 0.5, delay: 0, usingSpringWithDamping: 1, initialSpringVelocity: 1, options: .curveEaseOut) {
             self.uiViewAnimation()
         } completion: { (flag) in }
     }
     
     @objc fileprivate func handleQRscan() {
-        if mainPageController?.qrFlag == nil {
-            UIView.animate(withDuration: 0.5, delay: 0, usingSpringWithDamping: 1, initialSpringVelocity: 1, options: .curveEaseOut) {
-                self.uiViewAnimation()
-            } completion: { (flag) in
-                self.mainPageController?.showQRScannerController()
-            }
-        } else {
-            UIView.animate(withDuration: 0.5, delay: 0, usingSpringWithDamping: 1, initialSpringVelocity: 1, options: .curveEaseOut) {
-                self.uiViewAnimation()
-            } completion: { (flag) in
-            }
+        UIView.animate(withDuration: 0.5, delay: 0, usingSpringWithDamping: 1, initialSpringVelocity: 1, options: .curveEaseOut) {
+            self.uiViewAnimation()
+        } completion: { (flag) in
+            self.mainPageController?.showQRScannerController()
+        }
+    
+        UIView.animate(withDuration: 0.5, delay: 0, usingSpringWithDamping: 1, initialSpringVelocity: 1, options: .curveEaseOut) {
+            self.uiViewAnimation()
+        } completion: { (flag) in
         }
     }
 }

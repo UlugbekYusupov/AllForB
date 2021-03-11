@@ -13,7 +13,7 @@ class QRScannerController: UIViewController {
     var captureSession = AVCaptureSession()
     var videoPreviewLayer: AVCaptureVideoPreviewLayer?
     var qrCodeFrameView: UIView?
-    var qrString: String?
+    var mainPageController: MainPageController?
     
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -74,8 +74,39 @@ extension QRScannerController: AVCaptureMetadataOutputObjectsDelegate {
             qrCodeFrameView?.frame = barCodeObject!.bounds
 
             if metadataObj.stringValue != nil {
-                qrString = metadataObj.stringValue
+                returnedQRString = metadataObj.stringValue
+                
+                APIService.shared.qrCodeCheck(userId: 1, companyId: 1, qrCode: returnedQRString!) { (result, error) in
+                    
+                    if let result = result {
+                        if result["ReturnCode"] as! Int == 0 {
+                            DispatchQueue.main.async {
+//                                SharedClass.sharedInstance.alert(view: self, title: "Success!", message: "")
+//                                sleep(1)
+                                self.mainPageController?.removeQrScannerController()
+                                self.mainPageController?.controllerCreation(viewController: self.mainPageController!.homeController)
+                            }
+                        }
+                        
+                        else {
+                            let alert = UIAlertController(title: "Error!", message: "Already scanned", preferredStyle: .alert)
+                            let defaultAction = UIAlertAction(title: "OK", style: .default, handler: { action in
+                                self.mainPageController?.removeQrScannerController()
+                                self.mainPageController?.controllerCreation(viewController: self.mainPageController!.homeController)
+
+                            })
+                            alert.addAction(defaultAction)
+                            DispatchQueue.main.async(execute: {
+                                self.present(alert, animated: true)
+                            })
+                        }
+                    }
+                   if let error = error {
+                        print("error: \(error.localizedDescription)")
+                    }
+                }
             }
         }
+        captureSession.stopRunning()
     }
 }

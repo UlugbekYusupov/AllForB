@@ -152,14 +152,16 @@ extension UIImage {
 let mainBackgroundColor: UIColor = .init(red: 16/244, green: 24/244, blue: 32/244, alpha: 1)
 let mainColor: UIColor = .init(red: 241/244, green: 170/244, blue: 76/244, alpha: 1)
 let application = (UIApplication.shared.delegate as! AppDelegate)
+var returnedQRString: String?
 
-class SharedClass: NSObject {//This is shared class
-static let sharedInstance = SharedClass()
+class SharedClass: NSObject {
+    
+    static let sharedInstance = SharedClass()
 
-    //Show alert
     func alert(view: UIViewController, title: String, message: String) {
         let alert = UIAlertController(title: title, message: message, preferredStyle: .alert)
         let defaultAction = UIAlertAction(title: "OK", style: .default, handler: { action in
+            
         })
         alert.addAction(defaultAction)
         DispatchQueue.main.async(execute: {
@@ -167,8 +169,7 @@ static let sharedInstance = SharedClass()
         })
     }
 
-    private override init() {
-    }
+    private override init() {}
 }
 
 extension Date {
