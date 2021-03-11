@@ -144,7 +144,8 @@ class MenuLauncher: NSObject {
     private var menuTableView: UITableView!
     private let tableHeight: CGFloat = 40
     var mainPageController: MainPageController?
-
+    var qrScannerController: QRScannerController?
+    
     override init() {
         super.init()
         
@@ -171,13 +172,11 @@ class MenuLauncher: NSObject {
         }
     }
 
-    fileprivate func menuRemover() {
-        UIView.animate(withDuration: 1, delay: 0, usingSpringWithDamping: 1, initialSpringVelocity: 0.8, options: .curveEaseOut) {
-            if let window = UIApplication.shared.windows.first(where: { $0.isKeyWindow }) {
-                self.blackView.alpha = 0
-                self.menuView.frame = CGRect(x: -window.frame.width, y: 0, width: self.menuView.frame.width, height: self.menuView.frame.height)
-            }
-        } completion: { (flag) in}
+    fileprivate func uiViewAnimation() {
+        if let window = UIApplication.shared.windows.first(where: { $0.isKeyWindow }) {
+            self.blackView.alpha = 0
+            self.menuView.frame = CGRect(x: -window.frame.width, y: 0, width: self.menuView.frame.width, height: self.menuView.frame.height)
+        }
     }
 }
 
@@ -250,13 +249,25 @@ extension MenuLauncher {
     }
     
     @objc fileprivate func handleBlackTapDismiss(gesture: UITapGestureRecognizer) {
-        menuRemover()
+        UIView.animate(withDuration: 0.7, delay: 0, usingSpringWithDamping: 1, initialSpringVelocity: 1, options: .curveEaseOut) {
+            self.uiViewAnimation()
+        } completion: { (flag) in }
     }
     
     @objc fileprivate func handleQRscan() {
-        print("QR scan pressed")
+        if mainPageController?.qrFlag == nil {
+            UIView.animate(withDuration: 0.5, delay: 0, usingSpringWithDamping: 1, initialSpringVelocity: 1, options: .curveEaseOut) {
+                self.uiViewAnimation()
+            } completion: { (flag) in
+                self.mainPageController?.showQRScannerController()
+            }
+        } else {
+            UIView.animate(withDuration: 0.5, delay: 0, usingSpringWithDamping: 1, initialSpringVelocity: 1, options: .curveEaseOut) {
+                self.uiViewAnimation()
+            } completion: { (flag) in
+            }
+        }
     }
-    
 }
 
 
@@ -288,13 +299,9 @@ extension MenuLauncher: UITableViewDelegate, UITableViewDataSource {
         cell!.contentView.backgroundColor = #colorLiteral(red: 0.0355408527, green: 0, blue: 0.1415036023, alpha: 1)
     }
     
-    
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
         UIView.animate(withDuration: 0.5, delay: 0, usingSpringWithDamping: 1, initialSpringVelocity: 1, options: .curveEaseOut) {
-            if let window = UIApplication.shared.windows.first(where: { $0.isKeyWindow }) {
-                self.blackView.alpha = 0
-                self.menuView.frame = CGRect(x: -window.frame.width, y: 0, width: self.menuView.frame.width, height: self.menuView.frame.height)
-            }
+            self.uiViewAnimation()
         } completion: { (flag) in
             self.mainPageController?.showController(indexPath: indexPath)
         }

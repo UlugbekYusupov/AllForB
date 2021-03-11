@@ -76,6 +76,8 @@ class MainPageController: UIViewController {
     override open var shouldAutorotate: Bool {
         return false
     }
+    var qrFlag: Bool?
+
 }
 
 extension MainPageController {
@@ -128,6 +130,14 @@ extension MainPageController {
     }
     
     func showController(indexPath: IndexPath) {
+        
+        if let qrFlag = qrFlag {
+            if qrFlag {
+                menuLauncher.qrScannerController?.removeFromParent()
+                menuLauncher.qrScannerController?.view.removeFromSuperview()
+            }
+        }
+        
         switch indexPath.row {
         case 0:
             let homeController = HomeController()
@@ -146,6 +156,15 @@ extension MainPageController {
         default:
             break
         }
+        
+        qrFlag = nil
+    }
+    
+    func showQRScannerController() {
+        qrFlag = true
+        let qrScannerController = QRScannerController()
+        menuLauncher.qrScannerController = qrScannerController
+        self.controllerCreation(viewController: qrScannerController)
     }
     
     func controllerCreation(viewController: UIViewController) {

@@ -29,6 +29,7 @@
 		5CC64C0625F770CA00E1FF25 /* CalendarController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5CC64C0525F770CA00E1FF25 /* CalendarController.swift */; };
 		5CC64C0B25F770E300E1FF25 /* InOutAttendanceController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5CC64C0A25F770E300E1FF25 /* InOutAttendanceController.swift */; };
 		5CC64C1025F770EF00E1FF25 /* SettingsController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5CC64C0F25F770EF00E1FF25 /* SettingsController.swift */; };
+		5CC64C1D25F9A18F00E1FF25 /* QRScannerController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5CC64C1C25F9A18F00E1FF25 /* QRScannerController.swift */; };
 		5CD64E4B25F5BDC9002CD116 /* LoginInfo.xcdatamodeld in Sources */ = {isa = PBXBuildFile; fileRef = 5CD64E4925F5BDC9002CD116 /* LoginInfo.xcdatamodeld */; };
 		5CD64E8A25F5C93A002CD116 /* LoginInfo+CoreDataClass.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5CD64E8825F5C93A002CD116 /* LoginInfo+CoreDataClass.swift */; };
 		5CD64E8B25F5C93A002CD116 /* LoginInfo+CoreDataProperties.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5CD64E8925F5C93A002CD116 /* LoginInfo+CoreDataProperties.swift */; };
@@ -85,6 +86,7 @@
 		5CC64C0525F770CA00E1FF25 /* CalendarController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CalendarController.swift; sourceTree = "<group>"; };
 		5CC64C0A25F770E300E1FF25 /* InOutAttendanceController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = InOutAttendanceController.swift; sourceTree = "<group>"; };
 		5CC64C0F25F770EF00E1FF25 /* SettingsController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SettingsController.swift; sourceTree = "<group>"; };
+		5CC64C1C25F9A18F00E1FF25 /* QRScannerController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = QRScannerController.swift; sourceTree = "<group>"; };
 		5CD64E4A25F5BDC9002CD116 /* LoginInfo.xcdatamodel */ = {isa = PBXFileReference; lastKnownFileType = wrapper.xcdatamodel; path = LoginInfo.xcdatamodel; sourceTree = "<group>"; };
 		5CD64E8825F5C93A002CD116 /* LoginInfo+CoreDataClass.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = "LoginInfo+CoreDataClass.swift"; sourceTree = "<group>"; };
 		5CD64E8925F5C93A002CD116 /* LoginInfo+CoreDataProperties.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = "LoginInfo+CoreDataProperties.swift"; sourceTree = "<group>"; };
@@ -263,6 +265,7 @@
 				5CC64C0525F770CA00E1FF25 /* CalendarController.swift */,
 				5CC64C0A25F770E300E1FF25 /* InOutAttendanceController.swift */,
 				5CC64C0F25F770EF00E1FF25 /* SettingsController.swift */,
+				5CC64C1C25F9A18F00E1FF25 /* QRScannerController.swift */,
 			);
 			path = MenuItems;
 			sourceTree = "<group>";
@@ -546,6 +549,7 @@
 				5CC64BF925F770A600E1FF25 /* HomeController.swift in Sources */,
 				5CD64E8B25F5C93A002CD116 /* LoginInfo+CoreDataProperties.swift in Sources */,
 				5CC64C1025F770EF00E1FF25 /* SettingsController.swift in Sources */,
+				5CC64C1D25F9A18F00E1FF25 /* QRScannerController.swift in Sources */,
 				5C1C92A225F0B1AB00C0AA9E /* APIService.swift in Sources */,
 				5C1C929625F0A08800C0AA9E /* LoginModel.swift in Sources */,
 				5CC64C0125F770B000E1FF25 /* ProfileController.swift in Sources */,
@@ -732,7 +736,7 @@
 					"$(inherited)",
 					"@executable_path/Frameworks",
 				);
-				PRODUCT_BUNDLE_IDENTIFIER = SlackNSoft.AllForB;
+				PRODUCT_BUNDLE_IDENTIFIER = SlackNSoft.AllForB.com;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SWIFT_VERSION = 5.0;
 				TARGETED_DEVICE_FAMILY = "1,2";
@@ -752,7 +756,7 @@
 					"$(inherited)",
 					"@executable_path/Frameworks",
 				);
-				PRODUCT_BUNDLE_IDENTIFIER = SlackNSoft.AllForB;
+				PRODUCT_BUNDLE_IDENTIFIER = SlackNSoft.AllForB.com;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SWIFT_VERSION = 5.0;
 				TARGETED_DEVICE_FAMILY = "1,2";
