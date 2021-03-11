@@ -8,7 +8,7 @@ target 'AllForB' do
 
   # Pods for AllForB
   pod 'Alamofire', '~> 5.2'
-
+  pod 'FSCalendar'
   target 'AllForBTests' do
     inherit! :search_paths
     # Pods for testing
