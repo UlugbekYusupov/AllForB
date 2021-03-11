@@ -105,15 +105,11 @@ class RootController: UIViewController {
         if application.getCurrentLoginToken() == nil {
             let login = LoginController()
             login.modalPresentationStyle = .fullScreen
-//            view.addSubview(login.view)
-//            login.didMove(toParent: self)
-
             present(login, animated: true, completion: nil)
         }
         else {
             let mainPageController = MainPageController()
             mainPageController.modalPresentationStyle = .fullScreen
-
             present(mainPageController, animated: true, completion: nil)
         }
     }

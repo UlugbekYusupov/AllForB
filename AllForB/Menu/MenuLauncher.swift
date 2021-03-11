@@ -245,7 +245,12 @@ extension MenuLauncher {
     }
     
     @objc fileprivate func handleLogoutButton() {
-        print("Log out pressed")
+        application.clearDatabase()
+        UserDefaults.standard.removeObject(forKey: "currentLoginToken")
+        self.mainPageController?.dismiss(animated: false, completion: nil)
+        UIView.animate(withDuration: 0, delay: 0, usingSpringWithDamping: 1, initialSpringVelocity: 1, options: .curveEaseOut) {
+            self.uiViewAnimation()
+        } completion: { (flag) in }
     }
     
     @objc fileprivate func handleBlackTapDismiss(gesture: UITapGestureRecognizer) {

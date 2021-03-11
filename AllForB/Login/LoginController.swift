@@ -44,7 +44,7 @@ class LoginController: UIViewController {
             .foregroundColor: mainColor,
             .font: UIFont(name: "Verdana", size: 13) as Any
         ])
-        tf.textColor = .white
+        tf.textColor = mainColor
         tf.autocorrectionType = .no
         tf.autocapitalizationType = .none
         return tf
@@ -90,7 +90,7 @@ class LoginController: UIViewController {
         let tf = UITextField()
         tf.placeholder = tf.placeholder ?? ""
         tf.clipsToBounds = true
-        tf.textColor = .white
+        tf.textColor = mainColor
         tf.contentMode = .scaleAspectFit
         tf.attributedPlaceholder = NSAttributedString(string: "Your password", attributes: [
             .foregroundColor: mainColor,
@@ -172,6 +172,9 @@ extension LoginController {
         } else {
             handleLoginResponse(username, password, IsLoginSave)
         }
+        
+        yourUsernameTextField.text?.removeAll()
+        yourPasswordTextField.text?.removeAll()        
     }
     
     @objc fileprivate func handleSeePassword() {
