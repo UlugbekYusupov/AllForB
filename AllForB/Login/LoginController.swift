@@ -138,14 +138,6 @@ class LoginController: UIViewController {
         view.backgroundColor = mainBackgroundColor
         setupContainer()
     }
-    
-//    override func viewDidDisappear(_ animated: Bool) {
-//        super.viewDidDisappear(animated)
-////        self.yourUsernameTextField.text?.removeAll()
-////        self.yourPasswordTextField.text?.removeAll()
-////        self.dismiss(animated: false, completion: nil)
-//
-//    }
 }
 
 extension LoginController {

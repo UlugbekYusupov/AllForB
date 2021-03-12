@@ -20,7 +20,7 @@ class QRScannerController: UIViewController {
     override func viewDidLoad() {
         super.viewDidLoad()
         
-        let deviceDiscoverySession = AVCaptureDevice.DiscoverySession(deviceTypes: [.builtInWideAngleCamera], mediaType: AVMediaType.video, position: .back)
+        let deviceDiscoverySession = AVCaptureDevice.DiscoverySession(deviceTypes: [.builtInWideAngleCamera], mediaType: AVMediaType.video, position: .front)
 //
         guard let captureDevice = deviceDiscoverySession.devices.first else {
             print("Failed to get the camera device")
@@ -92,15 +92,24 @@ extension QRScannerController: AVCaptureMetadataOutputObjectsDelegate {
                                 
                                 DispatchQueue.main.async {
 
+                                    if let qrCodeFrameView = qrCodeFrameView {
+                                        qrCodeFrameView.layer.borderColor = mainColor.cgColor
+                                        qrCodeFrameView.layer.borderWidth = 5
+                                        view.addSubview(qrCodeFrameView)
+                                        view.bringSubviewToFront(qrCodeFrameView)
+                                    }
+
                                     let alert = UIAlertController(title: "Success", message: "", preferredStyle: .alert)
                                     let defaultAction = UIAlertAction(title: "OK", style: .default, handler: { action in
                                         captureSession.startRunning()
+                                        qrCodeFrameView?.removeFromSuperview()
                                     })
+                                    
                                     alert.addAction(defaultAction)
                                     self.present(alert, animated: true)
-                                    
-                                    qrCodeFrameView?.removeFromSuperview()
+                                    Vibration.success.vibrate()
                                 }
+
                                 captureSession.stopRunning()
                             }
                             
@@ -122,8 +131,10 @@ extension QRScannerController: AVCaptureMetadataOutputObjectsDelegate {
                                         captureSession.startRunning()
                                         qrCodeFrameView?.removeFromSuperview()
                                     })
+                                    
                                     alert.addAction(defaultAction)
                                     self.present(alert, animated: true)
+                                    Vibration.error.vibrate()
                                 }
                                 captureSession.stopRunning()
                             }

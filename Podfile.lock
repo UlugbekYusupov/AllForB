@@ -1,20 +1,26 @@
 PODS:
   - Alamofire (5.4.1)
   - FSCalendar (2.8.2)
+  - NVActivityIndicatorView (5.1.1):
+    - NVActivityIndicatorView/Base (= 5.1.1)
+  - NVActivityIndicatorView/Base (5.1.1)
 
 DEPENDENCIES:
   - Alamofire (~> 5.2)
   - FSCalendar
+  - NVActivityIndicatorView
 
 SPEC REPOS:
   trunk:
     - Alamofire
     - FSCalendar
+    - NVActivityIndicatorView
 
 SPEC CHECKSUMS:
   Alamofire: 2291f7d21ca607c491dd17642e5d40fdcda0e65c
   FSCalendar: e6a2eb9c571bf0719ed797ef807e08426753c241
+  NVActivityIndicatorView: 1f6c5687f1171810aa27a3296814dc2d7dec3667
 
-PODFILE CHECKSUM: 130cb5eb01004645a1f027535dbd1edc7772dabc
+PODFILE CHECKSUM: 53f96dca6d98bacd27134d2b56c40c556fe785c2
 
 COCOAPODS: 1.10.1

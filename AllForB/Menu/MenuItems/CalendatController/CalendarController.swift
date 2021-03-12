@@ -77,7 +77,7 @@ class CalendarController: UIViewController {
             guard let result = result else {return}
             self.resultList = result
             
-            print(self.resultList)
+//            print(self.resultList)
             DispatchQueue.main.async {
                 self.dailyListCollectionTable?.reloadData()
             }

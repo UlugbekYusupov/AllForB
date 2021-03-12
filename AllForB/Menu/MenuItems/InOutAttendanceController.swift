@@ -6,6 +6,7 @@
 //
 
 import UIKit
+import NVActivityIndicatorView
 
 class InOutAttendanceController: UIViewController {
     
@@ -19,6 +20,7 @@ class InOutAttendanceController: UIViewController {
         let iv = UIImageView()
         return iv
     }()
+    var activityIndicatorView: NVActivityIndicatorView?
     
     let segmentItems = ["출근", "퇴근"]
     lazy var chulTeginSegmentControl: UISegmentedControl = {
@@ -77,7 +79,8 @@ class InOutAttendanceController: UIViewController {
         
         userId = (application.getAnyValueFromCoreData(token!, "userId") as! Int)
         handleCreateQRCode(userId!, 1, "122234234535", 3)
-
+        
+        activityIndicatorView = NVActivityIndicatorView(frame: view.frame, type: .ballGridBeat, color: .red, padding: .none)
     }
     
     fileprivate func setupContainerView() {
@@ -144,8 +147,12 @@ class InOutAttendanceController: UIViewController {
         APIService.shared.qrCodeCreate(userId: userId, companyId: companyId, phoneNo: phoneNo, inOutTypeId: inOutTypeId) { (result, error) in
             if let result = result {
                 DispatchQueue.main.async {
+//                    self.view.addSubview(self.activityIndicatorView!)
+//                    self.activityIndicatorView!.startAnimating()
+
                     self.qrImageView.image = self.generateQRCode(qrString: result["InoutQRValue"] as! String)
                 }
+//                self.activityIndicatorView!.stopAnimating()
             }
             else if let error = error {
                 print("error: \(error.localizedDescription)")

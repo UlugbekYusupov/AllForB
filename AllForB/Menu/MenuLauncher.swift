@@ -145,6 +145,7 @@ class MenuLauncher: NSObject {
     private let tableHeight: CGFloat = 40
     var mainPageController: MainPageController?
     var qrScannerController: QRScannerController?
+    var loginController: LoginController?
     
     override init() {
         super.init()
@@ -247,6 +248,7 @@ extension MenuLauncher {
     @objc fileprivate func handleLogoutButton() {
         application.clearDatabase()
         UserDefaults.standard.removeObject(forKey: "currentLoginToken")
+        
         self.mainPageController?.dismiss(animated: false, completion: nil)
         UIView.animate(withDuration: 0, delay: 0, usingSpringWithDamping: 1, initialSpringVelocity: 1, options: .curveEaseOut) {
             self.uiViewAnimation()
