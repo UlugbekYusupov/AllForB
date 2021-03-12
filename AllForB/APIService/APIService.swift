@@ -10,5 +10,3 @@ import UIKit
 class APIService {
     static let shared = APIService()
 }
-
-

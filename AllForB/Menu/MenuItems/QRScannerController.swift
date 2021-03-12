@@ -15,10 +15,12 @@ class QRScannerController: UIViewController {
     var qrCodeFrameView: UIView?
     var mainPageController: MainPageController?
     
+    var flag: Bool?
+    
     override func viewDidLoad() {
         super.viewDidLoad()
         
-        let deviceDiscoverySession = AVCaptureDevice.DiscoverySession(deviceTypes: [.builtInWideAngleCamera], mediaType: AVMediaType.video, position: .front)
+        let deviceDiscoverySession = AVCaptureDevice.DiscoverySession(deviceTypes: [.builtInWideAngleCamera], mediaType: AVMediaType.video, position: .back)
 //
         guard let captureDevice = deviceDiscoverySession.devices.first else {
             print("Failed to get the camera device")
@@ -39,14 +41,16 @@ class QRScannerController: UIViewController {
             videoPreviewLayer = AVCaptureVideoPreviewLayer(session: captureSession)
             videoPreviewLayer?.videoGravity = AVLayerVideoGravity.resize
             videoPreviewLayer?.frame = view.layer.bounds
-
+            
+            
             view.layer.addSublayer(videoPreviewLayer!)
             captureSession.startRunning()
-            
+
             qrCodeFrameView = UIView()
+            
             if let qrCodeFrameView = qrCodeFrameView {
                 qrCodeFrameView.layer.borderColor = mainColor.cgColor
-                qrCodeFrameView.layer.borderWidth = 2
+                qrCodeFrameView.layer.borderWidth = 5
                 view.addSubview(qrCodeFrameView)
                 view.bringSubviewToFront(qrCodeFrameView)
             }
@@ -62,6 +66,7 @@ extension QRScannerController: AVCaptureMetadataOutputObjectsDelegate {
     
     func metadataOutput(_ output: AVCaptureMetadataOutput, didOutput metadataObjects: [AVMetadataObject], from connection: AVCaptureConnection) {
         
+        flag = false
         if metadataObjects.count == 0 {
             qrCodeFrameView?.frame = CGRect.zero
             return
@@ -76,37 +81,60 @@ extension QRScannerController: AVCaptureMetadataOutputObjectsDelegate {
             if metadataObj.stringValue != nil {
                 returnedQRString = metadataObj.stringValue
                 
-                APIService.shared.qrCodeCheck(userId: 1, companyId: 1, qrCode: returnedQRString!) { (result, error) in
+                APIService.shared.qrCodeCheck(userId: 1, companyId: 1, qrCode: returnedQRString!) { [self] (result, error) in
                     
-                    if let result = result {
-                        if result["ReturnCode"] as! Int == 0 {
-                            DispatchQueue.main.async {
-//                                SharedClass.sharedInstance.alert(view: self, title: "Success!", message: "")
-//                                sleep(1)
-//                                self.mainPageController?.removeQrScannerController()
-//                                self.mainPageController?.controllerCreation(viewController: self.mainPageController!.homeController)
+                    if flag == false {
+                        if let result = result {
+                            if result["ReturnCode"] as! Int == 0 {
+                                
+                                flag = true
+                                print(result["ReturnCode"] as! Int)
+                                
+                                DispatchQueue.main.async {
+
+                                    let alert = UIAlertController(title: "Success", message: "", preferredStyle: .alert)
+                                    let defaultAction = UIAlertAction(title: "OK", style: .default, handler: { action in
+                                        captureSession.startRunning()
+                                    })
+                                    alert.addAction(defaultAction)
+                                    self.present(alert, animated: true)
+                                    
+                                    qrCodeFrameView?.removeFromSuperview()
+                                }
+                                captureSession.stopRunning()
+                            }
+                            
+                            else {
+                                
+                                flag = false
+
+                                DispatchQueue.main.async {
+
+                                    if let qrCodeFrameView = qrCodeFrameView {
+                                        qrCodeFrameView.layer.borderColor = mainColor.cgColor
+                                        qrCodeFrameView.layer.borderWidth = 5
+                                        view.addSubview(qrCodeFrameView)
+                                        view.bringSubviewToFront(qrCodeFrameView)
+                                    }
+
+                                    let alert = UIAlertController(title: "Error!", message: (result["ExceptionMessage"] as! String), preferredStyle: .alert)
+                                    let defaultAction = UIAlertAction(title: "OK", style: .default, handler: { action in
+                                        captureSession.startRunning()
+                                        qrCodeFrameView?.removeFromSuperview()
+                                    })
+                                    alert.addAction(defaultAction)
+                                    self.present(alert, animated: true)
+                                }
+                                captureSession.stopRunning()
                             }
                         }
                         
-                        else {
-//                            let alert = UIAlertController(title: "Error!", message: "Already scanned", preferredStyle: .alert)
-//                            let defaultAction = UIAlertAction(title: "OK", style: .default, handler: { action in
-//                                self.mainPageController?.removeQrScannerController()
-//                                self.mainPageController?.controllerCreation(viewController: self.mainPageController!.homeController)
-//
-//                            })
-//                            alert.addAction(defaultAction)
-//                            DispatchQueue.main.async(execute: {
-//                                self.present(alert, animated: true)
-//                            })
+                        if let error = error {
+                             print("error: \(error.localizedDescription)")
                         }
-                    }
-                   if let error = error {
-                        print("error: \(error.localizedDescription)")
                     }
                 }
             }
         }
-//        captureSession.stopRunning()
     }
 }

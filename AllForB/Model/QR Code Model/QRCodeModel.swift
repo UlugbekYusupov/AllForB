@@ -7,13 +7,13 @@
 
 import UIKit
 
-struct QRCodeModel: Decodable {
-    let ReturnCode: Int?
-    let ThrownException: String?
-    let ExpireDateTime: String?
-    let ExceptionMessage: String?
-    let InoutQRValue: String?
-}
+//struct QRCodeModel: Decodable {
+//    let ReturnCode: Int?
+//    let ThrownException: String?
+//    let ExpireDateTime: String?
+//    let ExceptionMessage: String?
+//    let InoutQRValue: String?
+//}
 
 
 extension APIService {
@@ -56,9 +56,9 @@ extension APIService {
                     return
                 }
                 
-                let data = try JSONSerialization.data(withJSONObject: json, options: .prettyPrinted)
-                let decoder = JSONDecoder()
-                let qrCodeModel = try decoder.decode(QRCodeModel.self, from: data)
+//                let data = try JSONSerialization.data(withJSONObject: json, options: .prettyPrinted)
+//                let decoder = JSONDecoder()
+//                let qrCodeModel = try decoder.decode(QRCodeModel.self, from: data)
                 completion(json, nil)
                 
             }
@@ -110,7 +110,7 @@ extension APIService {
                         completion(nil, NSError(domain: "invalidJSONTypeError", code: -100009, userInfo: nil))
                     return
                 }
-                print(json)
+//                print(json)
 //                let data = try JSONSerialization.data(withJSONObject: json, options: .prettyPrinted)
 //                let decoder = JSONDecoder()
 //                let qrCodeModel = try decoder.decode(QRCodeModel.self, from: data)

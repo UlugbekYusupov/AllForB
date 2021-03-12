@@ -30,6 +30,8 @@
 		5CC64C0B25F770E300E1FF25 /* InOutAttendanceController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5CC64C0A25F770E300E1FF25 /* InOutAttendanceController.swift */; };
 		5CC64C1025F770EF00E1FF25 /* SettingsController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5CC64C0F25F770EF00E1FF25 /* SettingsController.swift */; };
 		5CC64C1D25F9A18F00E1FF25 /* QRScannerController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5CC64C1C25F9A18F00E1FF25 /* QRScannerController.swift */; };
+		5CC64C4E25FB1E8C00E1FF25 /* DailyListModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5CC64C4D25FB1E8C00E1FF25 /* DailyListModel.swift */; };
+		5CC64C5C25FB517500E1FF25 /* CalendarCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5CC64C5B25FB517500E1FF25 /* CalendarCell.swift */; };
 		5CD64E4B25F5BDC9002CD116 /* LoginInfo.xcdatamodeld in Sources */ = {isa = PBXBuildFile; fileRef = 5CD64E4925F5BDC9002CD116 /* LoginInfo.xcdatamodeld */; };
 		5CD64E8A25F5C93A002CD116 /* LoginInfo+CoreDataClass.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5CD64E8825F5C93A002CD116 /* LoginInfo+CoreDataClass.swift */; };
 		5CD64E8B25F5C93A002CD116 /* LoginInfo+CoreDataProperties.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5CD64E8925F5C93A002CD116 /* LoginInfo+CoreDataProperties.swift */; };
@@ -87,6 +89,8 @@
 		5CC64C0A25F770E300E1FF25 /* InOutAttendanceController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = InOutAttendanceController.swift; sourceTree = "<group>"; };
 		5CC64C0F25F770EF00E1FF25 /* SettingsController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SettingsController.swift; sourceTree = "<group>"; };
 		5CC64C1C25F9A18F00E1FF25 /* QRScannerController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = QRScannerController.swift; sourceTree = "<group>"; };
+		5CC64C4D25FB1E8C00E1FF25 /* DailyListModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DailyListModel.swift; sourceTree = "<group>"; };
+		5CC64C5B25FB517500E1FF25 /* CalendarCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CalendarCell.swift; sourceTree = "<group>"; };
 		5CD64E4A25F5BDC9002CD116 /* LoginInfo.xcdatamodel */ = {isa = PBXFileReference; lastKnownFileType = wrapper.xcdatamodel; path = LoginInfo.xcdatamodel; sourceTree = "<group>"; };
 		5CD64E8825F5C93A002CD116 /* LoginInfo+CoreDataClass.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = "LoginInfo+CoreDataClass.swift"; sourceTree = "<group>"; };
 		5CD64E8925F5C93A002CD116 /* LoginInfo+CoreDataProperties.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = "LoginInfo+CoreDataProperties.swift"; sourceTree = "<group>"; };
@@ -140,6 +144,7 @@
 		5C1C929425F0A07D00C0AA9E /* Model */ = {
 			isa = PBXGroup;
 			children = (
+				5CC64C4C25FB1E6C00E1FF25 /* Daily List Model */,
 				5CC64BD925F7109000E1FF25 /* QR Code Model */,
 				5CE4137925F708B900D7A26F /* Login Model */,
 			);
@@ -260,14 +265,31 @@
 		5CC64BF725F7708D00E1FF25 /* MenuItems */ = {
 			isa = PBXGroup;
 			children = (
+				5CC64C5A25FB515000E1FF25 /* CalendatController */,
 				5CC64BF825F770A600E1FF25 /* HomeController.swift */,
 				5CC64C0025F770B000E1FF25 /* ProfileController.swift */,
-				5CC64C0525F770CA00E1FF25 /* CalendarController.swift */,
 				5CC64C0A25F770E300E1FF25 /* InOutAttendanceController.swift */,
 				5CC64C0F25F770EF00E1FF25 /* SettingsController.swift */,
 				5CC64C1C25F9A18F00E1FF25 /* QRScannerController.swift */,
 			);
 			path = MenuItems;
+			sourceTree = "<group>";
+		};
+		5CC64C4C25FB1E6C00E1FF25 /* Daily List Model */ = {
+			isa = PBXGroup;
+			children = (
+				5CC64C4D25FB1E8C00E1FF25 /* DailyListModel.swift */,
+			);
+			path = "Daily List Model";
+			sourceTree = "<group>";
+		};
+		5CC64C5A25FB515000E1FF25 /* CalendatController */ = {
+			isa = PBXGroup;
+			children = (
+				5CC64C0525F770CA00E1FF25 /* CalendarController.swift */,
+				5CC64C5B25FB517500E1FF25 /* CalendarCell.swift */,
+			);
+			path = CalendatController;
 			sourceTree = "<group>";
 		};
 		5CE4137925F708B900D7A26F /* Login Model */ = {
@@ -533,8 +555,10 @@
 			buildActionMask = 2147483647;
 			files = (
 				5C1C92A725F0BDAB00C0AA9E /* MainPageController.swift in Sources */,
+				5CC64C5C25FB517500E1FF25 /* CalendarCell.swift in Sources */,
 				5C2C1A9C25E8F54E00CEBE3A /* Extensions.swift in Sources */,
 				5CC64BDB25F710A400E1FF25 /* QRCodeModel.swift in Sources */,
+				5CC64C4E25FB1E8C00E1FF25 /* DailyListModel.swift in Sources */,
 				5CD64E8A25F5C93A002CD116 /* LoginInfo+CoreDataClass.swift in Sources */,
 				5C2C1A4B25E8F0ED00CEBE3A /* ViewController.swift in Sources */,
 				5CD64E4B25F5BDC9002CD116 /* LoginInfo.xcdatamodeld in Sources */,
