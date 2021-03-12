@@ -88,26 +88,35 @@ class CalendarController: UIViewController {
         }
     }
 }
-
 extension CalendarController: FSCalendarDelegate {
     func calendar(_ calendar: FSCalendar, didSelect date: Date, at monthPosition: FSCalendarMonthPosition) {
         print("Selected: ", date)
     }
 }
 
-
 extension CalendarController: UICollectionViewDelegate, UICollectionViewDataSource, UICollectionViewDelegateFlowLayout {
-    
     func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
         return resultList.count
     }
     
+    //InOutTimeInfo
+    //IssueDate
+    
+    
     func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
         let cell = collectionView.dequeueReusableCell(withReuseIdentifier: "cellID", for: indexPath) as! CalendarCell
+        
+        let issueDate = resultList[indexPath.row].IssueDate
+        let inOutTimeInfo = resultList[indexPath.row].InOutTimeInfo
+        
+        cell.nalchaLabel.text = "날짜: " + issueDate!
+        cell.chulTweginLabel.text = inOutTimeInfo
+
         return cell
     }
     
     func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, sizeForItemAt indexPath: IndexPath) -> CGSize {
         return CGSize(width: (dailyListCollectionTable?.frame.width)!, height: (dailyListCollectionTable?.frame.size.height)! / 2)
     }
+
 }
