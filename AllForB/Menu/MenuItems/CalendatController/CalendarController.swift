@@ -92,16 +92,18 @@ extension CalendarController: FSCalendarDelegate {
     func calendar(_ calendar: FSCalendar, didSelect date: Date, at monthPosition: FSCalendarMonthPosition) {
         print("Selected: ", date)
     }
+    
+    func calendarCurrentPageDidChange(_ calendar: FSCalendar) {
+        // fetch data according to month
+        
+        print(calendar.currentPage)
+    }
 }
 
 extension CalendarController: UICollectionViewDelegate, UICollectionViewDataSource, UICollectionViewDelegateFlowLayout {
     func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
         return resultList.count
     }
-    
-    //InOutTimeInfo
-    //IssueDate
-    
     
     func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
         let cell = collectionView.dequeueReusableCell(withReuseIdentifier: "cellID", for: indexPath) as! CalendarCell
