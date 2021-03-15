@@ -7,17 +7,17 @@
 
 import UIKit
 
-//struct QRCodeModel: Decodable {
-//    let ReturnCode: Int?
-//    let ThrownException: String?
-//    let ExpireDateTime: String?
-//    let ExceptionMessage: String?
-//    let InoutQRValue: String?
-//}
+struct QRCodeModel: Decodable {
+    let ReturnCode: Int?
+    let ThrownException: String?
+    let ExpireDateTime: String
+    let ExceptionMessage: String?
+    let InoutQRValue: String
+}
 
 
 extension APIService {
-    func qrCodeCreate(userId: Int, companyId: Int, phoneNo: String, inOutTypeId: Int, completion: @escaping ([String: Any]?, Error?) -> Void) {
+    func qrCodeCreate(userId: Int, companyId: Int, phoneNo: String, inOutTypeId: Int, completion: @escaping (QRCodeModel?, Error?) -> Void) {
 
         let parameters = ["UserId": userId, "CompanyId": companyId, "PhoneNo": phoneNo, "InoutTypeId": inOutTypeId] as [String : Any]
             let url = URL(string: "http://112.216.225.178:44362/api/attendance/createQR")!
@@ -49,19 +49,11 @@ extension APIService {
                 completion(nil, NSError(domain: "dataNilError", code: -100001, userInfo: nil))
                 return
             }
-                        
             do {
-                guard let json = try JSONSerialization.jsonObject(with: data, options: .mutableContainers) as? [String: Any] else {
-                    completion(nil, NSError(domain: "invalidJSONTypeError", code: -100009, userInfo: nil))
-                    return
-                }
-                
-//                let data = try JSONSerialization.data(withJSONObject: json, options: .prettyPrinted)
-//                let decoder = JSONDecoder()
-//                let qrCodeModel = try decoder.decode(QRCodeModel.self, from: data)
-                completion(json, nil)
-                
+                let rootJSON = try JSONDecoder().decode(QRCodeModel.self, from: data)
+                completion(rootJSON, nil)
             }
+            
             catch let error {
                 print(error.localizedDescription)
                 completion(nil, error)

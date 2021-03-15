@@ -71,12 +71,8 @@ class MainPageController: UIViewController {
     let menuLauncher = MenuLauncher()
     var qrScannerController: QRScannerController?
     
-    let homeController = HomeController()
-    let profileController = ProfileController()
-    let settingsController = SettingsController()
-    let calendarController = CalendarController()
     var inOutController: InOutAttendanceController!
-
+    
     var inOutView: UIView!
 
     override func viewDidLoad() {
@@ -139,15 +135,19 @@ extension MainPageController {
         
         switch indexPath.row {
         case 0:
-            self.controllerCreation(viewController: homeController)
+            let homeController = HomeController()
+            controllerCreation(viewController: homeController)
         case 1:
-            self.controllerCreation(viewController: profileController)
+            let profileController = ProfileController()
+            controllerCreation(viewController: profileController)
         case 2:
-            self.controllerCreation(viewController: calendarController)
+            let calendarController = CalendarController()
+            controllerCreation(viewController: calendarController)
         case 3:
             self.controllerCreation(viewController: inOutController)
         case 4:
-            self.controllerCreation(viewController: settingsController)
+            let settingsController = SettingsController()
+            controllerCreation(viewController: settingsController)
         default:
             break
         }
@@ -156,15 +156,14 @@ extension MainPageController {
     func removeQrScannerController() {
         menuLauncher.qrScannerController?.removeFromParent()
         menuLauncher.qrScannerController?.view.removeFromSuperview()
+        menuLauncher.qrScannerController?.captureSession.stopRunning()
     }
     
     func showQRScannerController() {
         qrScannerController = QRScannerController()
-//        qrScannerController?.modalPresentationStyle = .fullScreen
         menuLauncher.qrScannerController = qrScannerController
         self.qrScannerController!.mainPageController = self
         self.controllerCreation(viewController: self.qrScannerController!)
-//        self.present(self.qrScannerController!, animated: false, completion: nil)
     }
     
     func controllerCreation(viewController: UIViewController) {

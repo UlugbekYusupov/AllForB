@@ -57,7 +57,7 @@ class MenuLauncher: NSObject {
     let profileImageView: UIImageView = {
         let iv = UIImageView(image: #imageLiteral(resourceName: "my"))
         iv.clipsToBounds = true
-        iv.contentMode = .scaleAspectFit
+        iv.contentMode = .scaleAspectFill
         iv.backgroundColor = .black
         iv.translatesAutoresizingMaskIntoConstraints = false
         return iv

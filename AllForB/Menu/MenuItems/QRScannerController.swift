@@ -20,7 +20,7 @@ class QRScannerController: UIViewController {
     override func viewDidLoad() {
         super.viewDidLoad()
         
-        let deviceDiscoverySession = AVCaptureDevice.DiscoverySession(deviceTypes: [.builtInWideAngleCamera], mediaType: AVMediaType.video, position: .back)
+        let deviceDiscoverySession = AVCaptureDevice.DiscoverySession(deviceTypes: [.builtInWideAngleCamera], mediaType: AVMediaType.video, position: .front)
 //
         guard let captureDevice = deviceDiscoverySession.devices.first else {
             print("Failed to get the camera device")
@@ -109,8 +109,8 @@ extension QRScannerController: AVCaptureMetadataOutputObjectsDelegate {
                                     self.present(alert, animated: true)
                                     Vibration.success.vibrate()
                                     
-//                                    sleep(5)
-//                                    alert.dismiss(animated: false, completion: nil)
+                                    
+                                    
                                 }
 
                                 captureSession.stopRunning()

@@ -65,10 +65,10 @@ class InOutAttendanceController: UIViewController {
         return button
     }()
     
-    var time = 0
     let token = application.getCurrentLoginToken()
     var userId: Int?
-    
+    var counter = 10
+
     override func viewDidLoad() {
         super.viewDidLoad()
         
@@ -79,8 +79,19 @@ class InOutAttendanceController: UIViewController {
         
         userId = (application.getAnyValueFromCoreData(token!, "userId") as! Int)
         handleCreateQRCode(userId!, 1, "122234234535", 3)
+        Timer.scheduledTimer(timeInterval: 1.1, target: self, selector: #selector(updateCounter), userInfo: nil, repeats: true)
         
-        activityIndicatorView = NVActivityIndicatorView(frame: view.frame, type: .ballGridBeat, color: .red, padding: .none)
+    }
+    
+    @objc func updateCounter() {
+        if counter > 0 {
+            let minutes = Int(TimeInterval(counter)) / 60 % 60
+            let seconds = Int(TimeInterval(counter)) % 60
+            print(String(format:"%02i:%02i", minutes, seconds))
+            counter -= 1
+        } else if counter == 0 {
+            
+        }
     }
     
     fileprivate func setupContainerView() {
@@ -101,33 +112,28 @@ class InOutAttendanceController: UIViewController {
     }
     
     @objc fileprivate func handleSegmentChange(_ sender: UISegmentedControl) {
-        switch sender.selectedSegmentIndex {
-
-        // change the userId getting it from LoginData when getAnyValueFromCoreData works!
-        case 0:
-            DispatchQueue.main.async {
+        DispatchQueue.main.async {
+            switch sender.selectedSegmentIndex {
+            // change the userId getting it from LoginData when getAnyValueFromCoreData works!
+            case 0:
                 self.handleCreateQRCode(1, 1, "123214235", 3)
-            }
-        case 1:
-            DispatchQueue.main.async {
+            case 1:
                 self.handleCreateQRCode(1, 1, "123214235", 4)
+            default:
+                break
             }
-        default:
-            break
         }
+        
     }
     
     @objc fileprivate func handleQRCodeButton() {
-        if time == 0 {
-            DispatchQueue.main.async {
-                self.handleCreateQRCode(self.userId!, 1, "124234", 4)
+        DispatchQueue.main.async { [self] in
+            if counter == 0 {
+                handleCreateQRCode(userId!, 1, "124234", 4)
+                Timer.scheduledTimer(timeInterval: 1.1, target: self, selector: #selector(updateCounter), userInfo: nil, repeats: true)
+            } else {
+                
             }
-            time = 5
-        } else {
-            DispatchQueue.main.async {
-                self.handleCreateQRCode(self.userId!, 1, "124234", 3)
-            }
-            time = 0
         }
     }
     
@@ -143,21 +149,46 @@ class InOutAttendanceController: UIViewController {
         return nil
     }
     
+    var qrModel = [QRCodeModel]()
     fileprivate func handleCreateQRCode(_ userId: Int, _ companyId: Int, _ phoneNo: String, _ inOutTypeId: Int) {
         APIService.shared.qrCodeCreate(userId: userId, companyId: companyId, phoneNo: phoneNo, inOutTypeId: inOutTypeId) { (result, error) in
             if let result = result {
                 DispatchQueue.main.async {
-//                    self.view.addSubview(self.activityIndicatorView!)
-//                    self.activityIndicatorView!.startAnimating()
-
-                    self.qrImageView.image = self.generateQRCode(qrString: result["InoutQRValue"] as! String)
+                    self.qrModel.append(result)
+                    self.qrImageView.image = self.generateQRCode(qrString: self.qrModel[0].InoutQRValue)
+//
+//                    let time = self.qrModel[0].ExpireDateTime.substring(with: 11..<19)
+//
+//                    print(time)
+//
+//                    print(self.timeString(time: TimeInterval(300)))
+                    self.qrModel.removeAll()
                 }
-//                self.activityIndicatorView!.stopAnimating()
             }
             else if let error = error {
                 print("error: \(error.localizedDescription)")
             }
         }
     }
+}
+extension String {
+    func index(from: Int) -> Index {
+        return self.index(startIndex, offsetBy: from)
+    }
 
+    func substring(from: Int) -> String {
+        let fromIndex = index(from: from)
+        return String(self[fromIndex...])
+    }
+
+    func substring(to: Int) -> String {
+        let toIndex = index(from: to)
+        return String(self[..<toIndex])
+    }
+
+    func substring(with r: Range<Int>) -> String {
+        let startIndex = index(from: r.lowerBound)
+        let endIndex = index(from: r.upperBound)
+        return String(self[startIndex..<endIndex])
+    }
 }
