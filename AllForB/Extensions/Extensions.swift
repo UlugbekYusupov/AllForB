@@ -185,6 +185,14 @@ extension Date {
         print("Date",dateFormatterPrint.string(from: date!)) // Feb 01,2018
         return dateFormatterPrint.string(from: date!);
     }
+    
+    func getNextMonth() -> Date? {
+        return Calendar.current.date(byAdding: .month, value: 0, to: self)
+    }
+
+    func getPreviousMonth() -> Date? {
+        return Calendar.current.date(byAdding: .month, value: 1, to: self)
+    }
 }
 // 2021-03-09T11:44:04.523
 

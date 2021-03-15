@@ -21,7 +21,11 @@ class CalendarController: UIViewController {
     }()
     
     var dailyListCollectionTable: UICollectionView?
-    
+    var fromDate = ""
+    var toDate = ""
+    let formatter = DateFormatter()
+    var resultList = [ResultList]()
+
     let calendar: FSCalendar = {
        let c = FSCalendar()
         c.layer.borderWidth = 1
@@ -41,6 +45,7 @@ class CalendarController: UIViewController {
     override func viewDidLoad() {
         super.viewDidLoad()
         view.backgroundColor = mainBackgroundColor
+        
         let weekDayLabel = calendar.calendarWeekdayView.weekdayLabels
         for weekDay in weekDayLabel {
             weekDay.textColor = mainColor
@@ -51,9 +56,22 @@ class CalendarController: UIViewController {
         calendar.delegate = self
         calendar.anchor(top: view.topAnchor, leading: view.leadingAnchor, bottom: nil, trailing: view.trailingAnchor,padding: .init(top: 10, left: 0, bottom: 0, right: 0),size: CGSize(width: 0, height: view.frame.size.height / 2.5))
         
-        fetchCall()
         setupCollectionView()
+        setupMonthFormattedString()
+        fetchCall()
     }
+    
+    
+    func setupMonthFormattedString() {
+        let nextMonth = self.calendar.currentPage.getNextMonth()
+        formatter.dateFormat = "yyyy-MM-dd"
+        self.fromDate = formatter.string(from: nextMonth!)
+        
+        let previosMonth = self.calendar.currentPage.getPreviousMonth()
+        formatter.dateFormat = "yyyy-MM-dd"
+        self.toDate = formatter.string(from: previosMonth!)
+    }
+    
     
     
     fileprivate func setupCollectionView() {
@@ -70,14 +88,11 @@ class CalendarController: UIViewController {
         dailyListCollectionTable?.anchor(top: calendar.bottomAnchor, leading: view.leadingAnchor, bottom: view.bottomAnchor, trailing: view.trailingAnchor,padding: .init(top: 40, left: 40, bottom: 40, right: 40))
         
     }
-    
-    var resultList = [ResultList]()
+        
     fileprivate func fetchCall() {
-        APIService.shared.getDailyList(userId: 1, fromDate: "2021-03-01 00:00:00", toDate: "2021-03-30 00:00:00") { (result, error) in
+        APIService.shared.getDailyList(userId: 1, fromDate: self.fromDate + " 00:00:00", toDate: self.toDate + " 00:00:00") { (result, error) in
             guard let result = result else {return}
             self.resultList = result
-            
-//            print(self.resultList)
             DispatchQueue.main.async {
                 self.dailyListCollectionTable?.reloadData()
             }
@@ -88,15 +103,20 @@ class CalendarController: UIViewController {
         }
     }
 }
+
+
 extension CalendarController: FSCalendarDelegate {
     func calendar(_ calendar: FSCalendar, didSelect date: Date, at monthPosition: FSCalendarMonthPosition) {
-        print("Selected: ", date)
+        
+
     }
     
     func calendarCurrentPageDidChange(_ calendar: FSCalendar) {
-        // fetch data according to month
-        
-        print(calendar.currentPage)
+        setupMonthFormattedString()
+        DispatchQueue.main.async {
+            self.fetchCall()
+            self.dailyListCollectionTable?.reloadData()
+        }
     }
 }
 
