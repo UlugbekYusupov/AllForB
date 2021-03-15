@@ -108,7 +108,15 @@ class CalendarController: UIViewController {
 extension CalendarController: FSCalendarDelegate {
     func calendar(_ calendar: FSCalendar, didSelect date: Date, at monthPosition: FSCalendarMonthPosition) {
         
-
+        formatter.dateFormat = "yyyy-MM-dd"
+        let formattedString = formatter.string(from: date)
+        
+        APIService.shared.getDailyList(userId: 1, fromDate: formattedString + " 00:00:00", toDate: formattedString + " 00:00:00") { (result, error) in
+            self.resultList = result!
+            DispatchQueue.main.async {
+                self.dailyListCollectionTable?.reloadData()
+            }
+        }
     }
     
     func calendarCurrentPageDidChange(_ calendar: FSCalendar) {
