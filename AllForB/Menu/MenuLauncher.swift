@@ -260,7 +260,9 @@ extension MenuLauncher {
     @objc fileprivate func handleBlackTapDismiss(gesture: UITapGestureRecognizer) {
         UIView.animate(withDuration: 0.5, delay: 0, usingSpringWithDamping: 1, initialSpringVelocity: 1, options: .curveEaseOut) {
             self.uiViewAnimation()
-        } completion: { (flag) in }
+        } completion: { (flag) in
+            self.qrScannerController?.captureSession.startRunning()
+        }
     }
     
     @objc fileprivate func handleQRscan() {

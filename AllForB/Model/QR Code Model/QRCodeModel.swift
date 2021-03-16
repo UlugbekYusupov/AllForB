@@ -102,7 +102,7 @@ extension APIService {
                         completion(nil, NSError(domain: "invalidJSONTypeError", code: -100009, userInfo: nil))
                     return
                 }
-//                print(json)
+                print(json)
 //                let data = try JSONSerialization.data(withJSONObject: json, options: .prettyPrinted)
 //                let decoder = JSONDecoder()
 //                let qrCodeModel = try decoder.decode(QRCodeModel.self, from: data)

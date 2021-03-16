@@ -46,7 +46,7 @@ class ProfileController: UIViewController {
     
     let profileNameLabel: UILabel = {
         let label = UILabel()
-        label.textAlignment = .right
+        label.textAlignment = .left
         label.textColor = mainColor
         label.clipsToBounds = true
         label.contentMode = .scaleAspectFit
@@ -106,7 +106,7 @@ class ProfileController: UIViewController {
         label.textColor = mainColor
         label.clipsToBounds = true
         label.contentMode = .scaleAspectFit
-        label.text = "Ulugbek"
+        label.text = ""
         label.font = UIFont(name: "Verdana-Bold", size: 22)
         return label
     }()
@@ -204,8 +204,6 @@ class ProfileController: UIViewController {
         stackViewContainer.addSubview(nameStackView!)
         nameStackView!.centerYInSuperview()
         nameStackView?.anchor(top: stackViewContainer.topAnchor, leading: labelStackView?.trailingAnchor, bottom: stackViewContainer.bottomAnchor, trailing: stackViewContainer.trailingAnchor,padding: .init(top: 0, left: 0, bottom: 0, right: 0),size: CGSize(width: 0, height: 0))
-        
-
         
     }
     

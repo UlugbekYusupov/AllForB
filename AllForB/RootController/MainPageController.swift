@@ -126,6 +126,7 @@ extension MainPageController {
     
     @objc fileprivate func handleMenuButton() {
         menuLauncher.showSettings()
+        menuLauncher.qrScannerController?.captureSession.stopRunning()
         menuLauncher.mainPageController = self
     }
     

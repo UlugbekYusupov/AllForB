@@ -80,7 +80,7 @@ class InOutAttendanceController: UIViewController {
     
     let token = application.getCurrentLoginToken()
     var userId: Int?
-    var counter = 10
+    var counter = 300
     var count: Int = 0
     
     override func viewDidLoad() {
