@@ -249,6 +249,8 @@ extension MenuLauncher {
         application.clearDatabase()
         UserDefaults.standard.removeObject(forKey: "currentLoginToken")
         
+        ProfileController.shared.userInfo.removeAll()
+        
         self.mainPageController?.dismiss(animated: false, completion: nil)
         UIView.animate(withDuration: 0, delay: 0, usingSpringWithDamping: 1, initialSpringVelocity: 1, options: .curveEaseOut) {
             self.uiViewAnimation()

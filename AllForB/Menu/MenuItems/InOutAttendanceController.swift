@@ -50,8 +50,21 @@ class InOutAttendanceController: UIViewController {
     
     let inchinShiganView: UIView = {
         let v = UIView()
-        v.backgroundColor = .red
+        v.backgroundColor = .clear
+        v.layer.borderWidth = 1
+        v.layer.borderColor = mainColor.cgColor
         return v
+    }()
+    
+    let timeLabel: UILabel = {
+        let label = UILabel()
+        label.clipsToBounds = true
+        label.contentMode = .scaleAspectFit
+        label.textAlignment = .center
+        label.textColor = .white
+        label.font = UIFont(name: "Verdana-Bold", size: 15)
+        label.text = ""
+        return label
     }()
     
     let qrCodeButton: UIButton = {
@@ -68,7 +81,8 @@ class InOutAttendanceController: UIViewController {
     let token = application.getCurrentLoginToken()
     var userId: Int?
     var counter = 10
-
+    var count: Int = 0
+    
     override func viewDidLoad() {
         super.viewDidLoad()
         
@@ -80,17 +94,15 @@ class InOutAttendanceController: UIViewController {
         userId = (application.getAnyValueFromCoreData(token!, "userId") as! Int)
         handleCreateQRCode(userId!, 1, "122234234535", 3)
         Timer.scheduledTimer(timeInterval: 1.1, target: self, selector: #selector(updateCounter), userInfo: nil, repeats: true)
-        
     }
     
     @objc func updateCounter() {
         if counter > 0 {
             let minutes = Int(TimeInterval(counter)) / 60 % 60
             let seconds = Int(TimeInterval(counter)) % 60
-            print(String(format:"%02i:%02i", minutes, seconds))
+            timeLabel.text = String(format:"%02i:%02i", minutes, seconds)
             counter -= 1
-        } else if counter == 0 {
-            
+            count += 1
         }
     }
     
@@ -99,12 +111,17 @@ class InOutAttendanceController: UIViewController {
         qrImageView.anchor(top: containerView.topAnchor, leading: containerView.leadingAnchor, bottom: nil, trailing: containerView.trailingAnchor, padding: .init(top: 50, left: 100, bottom: 0, right: 100), size: CGSize(width: 0, height: view.frame.size.width / 2))
         containerView.addSubview(timeFinishedLabel)
         timeFinishedLabel.anchor(top: qrImageView.bottomAnchor, leading: qrImageView.leadingAnchor, bottom: nil, trailing: qrImageView.trailingAnchor,size: CGSize(width: 0, height: 50))
+        timeFinishedLabel.isHidden = true
+        
         containerView.addSubview(chulTeginSegmentControl)
         chulTeginSegmentControl.centerInSuperview(size: CGSize(width: 250, height: 45))
         
         containerView.addSubview(inchinShiganView)
         inchinShiganView.centerXInSuperview()
         inchinShiganView.anchor(top: chulTeginSegmentControl.bottomAnchor, leading: nil, bottom: nil, trailing: nil,padding: .init(top: 20, left: 0, bottom: 0, right: 0),size: CGSize(width: 100, height: 30))
+        
+        inchinShiganView.addSubview(timeLabel)
+        timeLabel.fillSuperview(padding: .init(top: 2, left: 2, bottom: 2, right: 2))
         
         containerView.addSubview(qrCodeButton)
         qrCodeButton.anchor(top: nil, leading: view.leadingAnchor, bottom: view.bottomAnchor, trailing: view.trailingAnchor,padding: .init(top: 0, left: 100, bottom: 100, right: 100), size: CGSize(width: 0, height: 40))
@@ -129,10 +146,9 @@ class InOutAttendanceController: UIViewController {
     @objc fileprivate func handleQRCodeButton() {
         DispatchQueue.main.async { [self] in
             if counter == 0 {
+                timeFinishedLabel.isHidden = true
                 handleCreateQRCode(userId!, 1, "124234", 4)
-                Timer.scheduledTimer(timeInterval: 1.1, target: self, selector: #selector(updateCounter), userInfo: nil, repeats: true)
-            } else {
-                
+//                Timer.scheduledTimer(timeInterval: 1.1, target: self, selector: #selector(updateCounter), userInfo: nil, repeats: true)
             }
         }
     }
@@ -156,12 +172,6 @@ class InOutAttendanceController: UIViewController {
                 DispatchQueue.main.async {
                     self.qrModel.append(result)
                     self.qrImageView.image = self.generateQRCode(qrString: self.qrModel[0].InoutQRValue)
-//
-//                    let time = self.qrModel[0].ExpireDateTime.substring(with: 11..<19)
-//
-//                    print(time)
-//
-//                    print(self.timeString(time: TimeInterval(300)))
                     self.qrModel.removeAll()
                 }
             }
@@ -169,26 +179,5 @@ class InOutAttendanceController: UIViewController {
                 print("error: \(error.localizedDescription)")
             }
         }
-    }
-}
-extension String {
-    func index(from: Int) -> Index {
-        return self.index(startIndex, offsetBy: from)
-    }
-
-    func substring(from: Int) -> String {
-        let fromIndex = index(from: from)
-        return String(self[fromIndex...])
-    }
-
-    func substring(to: Int) -> String {
-        let toIndex = index(from: to)
-        return String(self[..<toIndex])
-    }
-
-    func substring(with r: Range<Int>) -> String {
-        let startIndex = index(from: r.lowerBound)
-        let endIndex = index(from: r.upperBound)
-        return String(self[startIndex..<endIndex])
     }
 }
