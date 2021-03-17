@@ -80,7 +80,7 @@ class InOutAttendanceController: UIViewController {
     
     let token = application.getCurrentLoginToken()
     var userId: Int?
-    var counter = 300
+    var counter = 5
     var count: Int = 0
     
     override func viewDidLoad() {
@@ -102,7 +102,8 @@ class InOutAttendanceController: UIViewController {
             let seconds = Int(TimeInterval(counter)) % 60
             timeLabel.text = String(format:"%02i:%02i", minutes, seconds)
             counter -= 1
-            count += 1
+        } else {
+            timeFinishedLabel.isHidden = false
         }
     }
     
