@@ -109,8 +109,6 @@ extension QRScannerController: AVCaptureMetadataOutputObjectsDelegate {
                                     self.present(alert, animated: true)
                                     Vibration.success.vibrate()
                                     
-                                    
-                                    
                                 }
 
                                 captureSession.stopRunning()
