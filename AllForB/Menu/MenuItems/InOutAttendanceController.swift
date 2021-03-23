@@ -81,7 +81,7 @@ class InOutAttendanceController: UIViewController {
     let token = application.getCurrentLoginToken()
     var userId: Int?
     var counter = 5
-    var count: Int = 0
+    var flag: Bool = false
     
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -93,18 +93,25 @@ class InOutAttendanceController: UIViewController {
         
         userId = (application.getAnyValueFromCoreData(token!, "userId") as! Int)
         handleCreateQRCode(userId!, 1, "122234234535", 3)
-        Timer.scheduledTimer(timeInterval: 1.1, target: self, selector: #selector(updateCounter), userInfo: nil, repeats: true)
+        
+        DispatchQueue.main.async { [self] in
+//            if flag == false {
+                Timer.scheduledTimer(timeInterval: 1.1, target: self, selector: #selector(updateCounter), userInfo: nil, repeats: false)
+//            }
+        }
     }
     
     @objc func updateCounter() {
-        if counter > 0 {
-            let minutes = Int(TimeInterval(counter)) / 60 % 60
-            let seconds = Int(TimeInterval(counter)) % 60
-            timeLabel.text = String(format:"%02i:%02i", minutes, seconds)
-            counter -= 1
-        } else {
-            timeFinishedLabel.isHidden = false
-        }
+//        if flag == false {
+            if counter > 0 {
+                let minutes = Int(TimeInterval(counter)) / 60 % 60
+                let seconds = Int(TimeInterval(counter)) % 60
+                timeLabel.text = String(format:"%02i:%02i", minutes, seconds)
+                counter -= 1
+            } else {
+//                flag = true
+            }
+//        }
     }
     
     fileprivate func setupContainerView() {
@@ -127,6 +134,13 @@ class InOutAttendanceController: UIViewController {
         containerView.addSubview(qrCodeButton)
         qrCodeButton.anchor(top: nil, leading: view.leadingAnchor, bottom: view.bottomAnchor, trailing: view.trailingAnchor,padding: .init(top: 0, left: 100, bottom: 100, right: 100), size: CGSize(width: 0, height: 40))
         qrCodeButton.addTarget(self, action: #selector(handleQRCodeButton), for: .touchUpInside)
+//        qrCodeButton.isEnabled = false
+//
+//        DispatchQueue.main.async { [self] in
+//            if flag == true {
+//                qrCodeButton.isEnabled = true
+//            }
+//        }
     }
     
     @objc fileprivate func handleSegmentChange(_ sender: UISegmentedControl) {
@@ -146,8 +160,8 @@ class InOutAttendanceController: UIViewController {
     
     @objc fileprivate func handleQRCodeButton() {
         DispatchQueue.main.async { [self] in
-            if counter == 0 {
-                timeFinishedLabel.isHidden = true
+            if flag == true {
+//                timeFinishedLabel.isHidden = true
                 handleCreateQRCode(userId!, 1, "124234", 4)
 //                Timer.scheduledTimer(timeInterval: 1.1, target: self, selector: #selector(updateCounter), userInfo: nil, repeats: true)
             }
