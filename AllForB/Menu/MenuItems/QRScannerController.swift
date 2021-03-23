@@ -41,14 +41,14 @@ class QRScannerController : UIViewController, AVCaptureMetadataOutputObjectsDele
             view.layer.addSublayer(previewLayer!)
             captureSession.startRunning()
 
-            qrCodeFrameView = UIView()
-
-            if let qrCodeFrameView = qrCodeFrameView {
-                qrCodeFrameView.layer.borderColor = mainColor.cgColor
-                qrCodeFrameView.layer.borderWidth = 5
-                view.addSubview(qrCodeFrameView)
-                view.bringSubviewToFront(qrCodeFrameView)
-            }
+//            qrCodeFrameView = UIView()
+//
+//            if let qrCodeFrameView = qrCodeFrameView {
+//                qrCodeFrameView.layer.borderColor = mainColor.cgColor
+//                qrCodeFrameView.layer.borderWidth = 5
+//                view.addSubview(qrCodeFrameView)
+//                view.bringSubviewToFront(qrCodeFrameView)
+//            }
 
         } catch {
             print(error)
@@ -109,28 +109,22 @@ class QRScannerController : UIViewController, AVCaptureMetadataOutputObjectsDele
             }
             if let result = result {
                 if result["ReturnCode"] as! Int == 0 {
-                    captureSession.stopRunning()
-                    sleep(5)
+                    
                     Vibration.success.vibrate()
+                    captureSession.stopRunning()
+                    sleep(2)
                     captureSession.startRunning()
-                    DispatchQueue.main.async {
-                        qrCodeFrameView?.removeFromSuperview()
-                    }
                     print("Success")
                 }
                 else {
-                    captureSession.startRunning()
-                    sleep(5)
                     Vibration.error.vibrate()
                     captureSession.stopRunning()
-                    DispatchQueue.main.async {
-                        qrCodeFrameView?.removeFromSuperview()
-                    }
+                    sleep(2)
+                    captureSession.startRunning()
                     print(result["ExceptionMessage"] as! String)
                 }
             }
         }
-        captureSession.startRunning()
     }
 }
 //class QRScannerController: UIViewController {
