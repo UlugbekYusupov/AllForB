@@ -61,7 +61,7 @@ class InOutAttendanceController: UIViewController {
         label.clipsToBounds = true
         label.contentMode = .scaleAspectFit
         label.textAlignment = .center
-        label.textColor = .white
+        label.textColor = mainColor
         label.font = UIFont(name: "Verdana-Bold", size: 15)
         label.text = ""
         return label
@@ -80,7 +80,7 @@ class InOutAttendanceController: UIViewController {
     
     let token = application.getCurrentLoginToken()
     var userId: Int?
-    var counter = 10
+    var counter = 300
     var timer: Timer!
     
     override func viewDidLoad() {
@@ -94,28 +94,30 @@ class InOutAttendanceController: UIViewController {
     
     override func viewDidAppear(_ animated: Bool) {
         super.viewDidAppear(animated)
-        Timer.scheduledTimer(timeInterval: 1, target: self, selector: #selector(updateCounter), userInfo: nil, repeats: true)
+        timer = Timer.scheduledTimer(timeInterval: 1, target: self, selector: #selector(updateCounter), userInfo: nil, repeats: true)
     }
     
     @objc func updateCounter() {
-        if counter != 0 {
-            print(1)
+        if counter >= 0 {
+            if counter == 0 {
+                timeFinishedLabel.isHidden = false
+                qrCodeButton.isEnabled = true
+                timeLabel.textColor = .red
+            }
             let minutes = Int(TimeInterval(counter)) / 60 % 60
             let seconds = Int(TimeInterval(counter)) % 60
             timeLabel.text = String(format:"%02i:%02i", minutes, seconds)
             counter -= 1
         }
-        else if counter == 0 {
-            timeFinishedLabel.isHidden = false
-            qrCodeButton.isEnabled = true
-        }
     }
     
     fileprivate func timerFunc() {
-        counter = 10
+        timer.invalidate()
+        counter = 300
         timeFinishedLabel.isHidden = true
         qrCodeButton.isEnabled = false
-        Timer.scheduledTimer(timeInterval: 1, target: self, selector: #selector(updateCounter), userInfo: nil, repeats: true)
+        timeLabel.textColor = mainColor
+        timer = Timer.scheduledTimer(timeInterval: 1, target: self, selector: #selector(updateCounter), userInfo: nil, repeats: true)
     }
     
     fileprivate func setupContainerView() {
