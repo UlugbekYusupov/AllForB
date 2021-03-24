@@ -19,7 +19,7 @@ struct LoginData: Decodable {
 }
 
 extension APIService {
-    func loginRequest(username: String, password: String, IsLoginSave: Bool, completion: @escaping ([String: Any]?, Error?) -> Void) {
+    func loginRequest(username: String, password: String, IsLoginSave: Bool, completion: @escaping (LoginData?, Error?) -> Void) {
 
             let parameters = ["AccountId": username, "PwdCrypt": password, "IsLoginSave": IsLoginSave] as [String : Any]
             let url = URL(string: "http://112.216.225.178:44362/api/userlogin/checkLogin")!
@@ -51,22 +51,15 @@ extension APIService {
                 completion(nil, NSError(domain: "dataNilError", code: -100001, userInfo: nil))
                 return
             }
-                        
             do {
-                guard let json = try JSONSerialization.jsonObject(with: data, options: .mutableContainers) as? [String: Any] else {
-                    completion(nil, NSError(domain: "invalidJSONTypeError", code: -100009, userInfo: nil))
-                    return
+                let rootJSON = try JSONDecoder().decode(LoginData.self, from: data)
+                if rootJSON.ReturnCode == 0 {
+                    application.saveLoginDataToCoreData(data: rootJSON)
                 }
                 
-                let data = try JSONSerialization.data(withJSONObject: json, options: .prettyPrinted)
-                let decoder = JSONDecoder()
-                let loginData = try decoder.decode(LoginData.self, from: data)
-                
-                //Dispatchque not wirking here!!!
-                application.saveLoginDataToCoreData(data: loginData)
-                completion(json, nil)
-                
+                completion(rootJSON, nil)
             }
+            
             catch let error {
                 print(error.localizedDescription)
                 completion(nil, error)

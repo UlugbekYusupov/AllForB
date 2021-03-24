@@ -138,6 +138,8 @@ class LoginController: UIViewController {
         view.backgroundColor = mainBackgroundColor
         setupContainer()
     }
+    
+    var loginData: LoginData!
 }
 
 extension LoginController {
@@ -150,9 +152,17 @@ extension LoginController {
     }
     
     fileprivate func handleLoginResponse(_ username: String, _ password: String, _ IsLoginSave: Bool) {
-        APIService.shared.loginRequest(username: username, password: password, IsLoginSave: IsLoginSave) { (result, error) in
+        APIService.shared.loginRequest(username: username, password: password, IsLoginSave: IsLoginSave) { [self] (result, error) in
             if result != nil {
-                self.checkReturnCode()
+                loginData = result
+                if loginData.ReturnCode == 0 {
+                    checkReturnCode()
+                }
+                else {
+                    DispatchQueue.main.async {
+                        SharedClass.sharedInstance.alert(view: self, title: "Incorrect !", message: "아이디와 비밀번호 확인 해주세요")
+                    }
+                }
             }
             else if let error = error {
                 print("error: \(error.localizedDescription)")
@@ -161,7 +171,6 @@ extension LoginController {
     }
     
     @objc fileprivate func handleLogin() {
-        
         guard let username = yourUsernameTextField.text else {return}
         guard let password = yourPasswordTextField.text else {return}
         let IsLoginSave: Bool = true
@@ -172,7 +181,6 @@ extension LoginController {
         } else {
             handleLoginResponse(username, password, IsLoginSave)
         }
-        
     }
     
     @objc fileprivate func handleSeePassword() {
