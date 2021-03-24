@@ -67,9 +67,11 @@ class MainPageController: UIViewController {
         }
     }
     
+    
     static let shared = MainPageController()
     let menuLauncher = MenuLauncher()
     var qrScannerController: QRScannerController?
+    var shouldAutoRotate: Bool = false
     
     var inOutController: InOutAttendanceController!
     
@@ -81,7 +83,7 @@ class MainPageController: UIViewController {
         setupViews()
     }
     
-    override open var shouldAutorotate: Bool { return false }
+    override open var shouldAutorotate: Bool { return shouldAutoRotate }
 
 }
 

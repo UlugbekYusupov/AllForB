@@ -27,30 +27,17 @@ class QRScannerController : UIViewController, AVCaptureMetadataOutputObjectsDele
         do {
             let input = try AVCaptureDeviceInput(device: captureDevice)
             captureSession.addInput(input)
-
             let captureMetadataOutput = AVCaptureMetadataOutput()
             captureSession.addOutput(captureMetadataOutput)
-
             captureMetadataOutput.setMetadataObjectsDelegate(self, queue: DispatchQueue.main)
             captureMetadataOutput.metadataObjectTypes = [AVMetadataObject.ObjectType.qr]
-
-
             previewLayer = AVCaptureVideoPreviewLayer(session: captureSession)
             previewLayer?.videoGravity = AVLayerVideoGravity.resize
             previewLayer?.frame = view.layer.bounds
             view.layer.addSublayer(previewLayer!)
             captureSession.startRunning()
-
-//            qrCodeFrameView = UIView()
-//
-//            if let qrCodeFrameView = qrCodeFrameView {
-//                qrCodeFrameView.layer.borderColor = mainColor.cgColor
-//                qrCodeFrameView.layer.borderWidth = 5
-//                view.addSubview(qrCodeFrameView)
-//                view.bringSubviewToFront(qrCodeFrameView)
-//            }
-
-        } catch {
+        }
+        catch {
             print(error)
             return
         }
@@ -93,9 +80,7 @@ class QRScannerController : UIViewController, AVCaptureMetadataOutputObjectsDele
             }
             
             guard let stringValue = readableObject.stringValue else { return }
-            
             qrString = stringValue
-//            AudioServicesPlaySystemSound(SystemSoundID(kSystemSoundID_Vibrate))
             found(stringCode: stringValue)
         }
     }

@@ -248,9 +248,8 @@ extension MenuLauncher {
     @objc fileprivate func handleLogoutButton() {
         application.clearDatabase()
         UserDefaults.standard.removeObject(forKey: "currentLoginToken")
-        
         ProfileController.shared.userInfo.removeAll()
-        
+        self.mainPageController?.shouldAutoRotate = false
         self.mainPageController?.dismiss(animated: false, completion: nil)
         UIView.animate(withDuration: 0, delay: 0, usingSpringWithDamping: 1, initialSpringVelocity: 1, options: .curveEaseOut) {
             self.uiViewAnimation()
@@ -262,6 +261,7 @@ extension MenuLauncher {
             self.uiViewAnimation()
         } completion: { (flag) in
             self.qrScannerController?.captureSession.startRunning()
+            self.mainPageController?.shouldAutoRotate = false
         }
     }
     
@@ -270,6 +270,7 @@ extension MenuLauncher {
             self.uiViewAnimation()
         } completion: { (flag) in
             self.mainPageController?.showQRScannerController()
+            self.mainPageController?.shouldAutoRotate = true
         }
     
         UIView.animate(withDuration: 0.5, delay: 0, usingSpringWithDamping: 1, initialSpringVelocity: 1, options: .curveEaseOut) {
@@ -316,6 +317,7 @@ extension MenuLauncher: UITableViewDelegate, UITableViewDataSource {
             let setting = self.settings[indexPath.item]
             self.mainPageController?.setting = setting
             self.mainPageController?.showController(indexPath: indexPath)
+            self.mainPageController?.shouldAutoRotate = false
         }
     }
 }
