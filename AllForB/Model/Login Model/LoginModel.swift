@@ -56,7 +56,6 @@ extension APIService {
                 if rootJSON.ReturnCode == 0 {
                     application.saveLoginDataToCoreData(data: rootJSON)
                 }
-                
                 completion(rootJSON, nil)
             }
             

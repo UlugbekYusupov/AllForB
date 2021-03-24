@@ -209,7 +209,8 @@ class ProfileController: UIViewController {
     
     var userInfo = [UserInfo]()
     fileprivate func fetchUserInfo() {
-        APIService.shared.getInfo(userId: 1, companyId: 1) { [self] (result, error) in
+        print(userId!)
+        APIService.shared.getInfo(userId: userId!, companyId: 1) { [self] (result, error) in
             guard let result = result else {return}
             userInfo.append(result)
             print(userInfo)

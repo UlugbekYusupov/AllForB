@@ -9,21 +9,21 @@ import UIKit
 
 
 struct UserInfo: Decodable {
-    let DutyCodeName: String
-    let PersonId: Int
-    let DutyCodeId: Int
-    let CompanyName: String
-    let UserId: Int
+    let DutyCodeName: String?
+    let PersonId: Int?
+    let DutyCodeId: Int?
+    let CompanyName: String?
+    let UserId: Int?
     let AttendanceTypeName: String?
     let ThrownException: String?
-    let CompanyId: Int
-    let ReturnCode: Int
-    let JobRankCodeId: Int
+    let CompanyId: Int?
+    let ReturnCode: Int?
+    let JobRankCodeId: Int?
     let ExceptionMessage: String?
-    let JobRankCodeName: String
+    let JobRankCodeName: String?
     let AttendanceTypeId: Int?
-    let PersonName: String
-    let SiteId: Int
+    let PersonName: String?
+    let SiteId: Int?
 }
 
 

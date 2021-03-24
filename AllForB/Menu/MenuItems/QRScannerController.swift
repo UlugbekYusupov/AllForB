@@ -87,7 +87,7 @@ class QRScannerController : UIViewController, AVCaptureMetadataOutputObjectsDele
 
     func found(stringCode: String) {
         
-        APIService.shared.qrCodeCheck(userId: 1, companyId: 1, qrCode: qrString) { [self] (result, err) in
+        APIService.shared.qrCodeCheck(userId: userId!, companyId: 1, qrCode: qrString) { [self] (result, err) in
             if let error = err {
                 print(error)
                 return

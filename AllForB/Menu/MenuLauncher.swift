@@ -69,7 +69,7 @@ class MenuLauncher: NSObject {
         label.textColor = mainColor
         label.font = UIFont(name: "Verdana-Bold", size: 16)
         label.clipsToBounds = true
-        label.text = "Ulugbek"
+        label.text = ""
         label.contentMode = .scaleAspectFit
         label.translatesAutoresizingMaskIntoConstraints = false
         return label

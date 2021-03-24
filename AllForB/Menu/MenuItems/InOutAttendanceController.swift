@@ -79,7 +79,6 @@ class InOutAttendanceController: UIViewController {
     }()
     
     let token = application.getCurrentLoginToken()
-    var userId: Int?
     var counter = 300
     var timer: Timer!
     
@@ -88,7 +87,7 @@ class InOutAttendanceController: UIViewController {
         view.addSubview(containerView)
         containerView.anchor(top: view.topAnchor, leading: view.leadingAnchor, bottom: view.bottomAnchor, trailing: view.trailingAnchor, padding: .init(), size: CGSize(width: 0, height: 0))
         setupContainerView()
-        userId = (application.getAnyValueFromCoreData(token!, "userId") as! Int)
+//        userId = (application.getAnyValueFromCoreData(token!, "userId") as! Int)
         handleCreateQRCode(userId!, 1, "122234234535", 3)
     }
     
@@ -144,13 +143,13 @@ class InOutAttendanceController: UIViewController {
     }
     
     @objc fileprivate func handleSegmentChange(_ sender: UISegmentedControl) {
-        DispatchQueue.main.async {
+        DispatchQueue.main.async { [self] in
             switch sender.selectedSegmentIndex {
             // change the userId getting it from LoginData when getAnyValueFromCoreData works!
             case 0:
-                self.handleCreateQRCode(1, 1, "123214235", 3)
+                handleCreateQRCode(userId!, 1, "123214235", 3)
             case 1:
-                self.handleCreateQRCode(1, 1, "123214235", 4)
+                handleCreateQRCode(userId!, 1, "123214235", 4)
             default:
                 break
             }

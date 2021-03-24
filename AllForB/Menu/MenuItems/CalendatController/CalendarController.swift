@@ -90,7 +90,7 @@ class CalendarController: UIViewController {
     }
         
     fileprivate func fetchCall() {
-        APIService.shared.getDailyList(userId: 1, fromDate: self.fromDate + " 00:00:00", toDate: self.toDate + " 00:00:00") { (result, error) in
+        APIService.shared.getDailyList(userId: userId!, fromDate: self.fromDate + " 00:00:00", toDate: self.toDate + " 00:00:00") { (result, error) in
             guard let result = result else {return}
             self.resultList = result
             DispatchQueue.main.async {
@@ -111,7 +111,7 @@ extension CalendarController: FSCalendarDelegate {
         formatter.dateFormat = "yyyy-MM-dd"
         let formattedString = formatter.string(from: date)
         
-        APIService.shared.getDailyList(userId: 1, fromDate: formattedString + " 00:00:00", toDate: formattedString + " 00:00:00") { (result, error) in
+        APIService.shared.getDailyList(userId: userId!, fromDate: formattedString + " 00:00:00", toDate: formattedString + " 00:00:00") { (result, error) in
             self.resultList = result!
             DispatchQueue.main.async {
                 self.dailyListCollectionTable?.reloadData()

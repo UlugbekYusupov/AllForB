@@ -93,6 +93,7 @@ class RootController: UIViewController {
             present(login, animated: true, completion: nil)
         }
         else {
+            userId = (application.getAnyValueFromCoreData(application.getCurrentLoginToken()!, "userId") as! Int)
             let mainPageController = MainPageController()
             mainPageController.modalPresentationStyle = .fullScreen
             present(mainPageController, animated: true, completion: nil)
