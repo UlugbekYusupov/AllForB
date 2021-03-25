@@ -7,7 +7,6 @@
 
 import UIKit
 
-
 struct DailyList: Decodable {
     let ReturnCode: Int
     let ThrownException: String?

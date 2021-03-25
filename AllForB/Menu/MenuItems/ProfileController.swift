@@ -9,6 +9,11 @@ import UIKit
 
 class ProfileController: UIViewController {
     
+    var labelStackView: UIStackView?
+    var nameStackView: UIStackView?
+    static let shared = ProfileController()
+    var userInfo = [UserInfo]()
+
     let homeLabel: UILabel = {
         let label = UILabel()
         label.text = "Profile"
@@ -150,22 +155,50 @@ class ProfileController: UIViewController {
         return v
     }()
     
-    var labelStackView: UIStackView?
-    var nameStackView: UIStackView?
-    
-    static let shared = ProfileController()
-    
-    override func viewDidLoad() {
-        super.viewDidLoad()
+    fileprivate func setupMainViews() {
         view.backgroundColor = mainBackgroundColor
         view.addSubview(containerView)
         containerView.fillSuperview(padding: .init(top: 50, left: 20, bottom: 50, right: 20))
         containerView.addSubview(profileImageView)
-       
+    }
+}
+
+extension ProfileController {
+    fileprivate func fetchUserInfo() {
+        print(userId!)
+        APIService.shared.getInfo(userId: userId!, companyId: 1) { [self] (result, error) in
+            guard let result = result else {return}
+            userInfo.append(result)
+            if let error = error {
+                print(error)
+            }
+            DispatchQueue.main.async { [self] in
+                userInfo.forEach { (user) in
+                    ProfileName.text = user.PersonName
+                    profileName.text = user.PersonName
+                    jobRankName.text = user.JobRankCodeName
+                    dutyName.text = user.DutyCodeName
+                    companyName.text = user.CompanyName
+                }
+            }
+        }
+    }
+}
+
+extension ProfileController {
+    override func viewDidLoad() {
+        super.viewDidLoad()
+        setupMainViews()
         setupChildViews()
         fetchUserInfo()
     }
-    
+    override func viewDidDisappear(_ animated: Bool) {
+        super.viewDidDisappear(animated)
+        self.userInfo.removeAll()
+    }
+}
+
+extension ProfileController {
     fileprivate func setupChildViews() {
         profileImageView.centerXInSuperview()
         profileImageView.anchor(top: containerView.topAnchor, leading: nil, bottom: nil, trailing: nil, padding: .init(top: 40, left: 0, bottom: 0, right: 0),size: CGSize(width: 100, height: 100))
@@ -176,10 +209,10 @@ class ProfileController: UIViewController {
         bottomLine.anchor(top: nil, leading: containerView.leadingAnchor, bottom: nil, trailing: containerView.trailingAnchor, padding: .init(top: 0, left: 20, bottom: 0, right: 20), size: CGSize(width: 0, height: 1))
         containerView.addSubview(ProfileName)
         ProfileName.centerXInSuperview()
-        ProfileName.anchor(top: nil, leading: nil, bottom: bottomLine.topAnchor, trailing: nil, padding: .init(top: 0, left: 0, bottom: 30, right: 0), size: CGSize(width: 100, height: 30))
+        ProfileName.anchor(top: nil, leading: nil, bottom: bottomLine.topAnchor, trailing: nil, padding: .init(top: 0, left: 0, bottom: 10, right: 0), size: CGSize(width: 100, height: 30))
         
         containerView.addSubview(stackViewContainer)
-        stackViewContainer.anchor(top: bottomLine.bottomAnchor, leading: containerView.leadingAnchor, bottom: containerView.bottomAnchor, trailing: containerView.trailingAnchor, padding: .init(top: 50, left: 20, bottom: 70, right: 40), size: CGSize(width: 0, height: 0))
+        stackViewContainer.anchor(top: bottomLine.bottomAnchor, leading: containerView.leadingAnchor, bottom: containerView.bottomAnchor, trailing: containerView.trailingAnchor, padding: .init(top: 50, left: 0, bottom: 50, right: 60), size: CGSize(width: 0, height: 0))
         
         labelStackView = UIStackView(arrangedSubviews: [profileNameLabel, jobRankNameLabel,dutyNameLabel,companyNameLabel])
         labelStackView!.axis  = .vertical
@@ -205,33 +238,5 @@ class ProfileController: UIViewController {
         nameStackView!.centerYInSuperview()
         nameStackView?.anchor(top: stackViewContainer.topAnchor, leading: labelStackView?.trailingAnchor, bottom: stackViewContainer.bottomAnchor, trailing: stackViewContainer.trailingAnchor,padding: .init(top: 0, left: 0, bottom: 0, right: 0),size: CGSize(width: 0, height: 0))
         
-    }
-    
-    var userInfo = [UserInfo]()
-    fileprivate func fetchUserInfo() {
-        print(userId!)
-        APIService.shared.getInfo(userId: userId!, companyId: 1) { [self] (result, error) in
-            guard let result = result else {return}
-            userInfo.append(result)
-            print(userInfo)
-            if let error = error {
-                print(error)
-            }
-            
-            DispatchQueue.main.async { [self] in
-                userInfo.forEach { (user) in
-                    ProfileName.text = user.PersonName
-                    profileName.text = user.PersonName
-                    jobRankName.text = user.JobRankCodeName
-                    dutyName.text = user.DutyCodeName
-                    companyName.text = user.CompanyName
-                }
-            }
-        }
-    }
-    
-    override func viewDidDisappear(_ animated: Bool) {
-        super.viewDidDisappear(animated)
-        self.userInfo.removeAll()
     }
 }

@@ -25,13 +25,6 @@ class MenuCell: UITableViewCell {
         }
     }
     
-//    override var isHighlighted: Bool {
-//        didSet{
-//            itemLabel.textColor = !isHighlighted ? mainColor : .clear
-//            itemImageView.tintColor = isHighlighted ? .clear : mainColor
-//        }
-//    }
-//    
     let itemLabel: UILabel = {
         let label = UILabel()
         label.textAlignment = .left
@@ -47,12 +40,9 @@ class MenuCell: UITableViewCell {
     override init(style: UITableViewCell.CellStyle, reuseIdentifier: String?) {
         super.init(style: style, reuseIdentifier: reuseIdentifier)
         backgroundColor = .clear
-        
-        
         addSubview(itemImageView)
         itemImageView.centerYInSuperview()
         itemImageView.anchor(top: nil, leading: leadingAnchor, bottom: nil, trailing: nil, padding: .init(), size: CGSize(width:35, height: 35))
-        
         addSubview(itemLabel)
         itemLabel.centerYInSuperview()
         itemLabel.anchor(top: nil, leading: itemImageView.trailingAnchor, bottom: nil, trailing: nil, padding: .init(top: 0, left: 20, bottom: 0, right: 0), size: CGSize(width: 100, height: 30))

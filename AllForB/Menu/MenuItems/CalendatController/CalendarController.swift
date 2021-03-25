@@ -10,6 +10,12 @@ import FSCalendar
 
 class CalendarController: UIViewController {
     
+    var dailyListCollectionTable: UICollectionView?
+    var fromDate = ""
+    var toDate = ""
+    let formatter = DateFormatter()
+    var resultList = [ResultList]()
+
     let homeLabel: UILabel = {
         let label = UILabel()
         label.text = "Calendar"
@@ -20,12 +26,6 @@ class CalendarController: UIViewController {
         return label
     }()
     
-    var dailyListCollectionTable: UICollectionView?
-    var fromDate = ""
-    var toDate = ""
-    let formatter = DateFormatter()
-    var resultList = [ResultList]()
-
     let calendar: FSCalendar = {
        let c = FSCalendar()
         c.layer.borderWidth = 1
@@ -42,65 +42,16 @@ class CalendarController: UIViewController {
         return c
     }()
     
-    override func viewDidLoad() {
-        super.viewDidLoad()
-        view.backgroundColor = mainBackgroundColor
-        
+    fileprivate func setupCalendar() {
         let weekDayLabel = calendar.calendarWeekdayView.weekdayLabels
         for weekDay in weekDayLabel {
             weekDay.textColor = mainColor
             weekDay.font = UIFont(name: "Verdana", size: 15)
         }
-
+        
         view.addSubview(calendar)
         calendar.delegate = self
         calendar.anchor(top: view.topAnchor, leading: view.leadingAnchor, bottom: nil, trailing: view.trailingAnchor,padding: .init(top: 10, left: 0, bottom: 0, right: 0),size: CGSize(width: 0, height: view.frame.size.height / 2.5))
-        
-        setupCollectionView()
-        setupMonthFormattedString()
-        fetchCall()
-    }
-    
-    
-    func setupMonthFormattedString() {
-        let nextMonth = self.calendar.currentPage.getNextMonth()
-        formatter.dateFormat = "yyyy-MM-dd"
-        self.fromDate = formatter.string(from: nextMonth!)
-        
-        let previosMonth = self.calendar.currentPage.getPreviousMonth()
-        formatter.dateFormat = "yyyy-MM-dd"
-        self.toDate = formatter.string(from: previosMonth!)
-    }
-    
-    
-    
-    fileprivate func setupCollectionView() {
-        
-        let layout: UICollectionViewFlowLayout = UICollectionViewFlowLayout()
-        dailyListCollectionTable = UICollectionView(frame: .zero, collectionViewLayout: layout)
-        dailyListCollectionTable?.backgroundColor = .clear
-        dailyListCollectionTable?.register(CalendarCell.self, forCellWithReuseIdentifier: "cellID")
-        dailyListCollectionTable?.dataSource = self
-        dailyListCollectionTable?.delegate = self
-        dailyListCollectionTable?.showsVerticalScrollIndicator = false
-        
-        view.addSubview(dailyListCollectionTable!)
-        dailyListCollectionTable?.anchor(top: calendar.bottomAnchor, leading: view.leadingAnchor, bottom: view.bottomAnchor, trailing: view.trailingAnchor,padding: .init(top: 40, left: 40, bottom: 40, right: 40))
-        
-    }
-        
-    fileprivate func fetchCall() {
-        APIService.shared.getDailyList(userId: userId!, fromDate: self.fromDate + " 00:00:00", toDate: self.toDate + " 00:00:00") { (result, error) in
-            guard let result = result else {return}
-            self.resultList = result
-            DispatchQueue.main.async {
-                self.dailyListCollectionTable?.reloadData()
-            }
-            
-            if let error = error {
-                print(error)
-            }
-        }
     }
 }
 
@@ -146,7 +97,61 @@ extension CalendarController: UICollectionViewDelegate, UICollectionViewDataSour
     }
     
     func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, sizeForItemAt indexPath: IndexPath) -> CGSize {
-        return CGSize(width: (dailyListCollectionTable?.frame.width)!, height: (dailyListCollectionTable?.frame.size.height)! / 2)
+        return CGSize(width: (dailyListCollectionTable?.frame.width)!, height: 120)
     }
+}
 
+extension CalendarController {
+
+    override func viewDidLoad() {
+        super.viewDidLoad()
+        view.backgroundColor = mainBackgroundColor
+        setupCalendar()
+        setupCollectionView()
+        setupMonthFormattedString()
+        fetchCall()
+    }
+}
+
+extension CalendarController {
+    fileprivate func fetchCall() {
+        APIService.shared.getDailyList(userId: userId!, fromDate: self.fromDate + " 00:00:00", toDate: self.toDate + " 00:00:00") { (result, error) in
+            guard let result = result else {return}
+            self.resultList = result
+            DispatchQueue.main.async {
+                self.dailyListCollectionTable?.reloadData()
+            }
+            
+            if let error = error {
+                print(error)
+            }
+        }
+    }
+}
+
+extension CalendarController {
+    fileprivate func setupCollectionView() {
+        
+        let layout: UICollectionViewFlowLayout = UICollectionViewFlowLayout()
+        dailyListCollectionTable = UICollectionView(frame: .zero, collectionViewLayout: layout)
+        dailyListCollectionTable?.backgroundColor = .clear
+        dailyListCollectionTable?.register(CalendarCell.self, forCellWithReuseIdentifier: "cellID")
+        dailyListCollectionTable?.dataSource = self
+        dailyListCollectionTable?.delegate = self
+        dailyListCollectionTable?.showsVerticalScrollIndicator = false
+        
+        view.addSubview(dailyListCollectionTable!)
+        dailyListCollectionTable?.anchor(top: calendar.bottomAnchor, leading: view.leadingAnchor, bottom: view.bottomAnchor, trailing: view.trailingAnchor,padding: .init(top: 40, left: 40, bottom: 0, right: 40))
+        
+    }
+    
+    func setupMonthFormattedString() {
+        let nextMonth = self.calendar.currentPage.getNextMonth()
+        formatter.dateFormat = "yyyy-MM-dd"
+        self.fromDate = formatter.string(from: nextMonth!)
+        
+        let previosMonth = self.calendar.currentPage.getPreviousMonth()
+        formatter.dateFormat = "yyyy-MM-dd"
+        self.toDate = formatter.string(from: previosMonth!)
+    }
 }

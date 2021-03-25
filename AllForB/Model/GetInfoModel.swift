@@ -26,7 +26,6 @@ struct UserInfo: Decodable {
     let SiteId: Int?
 }
 
-
 extension APIService {
     func getInfo(userId: Int, companyId: Int, completion: @escaping (UserInfo?, Error?) -> Void) {
 
@@ -72,5 +71,4 @@ extension APIService {
         })
             task.resume()
     }
-
 }

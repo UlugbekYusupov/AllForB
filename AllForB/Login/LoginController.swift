@@ -10,6 +10,9 @@ import CoreData
 
 class LoginController: UIViewController {
     
+    var seePasswordStatus: Bool = true
+    var loginData: LoginData!
+
     let logoImageView: UIImageView = {
         let iv = UIImageView(image: #imageLiteral(resourceName: "Logo_Orange"))
         iv.clipsToBounds = true
@@ -17,11 +20,7 @@ class LoginController: UIViewController {
         iv.contentMode = .scaleAspectFit
         return iv
     }()
-    
-    var seePasswordStatus: Bool = true
-    
-    //아이디, 비밀번호
-    
+
     let idLabel: UILabel = {
         let label = UILabel()
         label.clipsToBounds = true
@@ -53,7 +52,6 @@ class LoginController: UIViewController {
         let iv = UIImageView(image: #imageLiteral(resourceName: "user"))
         iv.clipsToBounds = true
         iv.contentMode = .scaleAspectFit
-//        iv.backgroundColor = .red
         return iv
     }()
     
@@ -105,12 +103,10 @@ class LoginController: UIViewController {
         let view = UIView()
         view.backgroundColor = .clear
         view.layer.cornerRadius = 25
-//        view.layer.maskedCorners = [.layerMinXMinYCorner,.layerMaxXMinYCorner]
         view.layer.borderWidth = 1
         view.layer.borderColor = mainColor.cgColor
         return view
     }()
-    
     
     let idLine: UIView = {
         let v = UIView()
@@ -131,25 +127,22 @@ class LoginController: UIViewController {
         button.backgroundColor = mainColor
         return button
     }()
-    
-    override func viewDidLoad() {
-        super.viewDidLoad()
-        view.backgroundColor = mainBackgroundColor
-        setupContainer()
-    }
-    
-    var loginData: LoginData!
 }
 
 extension LoginController {
-    override func viewWillAppear(_ animated: Bool) {
-        super.viewWillAppear(animated)
-        
-    }
-    override open var shouldAutorotate: Bool {
-        return false
-    }
     
+    @objc fileprivate func handleSeePassword() {
+        if seePasswordStatus {
+            seePasswordButton.setImage(#imageLiteral(resourceName: "eys"), for: .normal)
+            seePasswordStatus = false
+            yourPasswordTextField.isSecureTextEntry = false
+        }
+        else {
+            seePasswordButton.setImage(#imageLiteral(resourceName: "eye-o"), for: .normal)
+            seePasswordStatus = true
+            yourPasswordTextField.isSecureTextEntry = true
+        }
+    }
     fileprivate func handleLoginResponse(_ username: String, _ password: String, _ IsLoginSave: Bool) {
         APIService.shared.loginRequest(username: username, password: password, IsLoginSave: IsLoginSave) { [self] (result, error) in
             if result != nil {
@@ -169,33 +162,6 @@ extension LoginController {
         }
     }
     
-    @objc fileprivate func handleLogin() {
-        guard let username = yourUsernameTextField.text else {return}
-        guard let password = yourPasswordTextField.text else {return}
-        let IsLoginSave: Bool = true
-        
-        if username.isEmpty || password.isEmpty {
-            SharedClass.sharedInstance.alert(view: self, title: "Please enter", message: "")
-            return
-        } else {
-            handleLoginResponse(username, password, IsLoginSave)
-        }
-    }
-    
-    @objc fileprivate func handleSeePassword() {
-        if seePasswordStatus {
-            seePasswordButton.setImage(#imageLiteral(resourceName: "eys"), for: .normal)
-            seePasswordStatus = false
-            yourPasswordTextField.isSecureTextEntry = false
-        }
-        else {
-            seePasswordButton.setImage(#imageLiteral(resourceName: "eye-o"), for: .normal)
-            seePasswordStatus = true
-            yourPasswordTextField.isSecureTextEntry = true
-        }
-    }
-    
-    
     func checkReturnCode(){
         let returnCode = application.getReturnCode()!
         if returnCode == 0 {
@@ -208,6 +174,20 @@ extension LoginController {
             SharedClass.sharedInstance.alert(view: self, title: "Incorrect !", message: "")
          }
     }
+    
+    @objc fileprivate func handleLogin() {
+        guard let username = yourUsernameTextField.text else {return}
+        guard let password = yourPasswordTextField.text else {return}
+        let IsLoginSave: Bool = true
+        
+        if username.isEmpty || password.isEmpty {
+            SharedClass.sharedInstance.alert(view: self, title: "Please enter", message: "")
+            return
+        } else {
+            handleLoginResponse(username, password, IsLoginSave)
+        }
+    }
+
 }
 
 extension LoginController {
@@ -246,8 +226,25 @@ extension LoginController {
         // log in button
         
         containerView.addSubview(loginButton)
-        loginButton.centerInSuperview(size: CGSize(width: 200, height: 50))
+        loginButton.centerXInSuperview()
+        loginButton.anchor(top: passwordLine.bottomAnchor, leading: nil, bottom: nil, trailing: nil, padding: .init(top: 50, left: 0, bottom: 0, right: 0), size: CGSize(width: 200, height: 50))
         loginButton.layer.cornerRadius = 10
         loginButton.addTarget(self, action: #selector(handleLogin), for: .touchUpInside)
+    }
+}
+
+extension LoginController {
+    override func viewDidLoad() {
+        super.viewDidLoad()
+        view.backgroundColor = mainBackgroundColor
+        setupContainer()
+    }
+    override func viewWillAppear(_ animated: Bool) {
+        super.viewWillAppear(animated)
+        
+    }
+    override open var shouldAutorotate: Bool { return false}
+    override var preferredStatusBarStyle: UIStatusBarStyle {
+        return .darkContent
     }
 }

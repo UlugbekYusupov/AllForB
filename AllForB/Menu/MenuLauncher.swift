@@ -21,7 +21,12 @@ class MenuLauncher: NSObject {
     
     fileprivate let blackView = UIView()
     fileprivate let cellID = "cellID"
-    
+    private var menuTableView: UITableView!
+    private let tableHeight: CGFloat = 40
+    var mainPageController: MainPageController?
+    var qrScannerController: QRScannerController?
+    var loginController: LoginController?
+
     let settings: [Setting] = {
        return [Setting(name: "홈", imageName: "home1"),
                Setting(name: "프로필", imageName: "profile"),
@@ -141,37 +146,7 @@ class MenuLauncher: NSObject {
         return cv
     }()
     
-    private var menuTableView: UITableView!
-    private let tableHeight: CGFloat = 40
-    var mainPageController: MainPageController?
-    var qrScannerController: QRScannerController?
-    var loginController: LoginController?
-    
-    override init() {
-        super.init()
-        
-    }
-    
-    func showSettings() {
-        if let window = UIApplication.shared.windows.first(where: { $0.isKeyWindow }) {
-            setupContainerViews()
-
-            blackView.backgroundColor = UIColor(white: 0, alpha: 0.5)
-            window.addSubview(blackView)
-            blackView.frame = window .frame
-            blackView.alpha = 0
-            blackView.addGestureRecognizer(UITapGestureRecognizer(target: self, action: #selector(handleBlackTapDismiss)))
-
-            window.addSubview(menuView)
-            let width: CGFloat = window.frame.size.width / 1.4
-            menuView.frame = CGRect(x: -window.frame.width, y: 0, width: width, height: window.frame.height)
-
-            UIView.animate(withDuration: 0.5, delay: 0, usingSpringWithDamping: 1, initialSpringVelocity: 1, options: .curveEaseOut) {
-                self.blackView.alpha = 1
-                self.menuView.frame = CGRect(x: 0, y: 0, width: width, height: self.menuView.frame.height)
-            } completion: { (flag) in }
-        }
-    }
+    override init() { super.init() }
 
     fileprivate func uiViewAnimation() {
         if let window = UIApplication.shared.windows.first(where: { $0.isKeyWindow }) {
@@ -214,7 +189,7 @@ extension MenuLauncher {
         gwanglijaSettingLabel.anchor(top: tableLine.bottomAnchor, leading: nil, bottom: nil, trailing: nil, padding: .init(top: 5, left: 0, bottom: 0, right: 0), size: CGSize(width: 100, height: 30))
         
         menuView.addSubview(qrScanImageView)
-        qrScanImageView.anchor(top: gwanglijaSettingLabel.bottomAnchor, leading: menuView.leadingAnchor, bottom: nil, trailing: nil, padding: .init(top: 10, left: 10, bottom: 0, right: 0), size: CGSize(width: 40, height: 40))
+        qrScanImageView.anchor(top: gwanglijaSettingLabel.bottomAnchor, leading: menuView.leadingAnchor, bottom: nil, trailing: nil, padding: .init(top: 10, left: 0, bottom: 0, right: 0), size: CGSize(width: 40, height: 40))
         
         menuView.addSubview(qrScanButton)
         qrScanButton.anchor(top: qrScanImageView.topAnchor, leading: qrScanImageView.trailingAnchor, bottom: nil, trailing: nil, padding: .init(top: 5, left: 0, bottom: 0, right: 0), size: CGSize(width: 100, height: 30))
@@ -224,7 +199,7 @@ extension MenuLauncher {
         footerLine.anchor(top: nil, leading: menuView.leadingAnchor, bottom: menuView.bottomAnchor, trailing: menuView.trailingAnchor, padding: .init(top: 0, left: 0, bottom: 100, right: 0), size: CGSize(width: 0, height: 1))
         
         menuView.addSubview(logoutImageView)
-        logoutImageView.anchor(top: nil, leading: menuView.leadingAnchor, bottom: menuView.safeAreaLayoutGuide.bottomAnchor, trailing: nil, padding: .init(top: 0, left: 10, bottom: 0, right: 0), size: CGSize(width: 40, height: 40))
+        logoutImageView.anchor(top: nil, leading: menuView.leadingAnchor, bottom: menuView.safeAreaLayoutGuide.bottomAnchor, trailing: nil, padding: .init(top: 0, left: 0, bottom: 0, right: 0), size: CGSize(width: 40, height: 40))
         
         menuView.addSubview(logOutButton)
         logOutButton.anchor(top: logoutImageView.topAnchor, leading: logoutImageView.trailingAnchor, bottom: nil, trailing: nil, padding: .init(top: 5, left: 0, bottom: 0, right: 0), size: CGSize(width: 100, height: 30))
@@ -245,37 +220,24 @@ extension MenuLauncher {
         menuTableView.anchor(top: headerLine.bottomAnchor, leading: menuView.leadingAnchor, bottom: nil, trailing: menuView.trailingAnchor, padding: .init(top: 10, left: 0, bottom: 0, right: 0), size: CGSize(width: 0, height: height))
     }
     
-    @objc fileprivate func handleLogoutButton() {
-        application.clearDatabase()
-        UserDefaults.standard.removeObject(forKey: "currentLoginToken")
-        ProfileController.shared.userInfo.removeAll()
-        self.mainPageController?.shouldAutoRotate = false
-        self.mainPageController?.dismiss(animated: false, completion: nil)
-        UIView.animate(withDuration: 0, delay: 0, usingSpringWithDamping: 1, initialSpringVelocity: 1, options: .curveEaseOut) {
-            self.uiViewAnimation()
-        } completion: { (flag) in }
-    }
-    
-    @objc fileprivate func handleBlackTapDismiss(gesture: UITapGestureRecognizer) {
-        UIView.animate(withDuration: 0.5, delay: 0, usingSpringWithDamping: 1, initialSpringVelocity: 1, options: .curveEaseOut) {
-            self.uiViewAnimation()
-        } completion: { (flag) in
-            self.qrScannerController?.captureSession.startRunning()
-            self.mainPageController?.shouldAutoRotate = false
-        }
-    }
-    
-    @objc fileprivate func handleQRscan() {
-        UIView.animate(withDuration: 0.5, delay: 0, usingSpringWithDamping: 1, initialSpringVelocity: 1, options: .curveEaseOut) {
-            self.uiViewAnimation()
-        } completion: { (flag) in
-            self.mainPageController?.showQRScannerController()
-            self.mainPageController?.shouldAutoRotate = true
-        }
-    
-        UIView.animate(withDuration: 0.5, delay: 0, usingSpringWithDamping: 1, initialSpringVelocity: 1, options: .curveEaseOut) {
-            self.uiViewAnimation()
-        } completion: { (flag) in
+    func showSettings() {
+        if let window = UIApplication.shared.windows.first(where: { $0.isKeyWindow }) {
+            setupContainerViews()
+
+            blackView.backgroundColor = UIColor(white: 0, alpha: 0.5)
+            window.addSubview(blackView)
+            blackView.frame = window .frame
+            blackView.alpha = 0
+            blackView.addGestureRecognizer(UITapGestureRecognizer(target: self, action: #selector(handleBlackTapDismiss)))
+
+            window.addSubview(menuView)
+            let width: CGFloat = window.frame.size.width / 1.4
+            menuView.frame = CGRect(x: -window.frame.width, y: 0, width: width, height: window.frame.height)
+
+            UIView.animate(withDuration: 0.5, delay: 0, usingSpringWithDamping: 1, initialSpringVelocity: 1, options: .curveEaseOut) {
+                self.blackView.alpha = 1
+                self.menuView.frame = CGRect(x: 0, y: 0, width: width, height: self.menuView.frame.height)
+            } completion: { (flag) in }
         }
     }
 }
@@ -313,11 +275,43 @@ extension MenuLauncher: UITableViewDelegate, UITableViewDataSource {
         UIView.animate(withDuration: 0.5, delay: 0, usingSpringWithDamping: 1, initialSpringVelocity: 1, options: .curveEaseOut) {
             self.uiViewAnimation()
         } completion: { (flag) in
-
             let setting = self.settings[indexPath.item]
             self.mainPageController?.setting = setting
             self.mainPageController?.showController(indexPath: indexPath)
-            self.mainPageController?.shouldAutoRotate = false
+        }
+    }
+}
+
+extension MenuLauncher {
+    @objc fileprivate func handleLogoutButton() {
+        application.clearDatabase()
+        UserDefaults.standard.removeObject(forKey: "currentLoginToken")
+        ProfileController.shared.userInfo.removeAll()
+        self.mainPageController?.dismiss(animated: false, completion: nil)
+        UIView.animate(withDuration: 0, delay: 0, usingSpringWithDamping: 1, initialSpringVelocity: 1, options: .curveEaseOut) {
+            self.uiViewAnimation()
+        } completion: { (flag) in }
+    }
+    
+    @objc fileprivate func handleBlackTapDismiss(gesture: UITapGestureRecognizer) {
+        UIView.animate(withDuration: 0.5, delay: 0, usingSpringWithDamping: 1, initialSpringVelocity: 1, options: .curveEaseOut) {
+            self.uiViewAnimation()
+        } completion: { (flag) in
+            self.qrScannerController?.captureSession.startRunning()
+        }
+    }
+    
+    @objc fileprivate func handleQRscan() {
+        UIView.animate(withDuration: 0.5, delay: 0, usingSpringWithDamping: 1, initialSpringVelocity: 1, options: .curveEaseOut) {
+            self.uiViewAnimation()
+        } completion: { (flag) in
+            self.mainPageController?.showQRScannerController()
+            self.mainPageController?.qrLabel.text = "QR Scanner"
+        }
+    
+        UIView.animate(withDuration: 0.5, delay: 0, usingSpringWithDamping: 1, initialSpringVelocity: 1, options: .curveEaseOut) {
+            self.uiViewAnimation()
+        } completion: { (flag) in
         }
     }
 }

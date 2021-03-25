@@ -10,6 +10,12 @@ import NVActivityIndicatorView
 
 class InOutAttendanceController: UIViewController {
     
+    let token = application.getCurrentLoginToken()
+    var counter = 300
+    var timer: Timer!
+    let segmentItems = ["출근", "퇴근"]
+    var qrModel = [QRCodeModel]()
+
     let containerView: UIView = {
         let view = UIView()
         view.backgroundColor = mainBackgroundColor
@@ -20,9 +26,7 @@ class InOutAttendanceController: UIViewController {
         let iv = UIImageView()
         return iv
     }()
-    var activityIndicatorView: NVActivityIndicatorView?
     
-    let segmentItems = ["출근", "퇴근"]
     lazy var chulTeginSegmentControl: UISegmentedControl = {
         let segment = UISegmentedControl(items: segmentItems)
         segment.selectedSegmentIndex = 0
@@ -78,23 +82,45 @@ class InOutAttendanceController: UIViewController {
         return button
     }()
     
-    let token = application.getCurrentLoginToken()
-    var counter = 300
-    var timer: Timer!
-    
-    override func viewDidLoad() {
-        super.viewDidLoad()
-        view.addSubview(containerView)
-        containerView.anchor(top: view.topAnchor, leading: view.leadingAnchor, bottom: view.bottomAnchor, trailing: view.trailingAnchor, padding: .init(), size: CGSize(width: 0, height: 0))
-        setupContainerView()
-//        userId = (application.getAnyValueFromCoreData(token!, "userId") as! Int)
-        handleCreateQRCode(userId!, 1, "122234234535", 3)
+    fileprivate func generateQRCode(qrString: String) -> UIImage? {
+        let string_data = qrString.data(using: String.Encoding.ascii)
+        if let filter = CIFilter(name: "CIQRCodeGenerator") {
+            filter.setValue(string_data, forKey: "inputMessage")
+            let transform = CGAffineTransform(scaleX: 3, y: 3)
+            if let output = filter.outputImage?.transformed(by: transform) {
+                return UIImage(ciImage: output)
+            }
+        }
+        return nil
     }
-    
-    override func viewDidAppear(_ animated: Bool) {
-        super.viewDidAppear(animated)
+    fileprivate func timerFunc() {
+        timer.invalidate()
+        counter = 300
+        timeFinishedLabel.isHidden = true
+        qrCodeButton.isEnabled = false
+        timeLabel.textColor = mainColor
         timer = Timer.scheduledTimer(timeInterval: 1, target: self, selector: #selector(updateCounter), userInfo: nil, repeats: true)
     }
+}
+
+extension InOutAttendanceController {
+    fileprivate func handleCreateQRCode(_ userId: Int, _ companyId: Int, _ phoneNo: String, _ inOutTypeId: Int) {
+        APIService.shared.qrCodeCreate(userId: userId, companyId: companyId, phoneNo: phoneNo, inOutTypeId: inOutTypeId) { (result, error) in
+            if let result = result {
+                DispatchQueue.main.async {
+                    self.qrModel.append(result)
+                    self.qrImageView.image = self.generateQRCode(qrString: self.qrModel[0].InoutQRValue)
+                    self.qrModel.removeAll()
+                }
+            }
+            else if let error = error {
+                print("error: \(error.localizedDescription)")
+            }
+        }
+    }
+}
+
+extension InOutAttendanceController {
     
     @objc func updateCounter() {
         if counter >= 0 {
@@ -109,39 +135,7 @@ class InOutAttendanceController: UIViewController {
             counter -= 1
         }
     }
-    
-    fileprivate func timerFunc() {
-        timer.invalidate()
-        counter = 300
-        timeFinishedLabel.isHidden = true
-        qrCodeButton.isEnabled = false
-        timeLabel.textColor = mainColor
-        timer = Timer.scheduledTimer(timeInterval: 1, target: self, selector: #selector(updateCounter), userInfo: nil, repeats: true)
-    }
-    
-    fileprivate func setupContainerView() {
-        containerView.addSubview(qrImageView)
-        qrImageView.anchor(top: containerView.topAnchor, leading: containerView.leadingAnchor, bottom: nil, trailing: containerView.trailingAnchor, padding: .init(top: 50, left: 100, bottom: 0, right: 100), size: CGSize(width: 0, height: view.frame.size.width / 2))
-        containerView.addSubview(timeFinishedLabel)
-        timeFinishedLabel.anchor(top: qrImageView.bottomAnchor, leading: qrImageView.leadingAnchor, bottom: nil, trailing: qrImageView.trailingAnchor,size: CGSize(width: 0, height: 50))
-        timeFinishedLabel.isHidden = true
-        
-        containerView.addSubview(chulTeginSegmentControl)
-        chulTeginSegmentControl.centerInSuperview(size: CGSize(width: 250, height: 45))
-        
-        containerView.addSubview(inchinShiganView)
-        inchinShiganView.centerXInSuperview()
-        inchinShiganView.anchor(top: chulTeginSegmentControl.bottomAnchor, leading: nil, bottom: nil, trailing: nil,padding: .init(top: 20, left: 0, bottom: 0, right: 0),size: CGSize(width: 100, height: 30))
-        
-        inchinShiganView.addSubview(timeLabel)
-        timeLabel.fillSuperview(padding: .init(top: 2, left: 2, bottom: 2, right: 2))
-        
-        containerView.addSubview(qrCodeButton)
-        qrCodeButton.anchor(top: nil, leading: view.leadingAnchor, bottom: view.bottomAnchor, trailing: view.trailingAnchor,padding: .init(top: 0, left: 100, bottom: 100, right: 100), size: CGSize(width: 0, height: 40))
-        qrCodeButton.addTarget(self, action: #selector(handleQRCodeButton), for: .touchUpInside)
-        qrCodeButton.isEnabled = false
-    }
-    
+
     @objc fileprivate func handleSegmentChange(_ sender: UISegmentedControl) {
         DispatchQueue.main.async { [self] in
             switch sender.selectedSegmentIndex {
@@ -160,32 +154,49 @@ class InOutAttendanceController: UIViewController {
         timerFunc()
         handleCreateQRCode(userId!, 1, "124234", 3)
     }
-    
-    fileprivate func generateQRCode(qrString: String) -> UIImage? {
-        let string_data = qrString.data(using: String.Encoding.ascii)
-        if let filter = CIFilter(name: "CIQRCodeGenerator") {
-            filter.setValue(string_data, forKey: "inputMessage")
-            let transform = CGAffineTransform(scaleX: 3, y: 3)
-            if let output = filter.outputImage?.transformed(by: transform) {
-                return UIImage(ciImage: output)
-            }
-        }
-        return nil
+}
+
+extension InOutAttendanceController {
+    override func viewDidLoad() {
+        super.viewDidLoad()
+        view.addSubview(containerView)
+        containerView.anchor(top: view.topAnchor, leading: view.leadingAnchor, bottom: view.bottomAnchor, trailing: view.trailingAnchor, padding: .init(), size: CGSize(width: 0, height: 0))
+        setupContainerView()
+//        userId = (application.getAnyValueFromCoreData(token!, "userId") as! Int)
+        handleCreateQRCode(userId!, 1, "122234234535", 3)
     }
     
-    var qrModel = [QRCodeModel]()
-    fileprivate func handleCreateQRCode(_ userId: Int, _ companyId: Int, _ phoneNo: String, _ inOutTypeId: Int) {
-        APIService.shared.qrCodeCreate(userId: userId, companyId: companyId, phoneNo: phoneNo, inOutTypeId: inOutTypeId) { (result, error) in
-            if let result = result {
-                DispatchQueue.main.async {
-                    self.qrModel.append(result)
-                    self.qrImageView.image = self.generateQRCode(qrString: self.qrModel[0].InoutQRValue)
-                    self.qrModel.removeAll()
-                }
-            }
-            else if let error = error {
-                print("error: \(error.localizedDescription)")
-            }
-        }
+    override func viewDidAppear(_ animated: Bool) {
+        super.viewDidAppear(animated)
+        timer = Timer.scheduledTimer(timeInterval: 1, target: self, selector: #selector(updateCounter), userInfo: nil, repeats: true)
+    }
+}
+
+extension InOutAttendanceController {
+    fileprivate func setupContainerView() {
+        containerView.addSubview(qrImageView)
+        qrImageView.anchor(top: containerView.topAnchor, leading: containerView.leadingAnchor, bottom: nil, trailing: containerView.trailingAnchor, padding: .init(top: 30, left: 100, bottom: 0, right: 100), size: CGSize(width: 0, height: view.frame.size.width / 2))
+        containerView.addSubview(timeFinishedLabel)
+        timeFinishedLabel.anchor(top: qrImageView.bottomAnchor, leading: qrImageView.leadingAnchor, bottom: nil, trailing: qrImageView.trailingAnchor,size: CGSize(width: 0, height: 50))
+        timeFinishedLabel.isHidden = true
+        
+        containerView.addSubview(chulTeginSegmentControl)
+//        chulTeginSegmentControl.centerInSuperview(size: CGSize(width: 250, height: 45))
+        chulTeginSegmentControl.centerXInSuperview()
+        chulTeginSegmentControl.anchor(top: timeFinishedLabel.bottomAnchor, leading: nil, bottom: nil, trailing: nil, size: CGSize(width: 250, height: 45))
+        
+        
+        containerView.addSubview(inchinShiganView)
+        inchinShiganView.centerXInSuperview()
+        inchinShiganView.anchor(top: chulTeginSegmentControl.bottomAnchor, leading: nil, bottom: nil, trailing: nil,padding: .init(top: 20, left: 0, bottom: 0, right: 0),size: CGSize(width: 100, height: 30))
+        
+        inchinShiganView.addSubview(timeLabel)
+        timeLabel.fillSuperview(padding: .init(top: 2, left: 2, bottom: 2, right: 2))
+        
+        containerView.addSubview(qrCodeButton)
+        qrCodeButton.centerXInSuperview()
+        qrCodeButton.anchor(top: inchinShiganView.bottomAnchor, leading: nil, bottom: nil, trailing: nil, padding: .init(top: 50, left: 100, bottom: 0, right: 100), size: CGSize(width: 200, height: 40))
+        qrCodeButton.addTarget(self, action: #selector(handleQRCodeButton), for: .touchUpInside)
+        qrCodeButton.isEnabled = false
     }
 }

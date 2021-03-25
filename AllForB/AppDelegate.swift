@@ -58,7 +58,6 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
     }
     
     func saveLoginDataToCoreData(data: LoginData){
-        
         let context: NSManagedObjectContext = self.persistentContainer.viewContext
         let entity: NSEntityDescription = NSEntityDescription.entity(forEntityName: "LoginInfo", in: context)!
         let mngdObj: NSManagedObject = NSManagedObject(entity: entity, insertInto: context)

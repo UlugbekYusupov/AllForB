@@ -9,6 +9,13 @@ import UIKit
 
 class MainPageController: UIViewController {
     
+    let headerNfooterHeight = 50
+    static let shared = MainPageController()
+    let menuLauncher = MenuLauncher()
+    var qrScannerController: QRScannerController?
+    var inOutController: InOutAttendanceController!
+    var inOutView: UIView!
+
     let headerView: UIView = {
         let view = UIView()
         view.backgroundColor = .clear
@@ -67,40 +74,25 @@ class MainPageController: UIViewController {
         }
     }
     
-    
-    static let shared = MainPageController()
-    let menuLauncher = MenuLauncher()
-    var qrScannerController: QRScannerController?
-    var shouldAutoRotate: Bool = false
-    
-    var inOutController: InOutAttendanceController!
-    
-    var inOutView: UIView!
-
-    override func viewDidLoad() {
-        super.viewDidLoad()
-        view.backgroundColor = mainBackgroundColor
-        setupViews()
+    @objc fileprivate func handleMenuButton() {
+        menuLauncher.showSettings()
+        menuLauncher.qrScannerController?.captureSession.stopRunning()
+        menuLauncher.mainPageController = self
     }
-    
-    override open var shouldAutorotate: Bool { return shouldAutoRotate }
-
 }
 
 extension MainPageController {
     fileprivate func setupMainViews() {
-        
         view.addSubview(headerView)
-        headerView.anchor(top: view.topAnchor, leading: view.leadingAnchor, bottom: nil, trailing: view.trailingAnchor,size: CGSize(width: 0, height: 90))
+        headerView.anchor(top: view.safeAreaLayoutGuide.topAnchor, leading: view.leadingAnchor, bottom: nil, trailing: view.trailingAnchor,size: CGSize(width: 0, height: headerNfooterHeight))
         view.addSubview(headerLine)
         headerLine.anchor(top: headerView.bottomAnchor, leading: view.leadingAnchor, bottom: nil, trailing: view.trailingAnchor, padding: .init(), size: CGSize(width: 0, height: 1))
         
         view.addSubview(footerView)
-        footerView.anchor(top: nil, leading: view.leadingAnchor, bottom: view.bottomAnchor, trailing: view.trailingAnchor, padding: .init(), size: CGSize(width: 0, height: 100))
+        footerView.anchor(top: nil, leading: view.leadingAnchor, bottom: view.safeAreaLayoutGuide.bottomAnchor, trailing: view.trailingAnchor, padding: .init(), size: CGSize(width: 0, height: headerNfooterHeight))
 
         view.addSubview(footerLine)
         footerLine.anchor(top: nil, leading: view.leadingAnchor, bottom: footerView.topAnchor, trailing: view.trailingAnchor, padding: .init(), size: CGSize(width: 0, height: 1))
-
 
         inOutController = InOutAttendanceController()
         inOutView = inOutController.view
@@ -123,19 +115,10 @@ extension MainPageController {
     }
 }
 
-
 extension MainPageController {
-    
-    @objc fileprivate func handleMenuButton() {
-        menuLauncher.showSettings()
-        menuLauncher.qrScannerController?.captureSession.stopRunning()
-        menuLauncher.mainPageController = self
-    }
-    
+        
     func showController(indexPath: IndexPath) {
-        
         removeQrScannerController()
-        
         switch indexPath.row {
         case 0:
             let homeController = HomeController()
@@ -149,6 +132,7 @@ extension MainPageController {
         case 3:
             self.controllerCreation(viewController: inOutController)
         case 4:
+            
             let settingsController = SettingsController()
             controllerCreation(viewController: settingsController)
         default:
@@ -164,15 +148,26 @@ extension MainPageController {
     
     func showQRScannerController() {
         qrScannerController = QRScannerController()
+        qrScannerController?.modalPresentationStyle = .fullScreen
         menuLauncher.qrScannerController = qrScannerController
-        self.qrScannerController!.mainPageController = self
-        self.controllerCreation(viewController: self.qrScannerController!)
+        self.present(qrScannerController!, animated: false) {}
     }
     
     func controllerCreation(viewController: UIViewController) {
         addChild(viewController)
         view.addSubview(viewController.view)
-        viewController.view.anchor(top: headerLine.bottomAnchor, leading: view.leadingAnchor, bottom: footerLine.topAnchor, trailing: view.trailingAnchor, padding: .init(), size: CGSize(width: 0, height: 0))
+        viewController.view.anchor(top: headerLine.bottomAnchor, leading: view.leadingAnchor, bottom: footerLine.topAnchor, trailing: view.trailingAnchor, padding: .init(top: 0, left: 0, bottom: footerView.frame.size.height, right: 0), size: CGSize(width: 0, height: 0))
         viewController.didMove(toParent: self)
     }
+}
+
+extension MainPageController {
+    override func viewDidLoad() {
+        super.viewDidLoad()
+        view.backgroundColor = mainBackgroundColor
+        setupViews()
+    }
+    
+    override open var shouldAutorotate: Bool { return false }
+    override var preferredStatusBarStyle: UIStatusBarStyle { return .lightContent}
 }

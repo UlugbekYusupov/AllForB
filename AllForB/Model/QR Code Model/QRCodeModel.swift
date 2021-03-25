@@ -15,7 +15,6 @@ struct QRCodeModel: Decodable {
     let InoutQRValue: String
 }
 
-
 extension APIService {
     func qrCodeCreate(userId: Int, companyId: Int, phoneNo: String, inOutTypeId: Int, completion: @escaping (QRCodeModel?, Error?) -> Void) {
 
@@ -102,12 +101,7 @@ extension APIService {
                         completion(nil, NSError(domain: "invalidJSONTypeError", code: -100009, userInfo: nil))
                     return
                 }
-                print(json)
-//                let data = try JSONSerialization.data(withJSONObject: json, options: .prettyPrinted)
-//                let decoder = JSONDecoder()
-//                let qrCodeModel = try decoder.decode(QRCodeModel.self, from: data)
                 completion(json, nil)
-                
             }
             catch let error {
                 print(error.localizedDescription)
@@ -116,5 +110,4 @@ extension APIService {
         })
             task.resume()
     }
-
 }
