@@ -121,7 +121,7 @@ class MenuLauncher: NSObject {
     }()
     
     let qrScanButton: UIButton = {
-        let button = UIButton()
+        let button = UIButton(type: .system)
         button.clipsToBounds = true
         button.setTitle("QR Scan", for: .normal)
         button.setTitleColor(mainColor, for: .normal)
@@ -131,11 +131,11 @@ class MenuLauncher: NSObject {
     }()
     
     let logOutButton: UIButton = {
-        let button = UIButton()
+        let button = UIButton(type: .system)
         button.clipsToBounds = true
         button.setTitle("로그아웃", for: .normal)
         button.setTitleColor(mainColor, for: .normal)
-        button.contentMode = .scaleAspectFit
+        button.contentMode = .scaleAspectFill
         button.translatesAutoresizingMaskIntoConstraints = false
         return button
     }()
@@ -287,7 +287,11 @@ extension MenuLauncher {
         application.clearDatabase()
         UserDefaults.standard.removeObject(forKey: "currentLoginToken")
         ProfileController.shared.userInfo.removeAll()
-        self.mainPageController?.dismiss(animated: false, completion: nil)
+        self.mainPageController?.dismiss(animated: true, completion: nil)
+        loginController = LoginController()
+        loginController?.modalPresentationStyle = .fullScreen
+        self.mainPageController?.present(loginController!, animated: false, completion: nil)
+        
         UIView.animate(withDuration: 0, delay: 0, usingSpringWithDamping: 1, initialSpringVelocity: 1, options: .curveEaseOut) {
             self.uiViewAnimation()
         } completion: { (flag) in }

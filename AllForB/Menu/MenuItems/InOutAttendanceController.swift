@@ -11,11 +11,12 @@ import NVActivityIndicatorView
 class InOutAttendanceController: UIViewController {
     
     let token = application.getCurrentLoginToken()
-    var counter = 300
+    var counter = 0
     var timer: Timer!
     let segmentItems = ["출근", "퇴근"]
-    var qrModel = [QRCodeModel]()
-
+    var qrModel: QRCodeModel!
+    var expireString: String!
+    
     let containerView: UIView = {
         let view = UIView()
         view.backgroundColor = mainBackgroundColor
@@ -48,7 +49,7 @@ class InOutAttendanceController: UIViewController {
         label.textAlignment = .center
         label.textColor = .red
         label.font = UIFont(name: "Verdana-Bold", size: 17)
-        label.text = "Time is finished !"
+        label.text = "인증시간이 초과되었습니다 !"
         return label
     }()
     
@@ -77,7 +78,7 @@ class InOutAttendanceController: UIViewController {
         button.clipsToBounds = true
         button.contentMode = .scaleAspectFit
         button.layer.cornerRadius = 10
-        let attributedText = NSAttributedString(string: "QR Code 재생성", attributes: [.foregroundColor: UIColor.black,.font: UIFont(name: "Verdana", size: 18) as Any])
+        let attributedText = NSAttributedString(string: "QR Code 재생성", attributes: [.foregroundColor: mainBackgroundColor,.font: UIFont(name: "Verdana", size: 18) as Any])
         button.setAttributedTitle(attributedText, for: .normal)
         return button
     }()
@@ -93,24 +94,20 @@ class InOutAttendanceController: UIViewController {
         }
         return nil
     }
-    fileprivate func timerFunc() {
-        timer.invalidate()
-        counter = 300
-        timeFinishedLabel.isHidden = true
-        qrCodeButton.isEnabled = false
-        timeLabel.textColor = mainColor
-        timer = Timer.scheduledTimer(timeInterval: 1, target: self, selector: #selector(updateCounter), userInfo: nil, repeats: true)
-    }
 }
 
 extension InOutAttendanceController {
     fileprivate func handleCreateQRCode(_ userId: Int, _ companyId: Int, _ phoneNo: String, _ inOutTypeId: Int) {
         APIService.shared.qrCodeCreate(userId: userId, companyId: companyId, phoneNo: phoneNo, inOutTypeId: inOutTypeId) { (result, error) in
             if let result = result {
-                DispatchQueue.main.async {
-                    self.qrModel.append(result)
-                    self.qrImageView.image = self.generateQRCode(qrString: self.qrModel[0].InoutQRValue)
-                    self.qrModel.removeAll()
+                DispatchQueue.main.async { [self] in
+                    self.qrModel = result
+                    self.qrImageView.image = self.generateQRCode(qrString: self.qrModel.InoutQRValue)
+                    
+                    let expireDateString = self.qrModel.ExpireDateTime
+                    let timeString = expireDateString.substring(with: 0..<19)
+                    print(timeString)
+                    dateFormatting(expireDateString: timeString)
                 }
             }
             else if let error = error {
@@ -118,17 +115,47 @@ extension InOutAttendanceController {
             }
         }
     }
+    
+    func dateFormatting(expireDateString: String) {
+        let date = Date()
+        let dateFormatter = DateFormatter()
+        dateFormatter.dateFormat = "yyyy-MM-dd'T'HH:mm:ss Z"
+        let currentDateString = dateFormatter.string(from: date).capitalized
+
+        dateFormatter.dateFormat = "yyyy-MM-dd'T'HH:mm:ss"
+        let expireDate = dateFormatter.date(from: expireDateString)
+        
+        dateFormatter.dateFormat = "yyyy-MM-dd'T'HH:mm:ss Z"
+        let currentDate = dateFormatter.date(from: currentDateString)
+        
+        print(getDateDiff(start: currentDate!, end: expireDate!))
+        
+        DispatchQueue.main.async { [self] in
+            counter = getDateDiff(start: currentDate!, end: expireDate!)
+        }
+    }
+    
+    func getDateDiff(start: Date, end: Date) -> Int  {
+        let calendar = Calendar.current
+        let dateComponents = calendar.dateComponents([Calendar.Component.second], from: start, to: end)
+        let seconds = dateComponents.second
+        return Int(seconds!)
+    }
 }
 
 extension InOutAttendanceController {
     
     @objc func updateCounter() {
         if counter >= 0 {
-            if counter == 0 {
-                timeFinishedLabel.isHidden = false
-                qrCodeButton.isEnabled = true
-                timeLabel.textColor = .red
+            DispatchQueue.main.async { [self] in
+                if counter == 0 {
+                    timeFinishedLabel.isHidden = false
+                    qrCodeButton.isEnabled = true
+                    qrCodeButton.backgroundColor  = mainColor
+                    timeLabel.textColor = .red
+                }
             }
+            
             let minutes = Int(TimeInterval(counter)) / 60 % 60
             let seconds = Int(TimeInterval(counter)) % 60
             timeLabel.text = String(format:"%02i:%02i", minutes, seconds)
@@ -137,9 +164,9 @@ extension InOutAttendanceController {
     }
 
     @objc fileprivate func handleSegmentChange(_ sender: UISegmentedControl) {
+        setup()
         DispatchQueue.main.async { [self] in
             switch sender.selectedSegmentIndex {
-            // change the userId getting it from LoginData when getAnyValueFromCoreData works!
             case 0:
                 handleCreateQRCode(userId!, 1, "123214235", 3)
             case 1:
@@ -150,9 +177,25 @@ extension InOutAttendanceController {
         }
     }
     
+    fileprivate func setup() {
+        timer.invalidate()
+        timeFinishedLabel.isHidden = true
+        qrCodeButton.isEnabled = false
+        qrCodeButton.backgroundColor  = .init(red: 241/244, green: 170/244, blue: 76/244, alpha: 0.7)
+        timeLabel.textColor = mainColor
+        timer = Timer.scheduledTimer(timeInterval: 1, target: self, selector: #selector(updateCounter), userInfo: nil, repeats: true)
+    }
+    
     @objc fileprivate func handleQRCodeButton() {
-        timerFunc()
-        handleCreateQRCode(userId!, 1, "124234", 3)
+        setup()
+        switch chulTeginSegmentControl.selectedSegmentIndex {
+        case 0:
+            handleCreateQRCode(userId!, 1, "124234", 3)
+        case 1:
+            handleCreateQRCode(userId!, 1, "124234", 4)
+        default:
+            break
+        }
     }
 }
 
@@ -162,7 +205,6 @@ extension InOutAttendanceController {
         view.addSubview(containerView)
         containerView.anchor(top: view.topAnchor, leading: view.leadingAnchor, bottom: view.bottomAnchor, trailing: view.trailingAnchor, padding: .init(), size: CGSize(width: 0, height: 0))
         setupContainerView()
-//        userId = (application.getAnyValueFromCoreData(token!, "userId") as! Int)
         handleCreateQRCode(userId!, 1, "122234234535", 3)
     }
     
@@ -176,6 +218,7 @@ extension InOutAttendanceController {
     fileprivate func setupContainerView() {
         containerView.addSubview(qrImageView)
         qrImageView.anchor(top: containerView.topAnchor, leading: containerView.leadingAnchor, bottom: nil, trailing: containerView.trailingAnchor, padding: .init(top: 30, left: 100, bottom: 0, right: 100), size: CGSize(width: 0, height: view.frame.size.width / 2))
+        
         containerView.addSubview(timeFinishedLabel)
         timeFinishedLabel.anchor(top: qrImageView.bottomAnchor, leading: qrImageView.leadingAnchor, bottom: nil, trailing: qrImageView.trailingAnchor,size: CGSize(width: 0, height: 50))
         timeFinishedLabel.isHidden = true
@@ -198,5 +241,6 @@ extension InOutAttendanceController {
         qrCodeButton.anchor(top: inchinShiganView.bottomAnchor, leading: nil, bottom: nil, trailing: nil, padding: .init(top: 50, left: 100, bottom: 0, right: 100), size: CGSize(width: 200, height: 40))
         qrCodeButton.addTarget(self, action: #selector(handleQRCodeButton), for: .touchUpInside)
         qrCodeButton.isEnabled = false
+        qrCodeButton.backgroundColor  = .init(red: 241/244, green: 170/244, blue: 76/244, alpha: 0.7)
     }
 }

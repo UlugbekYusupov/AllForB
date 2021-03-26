@@ -118,6 +118,7 @@ extension CalendarController {
         APIService.shared.getDailyList(userId: userId!, fromDate: self.fromDate + " 00:00:00", toDate: self.toDate + " 00:00:00") { (result, error) in
             guard let result = result else {return}
             self.resultList = result
+            print(self.resultList)
             DispatchQueue.main.async {
                 self.dailyListCollectionTable?.reloadData()
             }

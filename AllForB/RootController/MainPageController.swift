@@ -148,9 +148,8 @@ extension MainPageController {
     
     func showQRScannerController() {
         qrScannerController = QRScannerController()
-        qrScannerController?.modalPresentationStyle = .fullScreen
         menuLauncher.qrScannerController = qrScannerController
-        self.present(qrScannerController!, animated: false) {}
+        self.controllerCreation(viewController: qrScannerController!)
     }
     
     func controllerCreation(viewController: UIViewController) {

@@ -12,7 +12,8 @@ class LoginController: UIViewController {
     
     var seePasswordStatus: Bool = true
     var loginData: LoginData!
-
+    var menuLauncher: MenuLauncher!
+    
     let logoImageView: UIImageView = {
         let iv = UIImageView(image: #imageLiteral(resourceName: "Logo_Orange"))
         iv.clipsToBounds = true
@@ -42,6 +43,7 @@ class LoginController: UIViewController {
             .foregroundColor: mainColor,
             .font: UIFont(name: "Verdana", size: 13) as Any
         ])
+        tf.addTarget(self, action: #selector(handleInputChange), for: .editingChanged)
         tf.textColor = mainColor
         tf.autocorrectionType = .no
         tf.autocapitalizationType = .none
@@ -93,6 +95,7 @@ class LoginController: UIViewController {
             .foregroundColor: mainColor,
             .font: UIFont(name: "Verdana", size: 13) as Any
         ])
+        tf.addTarget(self, action: #selector(handleInputChange), for: .editingChanged)
         tf.isSecureTextEntry = true
         tf.autocorrectionType = .no
         tf.autocapitalizationType = .none
@@ -124,7 +127,10 @@ class LoginController: UIViewController {
         let button = UIButton(type: .system)
         button.clipsToBounds = true
         button.contentMode = .scaleAspectFit
-        button.backgroundColor = mainColor
+        button.setTitle("Log in", for: .normal)
+        button.setTitleColor(mainBackgroundColor, for: .normal)
+        button.backgroundColor = .init(red: 241/244, green: 170/244, blue: 76/244, alpha: 0.6)
+        button.isEnabled = false
         return button
     }()
 }
@@ -165,10 +171,14 @@ extension LoginController {
     func checkReturnCode(){
         let returnCode = application.getReturnCode()!
         if returnCode == 0 {
-            DispatchQueue.main.async {
+            DispatchQueue.main.async { [self] in
                 let mainController  = MainPageController()
                 mainController.modalPresentationStyle = .fullScreen
-                self.present(mainController, animated: false, completion: nil)
+                present(mainController, animated: false, completion: nil)
+                yourPasswordTextField.text?.removeAll()
+                yourUsernameTextField.text?.removeAll()
+                loginButton.isEnabled = false
+                loginButton.backgroundColor = .init(red: 241/244, green: 170/244, blue: 76/244, alpha: 0.6)
             }
          } else {
             SharedClass.sharedInstance.alert(view: self, title: "Incorrect !", message: "")
@@ -179,15 +189,19 @@ extension LoginController {
         guard let username = yourUsernameTextField.text else {return}
         guard let password = yourPasswordTextField.text else {return}
         let IsLoginSave: Bool = true
-        
-        if username.isEmpty || password.isEmpty {
-            SharedClass.sharedInstance.alert(view: self, title: "Please enter", message: "")
-            return
+        handleLoginResponse(username, password, IsLoginSave)
+    }
+    
+    @objc func handleInputChange() {
+        let isFormValid = yourUsernameTextField.text?.count ?? 0 > 0 && yourPasswordTextField.text?.count ?? 0 > 0
+        if isFormValid {
+            loginButton.isEnabled = true
+            loginButton.backgroundColor = .init(red: 241/244, green: 170/244, blue: 76/244, alpha: 1)
         } else {
-            handleLoginResponse(username, password, IsLoginSave)
+            loginButton.isEnabled = false
+            loginButton.backgroundColor = .init(red: 241/244, green: 170/244, blue: 76/244, alpha: 0.6)
         }
     }
-
 }
 
 extension LoginController {

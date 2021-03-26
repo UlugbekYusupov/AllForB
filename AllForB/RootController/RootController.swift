@@ -45,7 +45,7 @@ class RootController: UIViewController {
         button.contentMode = .scaleAspectFit
         button.backgroundColor = mainColor
         button.setTitle("Log in  >", for: .normal)
-        button.setTitleColor(.black, for: .normal)
+        button.setTitleColor(mainBackgroundColor, for: .normal)
         button.addTarget(self, action: #selector(handleLogin), for: .touchUpInside)
         button.translatesAutoresizingMaskIntoConstraints = false
         return button
