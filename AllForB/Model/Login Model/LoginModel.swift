@@ -54,8 +54,8 @@ extension APIService {
             do {
                 let rootJSON = try JSONDecoder().decode(LoginData.self, from: data)
                 if rootJSON.ReturnCode == 0 {
-                    application.saveLoginDataToCoreData(data: rootJSON)
-                    userId = (application.getAnyValueFromCoreData(application.getCurrentLoginToken()!, "userId") as! Int)
+                    applicationDelegate.saveLoginDataToCoreData(data: rootJSON)
+                    userId = (applicationDelegate.getAnyValueFromCoreData(applicationDelegate.getCurrentLoginToken()!, "userId") as! Int)
                 }
                 completion(rootJSON, nil)
             }

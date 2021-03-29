@@ -18,8 +18,8 @@ class SceneDelegate: UIResponder, UIWindowSceneDelegate {
         // This delegate does not imply the connecting scene or session are new (see `application:configurationForConnectingSceneSession` instead).
         
 
-        if application.getCurrentLoginToken() != nil {
-            userId = (application.getAnyValueFromCoreData(application.getCurrentLoginToken()!, "userId") as! Int)
+        if applicationDelegate.getCurrentLoginToken() != nil {
+            userId = (applicationDelegate.getAnyValueFromCoreData(applicationDelegate.getCurrentLoginToken()!, "userId") as! Int)
             window?.rootViewController = MainPageController()
         } else {
             window?.rootViewController = RootController()

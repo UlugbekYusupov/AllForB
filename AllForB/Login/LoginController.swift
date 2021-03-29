@@ -169,7 +169,7 @@ extension LoginController {
     }
     
     func checkReturnCode(){
-        let returnCode = application.getReturnCode()!
+        let returnCode = applicationDelegate.getReturnCode()!
         if returnCode == 0 {
             DispatchQueue.main.async { [self] in
                 let mainController  = MainPageController()

@@ -10,7 +10,7 @@ import NVActivityIndicatorView
 
 class InOutAttendanceController: UIViewController {
     
-    let token = application.getCurrentLoginToken()
+    let token = applicationDelegate.getCurrentLoginToken()
     var counter = 0
     var timer: Timer!
     let segmentItems = ["출근", "퇴근"]
@@ -129,6 +129,8 @@ extension InOutAttendanceController {
         let currentDate = dateFormatter.date(from: currentDateString)
         
         print(getDateDiff(start: currentDate!, end: expireDate!))
+        
+        applicationDelegate.scheduleNotification(at: expireDate!)
         
         DispatchQueue.main.async { [self] in
             counter = getDateDiff(start: currentDate!, end: expireDate!)

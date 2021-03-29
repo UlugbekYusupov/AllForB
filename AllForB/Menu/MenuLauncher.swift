@@ -170,8 +170,8 @@ extension MenuLauncher {
         headerView.addSubview(profileEmail)
         profileEmail.anchor(top: profileName.bottomAnchor, leading: profileImageView.trailingAnchor, bottom: nil, trailing: headerView.trailingAnchor,padding: .init(top: 5, left: 10, bottom: 0, right: 0),size: CGSize(width: 0, height: 20))
         
-        let token = application.getCurrentLoginToken()
-        let accountId = application.getAnyValueFromCoreData(token!, "accountId")
+        let token = applicationDelegate.getCurrentLoginToken()
+        let accountId = applicationDelegate.getAnyValueFromCoreData(token!, "accountId")
         DispatchQueue.main.async { [self] in
             profileEmail.text = (accountId as! String)
         }
@@ -284,7 +284,7 @@ extension MenuLauncher: UITableViewDelegate, UITableViewDataSource {
 
 extension MenuLauncher {
     @objc fileprivate func handleLogoutButton() {
-        application.clearDatabase()
+        applicationDelegate.clearDatabase()
         UserDefaults.standard.removeObject(forKey: "currentLoginToken")
         ProfileController.shared.userInfo.removeAll()
         self.mainPageController?.dismiss(animated: true, completion: nil)

@@ -52,13 +52,13 @@ class RootController: UIViewController {
     }()
     
     @objc fileprivate func handleLogin() {
-        if application.getCurrentLoginToken() == nil {
+        if applicationDelegate.getCurrentLoginToken() == nil {
             let login = LoginController()
             login.modalPresentationStyle = .fullScreen
             present(login, animated: true, completion: nil)
         }
         else {
-            userId = (application.getAnyValueFromCoreData(application.getCurrentLoginToken()!, "userId") as! Int)
+            userId = (applicationDelegate.getAnyValueFromCoreData(applicationDelegate.getCurrentLoginToken()!, "userId") as! Int)
             let mainPageController = MainPageController()
             mainPageController.modalPresentationStyle = .fullScreen
             present(mainPageController, animated: true, completion: nil)
