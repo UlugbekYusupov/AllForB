@@ -15,7 +15,10 @@ class CalendarController: UIViewController {
     var toDate = ""
     let formatter = DateFormatter()
     var resultList = [ResultList]()
-
+    
+    var issueDate: String?
+    var inOutTimeInfo: String?
+    
     let homeLabel: UILabel = {
         let label = UILabel()
         label.text = "Calendar"
@@ -26,10 +29,19 @@ class CalendarController: UIViewController {
         return label
     }()
     
+    let underLineSymbol: UILabel = {
+        let label = UILabel()
+        label.textAlignment = .center
+        label.textColor = .red
+        label.font = UIFont(name: "Verdana", size: 18)
+        label.text = ""
+        return label
+    }()
+    
     let calendar: FSCalendar = {
        let c = FSCalendar()
         c.layer.borderWidth = 1
-        c.scrollDirection = .vertical
+        c.scrollDirection = .horizontal
         c.layer.borderColor = mainColor.cgColor
         c.appearance.headerTitleColor = mainColor
         c.appearance.titleWeekendColor = .red
@@ -51,12 +63,13 @@ class CalendarController: UIViewController {
         
         view.addSubview(calendar)
         calendar.delegate = self
+        calendar.dataSource = self
         calendar.anchor(top: view.topAnchor, leading: view.leadingAnchor, bottom: nil, trailing: view.trailingAnchor,padding: .init(top: 10, left: 0, bottom: 0, right: 0),size: CGSize(width: 0, height: view.frame.size.height / 2.5))
     }
 }
 
 
-extension CalendarController: FSCalendarDelegate {
+extension CalendarController: FSCalendarDelegate, FSCalendarDataSource {
     func calendar(_ calendar: FSCalendar, didSelect date: Date, at monthPosition: FSCalendarMonthPosition) {
         
         formatter.dateFormat = "yyyy-MM-dd"
@@ -68,6 +81,23 @@ extension CalendarController: FSCalendarDelegate {
                 self.dailyListCollectionTable?.reloadData()
             }
         }
+    }
+    
+    func calendar(_ calendar: FSCalendar, subtitleFor date: Date) -> String? {
+        
+        formatter.dateFormat = "yyyy-MM-dd"
+        let dateString = formatter.string(from: date).capitalized
+
+        if resultList.count > 0 {
+            resultList.forEach { (result) in
+                let issuedDateString = result.IssueDate!.substring(with: 0..<10)
+                
+                if dateString == issuedDateString {
+                    underLineSymbol.text = "•"
+                }
+            }
+        }
+        return underLineSymbol.text
     }
     
     func calendarCurrentPageDidChange(_ calendar: FSCalendar) {
@@ -87,8 +117,8 @@ extension CalendarController: UICollectionViewDelegate, UICollectionViewDataSour
     func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
         let cell = collectionView.dequeueReusableCell(withReuseIdentifier: "cellID", for: indexPath) as! CalendarCell
         
-        let issueDate = resultList[indexPath.row].IssueDate
-        let inOutTimeInfo = resultList[indexPath.row].InOutTimeInfo
+        issueDate = resultList[indexPath.row].IssueDate
+        inOutTimeInfo = resultList[indexPath.row].InOutTimeInfo
         
         cell.nalchaLabel.text = "날짜: " + issueDate!
         cell.chulTweginLabel.text = inOutTimeInfo
@@ -110,6 +140,7 @@ extension CalendarController {
         setupCollectionView()
         setupMonthFormattedString()
         fetchCall()
+        setupUnderline()
     }
 }
 
@@ -118,7 +149,7 @@ extension CalendarController {
         APIService.shared.getDailyList(userId: userId!, fromDate: self.fromDate + " 00:00:00", toDate: self.toDate + " 00:00:00") { (result, error) in
             guard let result = result else {return}
             self.resultList = result
-            print(self.resultList)
+//            print(self.resultList)
             DispatchQueue.main.async {
                 self.dailyListCollectionTable?.reloadData()
             }
@@ -146,7 +177,7 @@ extension CalendarController {
         
     }
     
-    func setupMonthFormattedString() {
+    fileprivate func setupMonthFormattedString() {
         let nextMonth = self.calendar.currentPage.getNextMonth()
         formatter.dateFormat = "yyyy-MM-dd"
         self.fromDate = formatter.string(from: nextMonth!)
@@ -154,5 +185,9 @@ extension CalendarController {
         let previosMonth = self.calendar.currentPage.getPreviousMonth()
         formatter.dateFormat = "yyyy-MM-dd"
         self.toDate = formatter.string(from: previosMonth!)
+    }
+    
+    fileprivate func setupUnderline(){
+        
     }
 }

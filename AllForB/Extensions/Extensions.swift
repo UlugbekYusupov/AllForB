@@ -9,6 +9,7 @@ import UIKit
 import AVFoundation
 
 extension UIView {
+    
     @discardableResult
     func anchor(top: NSLayoutYAxisAnchor?, leading: NSLayoutXAxisAnchor?, bottom: NSLayoutYAxisAnchor?, trailing: NSLayoutXAxisAnchor?, padding: UIEdgeInsets = .zero, size: CGSize = .zero) -> AnchoredConstraints {
         
@@ -149,6 +150,10 @@ extension UIImage {
     }
 }
 
+let mainBackgroundColor: UIColor = .init(red: 16/244, green: 24/244, blue: 32/244, alpha: 1)
+let mainColor: UIColor = .init(red: 241/244, green: 170/244, blue: 76/244, alpha: 1)
+let applicationDelegate = (UIApplication.shared.delegate as! AppDelegate)
+var userId: Int?
 
 class SharedClass: NSObject {
     
@@ -192,51 +197,67 @@ extension Date {
 // 2021-03-09T11:44:04.523
 
 enum Vibration {
-    case error
-    case success
-    case warning
-    case light
-    case medium
-    case heavy
-    @available(iOS 13.0, *)
-    case soft
-    @available(iOS 13.0, *)
-    case rigid
-    case selection
-    case oldSchool
+        case error
+        case success
+        case warning
+        case light
+        case medium
+        case heavy
+        @available(iOS 13.0, *)
+        case soft
+        @available(iOS 13.0, *)
+        case rigid
+        case selection
+        case oldSchool
 
-    public func vibrate() {
-        switch self {
-        case .error:
-            UINotificationFeedbackGenerator().notificationOccurred(.error)
-        case .success:
-            UINotificationFeedbackGenerator().notificationOccurred(.success)
-        case .warning:
-            UINotificationFeedbackGenerator().notificationOccurred(.warning)
-        case .light:
-            UIImpactFeedbackGenerator(style: .light).impactOccurred()
-        case .medium:
-            UIImpactFeedbackGenerator(style: .medium).impactOccurred()
-        case .heavy:
-            UIImpactFeedbackGenerator(style: .heavy).impactOccurred()
-        case .soft:
-            if #available(iOS 13.0, *) {
-                UIImpactFeedbackGenerator(style: .soft).impactOccurred()
+        public func vibrate() {
+            switch self {
+            case .error:
+                UINotificationFeedbackGenerator().notificationOccurred(.error)
+            case .success:
+                UINotificationFeedbackGenerator().notificationOccurred(.success)
+            case .warning:
+                UINotificationFeedbackGenerator().notificationOccurred(.warning)
+            case .light:
+                UIImpactFeedbackGenerator(style: .light).impactOccurred()
+            case .medium:
+                UIImpactFeedbackGenerator(style: .medium).impactOccurred()
+            case .heavy:
+                UIImpactFeedbackGenerator(style: .heavy).impactOccurred()
+            case .soft:
+                if #available(iOS 13.0, *) {
+                    UIImpactFeedbackGenerator(style: .soft).impactOccurred()
+                }
+            case .rigid:
+                if #available(iOS 13.0, *) {
+                    UIImpactFeedbackGenerator(style: .rigid).impactOccurred()
+                }
+            case .selection:
+                UISelectionFeedbackGenerator().selectionChanged()
+            case .oldSchool:
+                AudioServicesPlaySystemSound(SystemSoundID(kSystemSoundID_Vibrate))
             }
-        case .rigid:
-            if #available(iOS 13.0, *) {
-                UIImpactFeedbackGenerator(style: .rigid).impactOccurred()
-            }
-        case .selection:
-            UISelectionFeedbackGenerator().selectionChanged()
-        case .oldSchool:
-            AudioServicesPlaySystemSound(SystemSoundID(kSystemSoundID_Vibrate))
         }
     }
+
+extension String {
+    func index(from: Int) -> Index {
+        return self.index(startIndex, offsetBy: from)
+    }
+
+    func substring(from: Int) -> String {
+        let fromIndex = index(from: from)
+        return String(self[fromIndex...])
+    }
+
+    func substring(to: Int) -> String {
+        let toIndex = index(from: to)
+        return String(self[..<toIndex])
+    }
+
+    func substring(with r: Range<Int>) -> String {
+        let startIndex = index(from: r.lowerBound)
+        let endIndex = index(from: r.upperBound)
+        return String(self[startIndex..<endIndex])
+    }
 }
-
-
-let mainBackgroundColor: UIColor = .init(red: 16/244, green: 24/244, blue: 32/244, alpha: 1)
-let mainColor: UIColor = .init(red: 241/244, green: 170/244, blue: 76/244, alpha: 1)
-let applicationDelegate = (UIApplication.shared.delegate as! AppDelegate)
-var userId: Int?

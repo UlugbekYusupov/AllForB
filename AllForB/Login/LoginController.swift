@@ -252,6 +252,7 @@ extension LoginController {
         super.viewDidLoad()
         view.backgroundColor = mainBackgroundColor
         setupContainer()
+        self.hideKeyboardWhenTappedAround()
     }
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
@@ -260,5 +261,17 @@ extension LoginController {
     override open var shouldAutorotate: Bool { return false}
     override var preferredStatusBarStyle: UIStatusBarStyle {
         return .darkContent
+    }
+}
+
+extension UIViewController {
+    func hideKeyboardWhenTappedAround() {
+        let tap: UITapGestureRecognizer = UITapGestureRecognizer(target: self, action: #selector(dismissKeyboardView))
+        tap.cancelsTouchesInView = false
+        view.addGestureRecognizer(tap)
+    }
+
+    @objc func dismissKeyboardView() {
+        view.endEditing(true)
     }
 }
