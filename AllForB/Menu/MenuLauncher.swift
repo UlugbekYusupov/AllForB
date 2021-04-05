@@ -22,7 +22,7 @@ class MenuLauncher: NSObject {
     fileprivate let blackView = UIView()
     fileprivate let cellID = "cellID"
     private var menuTableView: UITableView!
-    private let tableHeight: CGFloat = 40
+    private var tableHeight: CGFloat = 50
     var mainPageController: MainPageController?
     var qrScannerController: QRScannerController?
     var loginController: LoginController?
@@ -74,7 +74,6 @@ class MenuLauncher: NSObject {
         label.textColor = mainColor
         label.font = UIFont(name: "Verdana-Bold", size: 16)
         label.clipsToBounds = true
-        label.text = ""
         label.contentMode = .scaleAspectFit
         label.translatesAutoresizingMaskIntoConstraints = false
         return label
@@ -86,7 +85,8 @@ class MenuLauncher: NSObject {
         label.textColor = mainColor
         label.font = UIFont(name: "Verdana", size: 13)
         label.clipsToBounds = true
-        label.text = "bilmadim.uz@gmail.com"
+        label.minimumScaleFactor = 0.4
+        label.adjustsFontSizeToFitWidth = true
         label.contentMode = .scaleAspectFit
         label.translatesAutoresizingMaskIntoConstraints = false
         return label
@@ -100,6 +100,7 @@ class MenuLauncher: NSObject {
         label.clipsToBounds = true
         label.text = "관리자설정"
         label.contentMode = .scaleAspectFit
+        label.isHidden = true
         label.translatesAutoresizingMaskIntoConstraints = false
         return label
     }()
@@ -108,6 +109,7 @@ class MenuLauncher: NSObject {
         let iv = UIImageView(image: #imageLiteral(resourceName: "qrcode"))
         iv.clipsToBounds = true
         iv.contentMode = .scaleAspectFit
+        iv.isHidden = true
         iv.translatesAutoresizingMaskIntoConstraints = false
         return iv
     }()
@@ -126,6 +128,7 @@ class MenuLauncher: NSObject {
         button.setTitle("QR Scan", for: .normal)
         button.setTitleColor(mainColor, for: .normal)
         button.contentMode = .scaleAspectFit
+        button.isHidden = true
         button.translatesAutoresizingMaskIntoConstraints = false
         return button
     }()
@@ -176,6 +179,12 @@ extension MenuLauncher {
             profileEmail.text = (accountId as! String)
         }
         
+        if (accountId as! String) == superUserEmail {
+            qrScanButton.isHidden = false
+            qrScanImageView.isHidden = false
+            gwanglijaSettingLabel.isHidden = false
+        }
+        
         menuView.addSubview(headerLine)
         headerLine.anchor(top: headerView.bottomAnchor, leading: menuView.leadingAnchor, bottom: nil, trailing: menuView.trailingAnchor,size: CGSize(width: 0, height: 1))
         
@@ -191,9 +200,11 @@ extension MenuLauncher {
         menuView.addSubview(qrScanImageView)
         qrScanImageView.anchor(top: gwanglijaSettingLabel.bottomAnchor, leading: menuView.leadingAnchor, bottom: nil, trailing: nil, padding: .init(top: 10, left: 0, bottom: 0, right: 0), size: CGSize(width: 40, height: 40))
         
+        
         menuView.addSubview(qrScanButton)
         qrScanButton.anchor(top: qrScanImageView.topAnchor, leading: qrScanImageView.trailingAnchor, bottom: nil, trailing: nil, padding: .init(top: 5, left: 0, bottom: 0, right: 0), size: CGSize(width: 100, height: 30))
         qrScanButton.addTarget(self, action: #selector(handleQRscan), for: .touchUpInside)
+                
         
         menuView.addSubview(footerLine)
         footerLine.anchor(top: nil, leading: menuView.leadingAnchor, bottom: menuView.bottomAnchor, trailing: menuView.trailingAnchor, padding: .init(top: 0, left: 0, bottom: 100, right: 0), size: CGSize(width: 0, height: 1))
@@ -207,6 +218,19 @@ extension MenuLauncher {
 
     }
     
+    fileprivate func fetchUserInfo() {
+        APIService.shared.getInfo(userId: userId!, companyId: 1) { [self] (result, error) in
+            guard let result = result else {return}
+            userInfo = result
+            if let error = error {
+                print(error)
+            }
+            DispatchQueue.main.async { [self] in
+                profileName.text = userInfo?.PersonName
+            }
+        }
+    }
+
     fileprivate func setupTabelView() {
         menuTableView = UITableView(frame: .zero, style: .plain)
         menuTableView.register(MenuCell.self, forCellReuseIdentifier: cellID)
@@ -238,10 +262,10 @@ extension MenuLauncher {
                 self.blackView.alpha = 1
                 self.menuView.frame = CGRect(x: 0, y: 0, width: width, height: self.menuView.frame.height)
             } completion: { (flag) in }
+            fetchUserInfo()
         }
     }
 }
-
 
 extension MenuLauncher: UITableViewDelegate, UITableViewDataSource {
     
@@ -286,7 +310,7 @@ extension MenuLauncher {
     @objc fileprivate func handleLogoutButton() {
         applicationDelegate.clearDatabase()
         UserDefaults.standard.removeObject(forKey: "currentLoginToken")
-        ProfileController.shared.userInfo.removeAll()
+        userInfo = nil
         self.mainPageController?.dismiss(animated: true, completion: nil)
         loginController = LoginController()
         loginController?.modalPresentationStyle = .fullScreen

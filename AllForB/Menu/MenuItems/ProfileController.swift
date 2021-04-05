@@ -12,7 +12,6 @@ class ProfileController: UIViewController {
     var labelStackView: UIStackView?
     var nameStackView: UIStackView?
     static let shared = ProfileController()
-    var userInfo = [UserInfo]()
 
     let homeLabel: UILabel = {
         let label = UILabel()
@@ -164,37 +163,10 @@ class ProfileController: UIViewController {
 }
 
 extension ProfileController {
-    fileprivate func fetchUserInfo() {
-        print(userId!)
-        APIService.shared.getInfo(userId: userId!, companyId: 1) { [self] (result, error) in
-            guard let result = result else {return}
-            userInfo.append(result)
-            if let error = error {
-                print(error)
-            }
-            DispatchQueue.main.async { [self] in
-                userInfo.forEach { (user) in
-                    ProfileName.text = user.PersonName
-                    profileName.text = user.PersonName
-                    jobRankName.text = user.JobRankCodeName
-                    dutyName.text = user.DutyCodeName
-                    companyName.text = user.CompanyName
-                }
-            }
-        }
-    }
-}
-
-extension ProfileController {
     override func viewDidLoad() {
         super.viewDidLoad()
         setupMainViews()
         setupChildViews()
-        fetchUserInfo()
-    }
-    override func viewDidDisappear(_ animated: Bool) {
-        super.viewDidDisappear(animated)
-        self.userInfo.removeAll()
     }
 }
 

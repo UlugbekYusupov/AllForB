@@ -65,16 +65,17 @@ class CalendarController: UIViewController {
         calendar.delegate = self
         calendar.dataSource = self
         calendar.anchor(top: view.topAnchor, leading: view.leadingAnchor, bottom: nil, trailing: view.trailingAnchor,padding: .init(top: 10, left: 0, bottom: 0, right: 0),size: CGSize(width: 0, height: view.frame.size.height / 2.5))
+        DispatchQueue.main.async {
+            self.calendar.reloadData()
+        }
     }
 }
 
 
 extension CalendarController: FSCalendarDelegate, FSCalendarDataSource {
     func calendar(_ calendar: FSCalendar, didSelect date: Date, at monthPosition: FSCalendarMonthPosition) {
-        
         formatter.dateFormat = "yyyy-MM-dd"
         let formattedString = formatter.string(from: date)
-        
         APIService.shared.getDailyList(userId: userId!, fromDate: formattedString + " 00:00:00", toDate: formattedString + " 00:00:00") { (result, error) in
             self.resultList = result!
             DispatchQueue.main.async {
@@ -82,19 +83,17 @@ extension CalendarController: FSCalendarDelegate, FSCalendarDataSource {
             }
         }
     }
-    
+
     func calendar(_ calendar: FSCalendar, subtitleFor date: Date) -> String? {
-        
+
         formatter.dateFormat = "yyyy-MM-dd"
         let dateString = formatter.string(from: date).capitalized
 
-        if resultList.count > 0 {
-            resultList.forEach { (result) in
-                let issuedDateString = result.IssueDate!.substring(with: 0..<10)
-                
-                if dateString == issuedDateString {
-                    underLineSymbol.text = "•"
-                }
+        
+        underLineSymbol.text = ""
+        resultList.forEach { (result) in
+            if dateString == result.IssueDate {
+                underLineSymbol.text = "•"
             }
         }
         return underLineSymbol.text
@@ -136,6 +135,7 @@ extension CalendarController {
     override func viewDidLoad() {
         super.viewDidLoad()
         view.backgroundColor = mainBackgroundColor
+        calendar.register(FSCalendarCell.self, forCellReuseIdentifier: "cellid")
         setupCalendar()
         setupCollectionView()
         setupMonthFormattedString()
@@ -146,14 +146,14 @@ extension CalendarController {
 
 extension CalendarController {
     fileprivate func fetchCall() {
+        self.resultList.removeAll()
         APIService.shared.getDailyList(userId: userId!, fromDate: self.fromDate + " 00:00:00", toDate: self.toDate + " 00:00:00") { (result, error) in
             guard let result = result else {return}
             self.resultList = result
-//            print(self.resultList)
             DispatchQueue.main.async {
                 self.dailyListCollectionTable?.reloadData()
+                self.calendar.reloadData()
             }
-            
             if let error = error {
                 print(error)
             }

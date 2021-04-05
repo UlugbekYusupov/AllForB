@@ -125,6 +125,13 @@ extension MainPageController {
             controllerCreation(viewController: homeController)
         case 1:
             let profileController = ProfileController()
+            DispatchQueue.main.async {
+                profileController.ProfileName.text = userInfo?.PersonName
+                profileController.profileName.text = userInfo?.PersonName
+                profileController.jobRankName.text = userInfo?.JobRankCodeName
+                profileController.dutyName.text = userInfo?.DutyCodeName
+                profileController.companyName.text = userInfo?.CompanyName
+            }
             controllerCreation(viewController: profileController)
         case 2:
             let calendarController = CalendarController()
@@ -132,7 +139,6 @@ extension MainPageController {
         case 3:
             self.controllerCreation(viewController: inOutController)
         case 4:
-            
             let settingsController = SettingsController()
             controllerCreation(viewController: settingsController)
         default:

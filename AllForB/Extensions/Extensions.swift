@@ -154,6 +154,8 @@ let mainBackgroundColor: UIColor = .init(red: 16/244, green: 24/244, blue: 32/24
 let mainColor: UIColor = .init(red: 241/244, green: 170/244, blue: 76/244, alpha: 1)
 let applicationDelegate = (UIApplication.shared.delegate as! AppDelegate)
 var userId: Int?
+let superUserEmail: String = "rock0211@slacknsoft.com"
+var userInfo: UserInfo?
 
 class SharedClass: NSObject {
     
@@ -194,7 +196,6 @@ extension Date {
         return Calendar.current.date(byAdding: .month, value: 1, to: self)
     }
 }
-// 2021-03-09T11:44:04.523
 
 enum Vibration {
         case error
