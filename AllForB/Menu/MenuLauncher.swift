@@ -81,7 +81,7 @@ class MenuLauncher: NSObject {
     
     let profileEmail: UILabel = {
         let label = UILabel()
-        label.textAlignment = .left
+        label.textAlignment = .center
         label.textColor = mainColor
         label.font = UIFont(name: "Verdana", size: 13)
         label.clipsToBounds = true
@@ -171,7 +171,9 @@ extension MenuLauncher {
         profileName.centerInSuperview(size: CGSize(width: 100, height: 20))
         
         headerView.addSubview(profileEmail)
+        
         profileEmail.anchor(top: profileName.bottomAnchor, leading: profileImageView.trailingAnchor, bottom: nil, trailing: headerView.trailingAnchor,padding: .init(top: 5, left: 10, bottom: 0, right: 0),size: CGSize(width: 0, height: 20))
+
         
         let token = applicationDelegate.getCurrentLoginToken()
         let accountId = applicationDelegate.getAnyValueFromCoreData(token!, "accountId")

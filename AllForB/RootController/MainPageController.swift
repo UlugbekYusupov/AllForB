@@ -161,7 +161,7 @@ extension MainPageController {
     func controllerCreation(viewController: UIViewController) {
         addChild(viewController)
         view.addSubview(viewController.view)
-        viewController.view.anchor(top: headerLine.bottomAnchor, leading: view.leadingAnchor, bottom: footerLine.topAnchor, trailing: view.trailingAnchor, padding: .init(top: 0, left: 0, bottom: footerView.frame.size.height, right: 0), size: CGSize(width: 0, height: 0))
+        viewController.view.anchor(top: headerLine.bottomAnchor, leading: view.leadingAnchor, bottom: footerLine.topAnchor, trailing: view.trailingAnchor, padding: .init(top: 0, left: 0, bottom: 10, right: 0), size: CGSize(width: 0, height: 0))
         viewController.didMove(toParent: self)
     }
 }

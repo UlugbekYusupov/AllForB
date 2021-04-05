@@ -50,6 +50,8 @@ class InOutAttendanceController: UIViewController {
         label.textColor = .red
         label.font = UIFont(name: "Verdana-Bold", size: 17)
         label.text = "인증시간이 초과되었습니다 !"
+        label.minimumScaleFactor = 0.1
+        label.adjustsFontSizeToFitWidth = true
         return label
     }()
     
