@@ -35,7 +35,7 @@ class ProfileController: UIViewController {
 
     let containerView: UIView = {
         let v = UIView()
-        v.backgroundColor = mainBackgroundColor
+        v.backgroundColor = mainBackgroundDarkColor
         v.layer.cornerRadius = 20
         v.layer.borderWidth = 1
         v.layer.borderColor = mainColor.cgColor
@@ -155,7 +155,7 @@ class ProfileController: UIViewController {
     }()
     
     fileprivate func setupMainViews() {
-        view.backgroundColor = mainBackgroundColor
+        view.backgroundColor = mainBackgroundDarkColor
         view.addSubview(containerView)
         containerView.fillSuperview(padding: .init(top: 50, left: 20, bottom: 50, right: 20))
         containerView.addSubview(profileImageView)
@@ -167,6 +167,24 @@ extension ProfileController {
         super.viewDidLoad()
         setupMainViews()
         setupChildViews()
+        fetchUserInfo()
+    }
+    
+    fileprivate func fetchUserInfo() {
+        APIService.shared.getInfo(userId: userId!, companyId: 1) { [self] (result, error) in
+            guard let result = result else {return}
+            userInfo = result
+            if let error = error {
+                print(error)
+            }
+            DispatchQueue.main.async { [self] in
+                ProfileName.text = userInfo?.PersonName
+                profileName.text = userInfo?.PersonName
+                jobRankName.text = userInfo?.JobRankCodeName
+                dutyName.text = userInfo?.DutyCodeName
+                companyName.text = userInfo?.CompanyName
+            }
+        }
     }
 }
 

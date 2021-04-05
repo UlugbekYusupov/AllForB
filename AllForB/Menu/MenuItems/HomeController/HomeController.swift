@@ -13,7 +13,7 @@ class HomeController: UIViewController {
     
     override func viewDidLoad() {
         super.viewDidLoad()
-        view.backgroundColor = mainBackgroundColor
+        view.backgroundColor = mainBackgroundDarkColor
         setupCollectionView()
     }
     

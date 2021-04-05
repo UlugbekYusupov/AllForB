@@ -11,6 +11,7 @@
 		5C1C92A225F0B1AB00C0AA9E /* APIService.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5C1C92A125F0B1AB00C0AA9E /* APIService.swift */; };
 		5C1C92A725F0BDAB00C0AA9E /* MainPageController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5C1C92A625F0BDAB00C0AA9E /* MainPageController.swift */; };
 		5C25C2A9261AE1E5004916F0 /* NoticeCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5C25C2A8261AE1E5004916F0 /* NoticeCell.swift */; };
+		5C25C2B2261B0500004916F0 /* OptionsCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5C25C2B1261B0500004916F0 /* OptionsCell.swift */; };
 		5C2C1A4725E8F0ED00CEBE3A /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5C2C1A4625E8F0ED00CEBE3A /* AppDelegate.swift */; };
 		5C2C1A4925E8F0ED00CEBE3A /* SceneDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5C2C1A4825E8F0ED00CEBE3A /* SceneDelegate.swift */; };
 		5C2C1A4B25E8F0ED00CEBE3A /* ViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5C2C1A4A25E8F0ED00CEBE3A /* ViewController.swift */; };
@@ -66,6 +67,7 @@
 		5C1C92A125F0B1AB00C0AA9E /* APIService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = APIService.swift; sourceTree = "<group>"; };
 		5C1C92A625F0BDAB00C0AA9E /* MainPageController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MainPageController.swift; sourceTree = "<group>"; };
 		5C25C2A8261AE1E5004916F0 /* NoticeCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NoticeCell.swift; sourceTree = "<group>"; };
+		5C25C2B1261B0500004916F0 /* OptionsCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = OptionsCell.swift; sourceTree = "<group>"; };
 		5C2C1A4325E8F0ED00CEBE3A /* AllForB.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = AllForB.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		5C2C1A4625E8F0ED00CEBE3A /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
 		5C2C1A4825E8F0ED00CEBE3A /* SceneDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SceneDelegate.swift; sourceTree = "<group>"; };
@@ -171,6 +173,15 @@
 				5C25C2A8261AE1E5004916F0 /* NoticeCell.swift */,
 			);
 			path = HomeController;
+			sourceTree = "<group>";
+		};
+		5C25C2B0261B04EC004916F0 /* SettingController */ = {
+			isa = PBXGroup;
+			children = (
+				5CC64C0F25F770EF00E1FF25 /* SettingsController.swift */,
+				5C25C2B1261B0500004916F0 /* OptionsCell.swift */,
+			);
+			path = SettingController;
 			sourceTree = "<group>";
 		};
 		5C2C1A3A25E8F0ED00CEBE3A = {
@@ -279,11 +290,11 @@
 		5CC64BF725F7708D00E1FF25 /* MenuItems */ = {
 			isa = PBXGroup;
 			children = (
+				5C25C2B0261B04EC004916F0 /* SettingController */,
 				5C25C2A7261AE1D0004916F0 /* HomeController */,
 				5CC64C5A25FB515000E1FF25 /* CalendatController */,
 				5CC64C0025F770B000E1FF25 /* ProfileController.swift */,
 				5CC64C0A25F770E300E1FF25 /* InOutAttendanceController.swift */,
-				5CC64C0F25F770EF00E1FF25 /* SettingsController.swift */,
 				5CC64C1C25F9A18F00E1FF25 /* QRScannerController.swift */,
 			);
 			path = MenuItems;
@@ -588,6 +599,7 @@
 				5CC64C0B25F770E300E1FF25 /* InOutAttendanceController.swift in Sources */,
 				5CC64BF925F770A600E1FF25 /* HomeController.swift in Sources */,
 				5CD64E8B25F5C93A002CD116 /* LoginInfo+CoreDataProperties.swift in Sources */,
+				5C25C2B2261B0500004916F0 /* OptionsCell.swift in Sources */,
 				5CC64C1025F770EF00E1FF25 /* SettingsController.swift in Sources */,
 				5CC64C1D25F9A18F00E1FF25 /* QRScannerController.swift in Sources */,
 				5C1C92A225F0B1AB00C0AA9E /* APIService.swift in Sources */,

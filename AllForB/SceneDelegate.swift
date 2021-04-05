@@ -7,25 +7,27 @@
 
 import UIKit
 
+//dataSource = ["홈", "프로필", "근무일정", "출퇴근인증"]
+
 class SceneDelegate: UIResponder, UIWindowSceneDelegate {
 
     var window: UIWindow?
 
-
     func scene(_ scene: UIScene, willConnectTo session: UISceneSession, options connectionOptions: UIScene.ConnectionOptions) {
-        // Use this method to optionally configure and attach the UIWindow `window` to the provided UIWindowScene `scene`.
-        // If using a storyboard, the `window` property will automatically be initialized and attached to the scene.
-        // This delegate does not imply the connecting scene or session are new (see `application:configurationForConnectingSceneSession` instead).
         
-
         if applicationDelegate.getCurrentLoginToken() != nil {
             userId = (applicationDelegate.getAnyValueFromCoreData(applicationDelegate.getCurrentLoginToken()!, "userId") as! Int)
-            window?.rootViewController = MainPageController()
-        } else {
+  
+            let mainPageController = MainPageController()
+            window?.rootViewController = mainPageController
+            mainPageController.showController(indexPath: nil, currentPageString: applicationDelegate.getCurrentPage())
+        }
+        else {
             window?.rootViewController = RootController()
-            window?.makeKeyAndVisible()
         }
         
+        window?.makeKeyAndVisible()
+
         guard let _ = (scene as? UIWindowScene) else { return }
     }
 

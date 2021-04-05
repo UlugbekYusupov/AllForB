@@ -128,7 +128,7 @@ class LoginController: UIViewController {
         button.clipsToBounds = true
         button.contentMode = .scaleAspectFit
         button.setTitle("Log in", for: .normal)
-        button.setTitleColor(mainBackgroundColor, for: .normal)
+        button.setTitleColor(mainBackgroundDarkColor, for: .normal)
         button.backgroundColor = .init(red: 241/244, green: 170/244, blue: 76/244, alpha: 0.6)
         button.isEnabled = false
         return button
@@ -250,7 +250,7 @@ extension LoginController {
 extension LoginController {
     override func viewDidLoad() {
         super.viewDidLoad()
-        view.backgroundColor = mainBackgroundColor
+        view.backgroundColor = mainBackgroundDarkColor
         setupContainer()
         self.hideKeyboardWhenTappedAround()
     }

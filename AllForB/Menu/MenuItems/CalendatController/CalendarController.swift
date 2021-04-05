@@ -134,7 +134,7 @@ extension CalendarController {
 
     override func viewDidLoad() {
         super.viewDidLoad()
-        view.backgroundColor = mainBackgroundColor
+        view.backgroundColor = mainBackgroundDarkColor
         calendar.register(FSCalendarCell.self, forCellReuseIdentifier: "cellid")
         setupCalendar()
         setupCollectionView()

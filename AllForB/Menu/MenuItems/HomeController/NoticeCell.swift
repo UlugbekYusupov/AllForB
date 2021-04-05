@@ -14,7 +14,7 @@ class NoticeCell: UICollectionViewCell {
         label.clipsToBounds = true
         label.contentMode = .scaleAspectFit
         label.textAlignment = .center
-        label.text = "Name of Notice"
+        label.text = "Title of Notice"
         label.textColor = mainColor
         label.backgroundColor = .clear
         label.font = UIFont(name: "Verdana", size: 18)

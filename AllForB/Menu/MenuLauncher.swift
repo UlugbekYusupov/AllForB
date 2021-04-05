@@ -37,7 +37,7 @@ class MenuLauncher: NSObject {
      
     let menuView: UIView = {
         let cv = UIView()
-        cv.backgroundColor = mainBackgroundColor
+        cv.backgroundColor = mainBackgroundDarkColor
         return cv
     }()
     
@@ -303,7 +303,7 @@ extension MenuLauncher: UITableViewDelegate, UITableViewDataSource {
         } completion: { (flag) in
             let setting = self.settings[indexPath.item]
             self.mainPageController?.setting = setting
-            self.mainPageController?.showController(indexPath: indexPath)
+            self.mainPageController?.showController(indexPath: indexPath, currentPageString: nil)
         }
     }
 }
@@ -312,6 +312,7 @@ extension MenuLauncher {
     @objc fileprivate func handleLogoutButton() {
         applicationDelegate.clearDatabase()
         UserDefaults.standard.removeObject(forKey: "currentLoginToken")
+        UserDefaults.standard.removeObject(forKey: "currentFirstPage")
         userInfo = nil
         self.mainPageController?.dismiss(animated: true, completion: nil)
         loginController = LoginController()

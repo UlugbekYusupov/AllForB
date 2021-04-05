@@ -106,7 +106,6 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
             
         }
         let currentLoginToken = data.LoginToken
-        mngdObj.setValue(currentLoginToken, forKeyPath: "loginToken")
         self.saveCurrentLoginToken(currentLoginToken!)
     }
     
@@ -127,6 +126,25 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
             return nil
         }
     }
+    
+    func saveCurrentPage(_ currentPage: String) {
+        let defaults = UserDefaults.standard
+        defaults.set(currentPage, forKey: "currentFirstPage")
+        defaults.synchronize()
+        print("Successfully saved the first page")
+    }
+    
+    func getCurrentPage() -> String? {
+        let defaults = UserDefaults.standard
+        let token = defaults.object(forKey: "currentFirstPage") as? String
+        if token != nil {
+            return token!
+        }
+        else {
+            return nil
+        }
+    }
+    
     
     func getAnyValueFromCoreData(_ loginToken:String,_ key:String) -> Any? { // key = data you want to retrieve the value of
 

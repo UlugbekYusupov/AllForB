@@ -150,12 +150,18 @@ extension UIImage {
     }
 }
 
-let mainBackgroundColor: UIColor = .init(red: 16/244, green: 24/244, blue: 32/244, alpha: 1)
+let mainBackgroundDarkColor: UIColor = .init(red: 16/244, green: 24/244, blue: 32/244, alpha: 1)
 let mainColor: UIColor = .init(red: 241/244, green: 170/244, blue: 76/244, alpha: 1)
+
+//let mainBackgroundDarkColor = UIColor.white
+//let mainColor: UIColor = .init(red: 16/244, green: 24/244, blue: 32/244, alpha: 1)
+
+
 let applicationDelegate = (UIApplication.shared.delegate as! AppDelegate)
 var userId: Int?
 let superUserEmail: String = "rock0211@slacknsoft.com"
 var userInfo: UserInfo?
+var dataSource = [String]()
 
 class SharedClass: NSObject {
     

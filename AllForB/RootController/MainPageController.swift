@@ -15,6 +15,7 @@ class MainPageController: UIViewController {
     var qrScannerController: QRScannerController?
     var inOutController: InOutAttendanceController!
     var inOutView: UIView!
+    let settingsController = SettingsController()
 
     let headerView: UIView = {
         let view = UIView()
@@ -103,6 +104,7 @@ extension MainPageController {
     fileprivate func setupViews() {
         setupMainViews()
         headerView.addSubview(qrLabel)
+        qrLabel.text = applicationDelegate.getCurrentPage()
         qrLabel.centerXInSuperview()
         qrLabel.anchor(top: nil, leading: nil, bottom: headerView.bottomAnchor, trailing: nil, padding: .init(top: 0, left: 0, bottom: 0, right: 0), size: CGSize(width: 150, height: 50))
         headerView.addSubview(menuButton)
@@ -116,33 +118,61 @@ extension MainPageController {
 }
 
 extension MainPageController {
+    func showController(indexPath: IndexPath? , currentPageString: String?) {
         
-    func showController(indexPath: IndexPath) {
-        removeQrScannerController()
-        switch indexPath.row {
-        case 0:
-            let homeController = HomeController()
-            controllerCreation(viewController: homeController)
-        case 1:
-            let profileController = ProfileController()
-            DispatchQueue.main.async {
-                profileController.ProfileName.text = userInfo?.PersonName
-                profileController.profileName.text = userInfo?.PersonName
-                profileController.jobRankName.text = userInfo?.JobRankCodeName
-                profileController.dutyName.text = userInfo?.DutyCodeName
-                profileController.companyName.text = userInfo?.CompanyName
+        if indexPath != nil {
+            removeQrScannerController()
+            switch indexPath!.row {
+            case 0:
+                let homeController = HomeController()
+                controllerCreation(viewController: homeController)
+            case 1:
+                let profileController = ProfileController()
+                DispatchQueue.main.async {
+                    profileController.ProfileName.text = userInfo?.PersonName
+                    profileController.profileName.text = userInfo?.PersonName
+                    profileController.jobRankName.text = userInfo?.JobRankCodeName
+                    profileController.dutyName.text = userInfo?.DutyCodeName
+                    profileController.companyName.text = userInfo?.CompanyName
+                }
+                controllerCreation(viewController: profileController)
+            case 2:
+                let calendarController = CalendarController()
+                controllerCreation(viewController: calendarController)
+            case 3:
+                self.controllerCreation(viewController: inOutController)
+            case 4:
+                controllerCreation(viewController: settingsController)
+            default:
+                break
             }
-            controllerCreation(viewController: profileController)
-        case 2:
-            let calendarController = CalendarController()
-            controllerCreation(viewController: calendarController)
-        case 3:
-            self.controllerCreation(viewController: inOutController)
-        case 4:
-            let settingsController = SettingsController()
-            controllerCreation(viewController: settingsController)
-        default:
-            break
+        }
+        
+        if currentPageString != nil {
+            removeQrScannerController()
+            switch currentPageString {
+            case "홈":
+                let homeController = HomeController()
+                controllerCreation(viewController: homeController)
+            case "프로필":
+                let profileController = ProfileController()
+                DispatchQueue.main.async {
+                    profileController.ProfileName.text = userInfo?.PersonName
+                    profileController.profileName.text = userInfo?.PersonName
+                    profileController.jobRankName.text = userInfo?.JobRankCodeName
+                    profileController.dutyName.text = userInfo?.DutyCodeName
+                    profileController.companyName.text = userInfo?.CompanyName
+                }
+                controllerCreation(viewController: profileController)
+            case "근무일정":
+                let calendarController = CalendarController()
+                controllerCreation(viewController: calendarController)
+            case "출퇴근인증":
+                let inOutController = InOutAttendanceController()
+                self.controllerCreation(viewController: inOutController)
+            default:
+                break
+            }
         }
     }
     
@@ -169,7 +199,7 @@ extension MainPageController {
 extension MainPageController {
     override func viewDidLoad() {
         super.viewDidLoad()
-        view.backgroundColor = mainBackgroundColor
+        view.backgroundColor = mainBackgroundDarkColor
         setupViews()
     }
     

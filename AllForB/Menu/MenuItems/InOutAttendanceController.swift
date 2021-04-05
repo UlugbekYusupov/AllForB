@@ -19,7 +19,7 @@ class InOutAttendanceController: UIViewController {
     
     let containerView: UIView = {
         let view = UIView()
-        view.backgroundColor = mainBackgroundColor
+        view.backgroundColor = mainBackgroundDarkColor
         return view
     }()
     
@@ -80,7 +80,7 @@ class InOutAttendanceController: UIViewController {
         button.clipsToBounds = true
         button.contentMode = .scaleAspectFit
         button.layer.cornerRadius = 10
-        let attributedText = NSAttributedString(string: "QR Code 재생성", attributes: [.foregroundColor: mainBackgroundColor,.font: UIFont(name: "Verdana", size: 18) as Any])
+        let attributedText = NSAttributedString(string: "QR Code 재생성", attributes: [.foregroundColor: mainBackgroundDarkColor,.font: UIFont(name: "Verdana", size: 18) as Any])
         button.setAttributedTitle(attributedText, for: .normal)
         return button
     }()
