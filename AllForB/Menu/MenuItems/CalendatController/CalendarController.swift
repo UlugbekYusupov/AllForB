@@ -33,7 +33,7 @@ class CalendarController: UIViewController {
         let label = UILabel()
         label.textAlignment = .center
         label.textColor = .red
-        label.font = UIFont(name: "Verdana", size: 18)
+        label.font = UIFont(name: "Verdana", size: 30)
         label.text = ""
         return label
     }()
@@ -93,7 +93,7 @@ extension CalendarController: FSCalendarDelegate, FSCalendarDataSource {
         underLineSymbol.text = ""
         resultList.forEach { (result) in
             if dateString == result.IssueDate {
-                underLineSymbol.text = "•"
+                underLineSymbol.text = "__"
             }
         }
         return underLineSymbol.text

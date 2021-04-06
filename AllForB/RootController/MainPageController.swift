@@ -167,7 +167,7 @@ extension MainPageController {
             case "근무일정":
                 let calendarController = CalendarController()
                 controllerCreation(viewController: calendarController)
-            case "출퇴근인증":
+            case "출퇴근인증", "Default":
                 let inOutController = InOutAttendanceController()
                 self.controllerCreation(viewController: inOutController)
             default:
@@ -201,6 +201,27 @@ extension MainPageController {
         super.viewDidLoad()
         view.backgroundColor = mainBackgroundDarkColor
         setupViews()
+        self.becomeFirstResponder()
+    }
+    
+    override var canBecomeFirstResponder: Bool {
+        get {
+            return true
+        }
+    }
+    
+    override func motionEnded(_ motion: UIEvent.EventSubtype, with event: UIEvent?) {
+        if motion == .motionShake {
+            Vibration.heavy.vibrate()
+            switch inOutController.chulTeginSegmentControl.selectedSegmentIndex {
+            case 0:
+                print("Chulgin")
+            case 1:
+                print("Twegin")
+            default:
+                break
+            }
+        }
     }
     
     override open var shouldAutorotate: Bool { return false }

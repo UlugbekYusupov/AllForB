@@ -7,6 +7,7 @@
 
 import UIKit
 import CoreData
+import SCLAlertView
 
 class LoginController: UIViewController {
     
@@ -158,7 +159,8 @@ extension LoginController {
                 }
                 else {
                     DispatchQueue.main.async {
-                        SharedClass.sharedInstance.alert(view: self, title: "Incorrect !", message: "아이디와 비밀번호 확인 해주세요")
+                        SCLAlertView().showError("Incorrect !", subTitle: "아이디와 비밀번호 확인 해주세요.", closeButtonTitle: "Ok") // Error
+
                     }
                 }
             }
@@ -181,7 +183,7 @@ extension LoginController {
                 loginButton.backgroundColor = .init(red: 241/244, green: 170/244, blue: 76/244, alpha: 0.6)
             }
          } else {
-            SharedClass.sharedInstance.alert(view: self, title: "Incorrect !", message: "")
+            SCLAlertView().showError("Incorrect !", subTitle: "아이디와 비밀번호 확인 해주세요.", closeButtonTitle: "Ok") // Error
          }
     }
     

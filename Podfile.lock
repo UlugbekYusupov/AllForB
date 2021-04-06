@@ -4,23 +4,27 @@ PODS:
   - NVActivityIndicatorView (5.1.1):
     - NVActivityIndicatorView/Base (= 5.1.1)
   - NVActivityIndicatorView/Base (5.1.1)
+  - SCLAlertView (0.8)
 
 DEPENDENCIES:
   - Alamofire (~> 5.2)
   - FSCalendar
   - NVActivityIndicatorView
+  - SCLAlertView
 
 SPEC REPOS:
   trunk:
     - Alamofire
     - FSCalendar
     - NVActivityIndicatorView
+    - SCLAlertView
 
 SPEC CHECKSUMS:
   Alamofire: 2291f7d21ca607c491dd17642e5d40fdcda0e65c
   FSCalendar: e6a2eb9c571bf0719ed797ef807e08426753c241
   NVActivityIndicatorView: 1f6c5687f1171810aa27a3296814dc2d7dec3667
+  SCLAlertView: 6a77bb2edfc65e04dbe57725546cb4107a506b85
 
-PODFILE CHECKSUM: 53f96dca6d98bacd27134d2b56c40c556fe785c2
+PODFILE CHECKSUM: 7d8d4f69868ae0c36b3e44fcdcd96b5cfb3257ef
 
 COCOAPODS: 1.10.1
