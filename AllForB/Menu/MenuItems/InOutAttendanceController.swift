@@ -108,7 +108,6 @@ extension InOutAttendanceController {
                     
                     let expireDateString = self.qrModel.ExpireDateTime
                     let timeString = expireDateString.substring(with: 0..<19)
-                    print(timeString)
                     dateFormatting(expireDateString: timeString)
                 }
             }
@@ -129,9 +128,7 @@ extension InOutAttendanceController {
         
         dateFormatter.dateFormat = "yyyy-MM-dd'T'HH:mm:ss Z"
         let currentDate = dateFormatter.date(from: currentDateString)
-        
-        print(getDateDiff(start: currentDate!, end: expireDate!))
-        
+                
         applicationDelegate.scheduleNotification(at: expireDate!)
         
         DispatchQueue.main.async { [self] in
@@ -210,12 +207,33 @@ extension InOutAttendanceController {
         containerView.anchor(top: view.topAnchor, leading: view.leadingAnchor, bottom: view.bottomAnchor, trailing: view.trailingAnchor, padding: .init(), size: CGSize(width: 0, height: 0))
         setupContainerView()
         handleCreateQRCode(userId!, 1, "122234234535", 3)
+//        self.becomeFirstResponder()
     }
     
     override func viewDidAppear(_ animated: Bool) {
         super.viewDidAppear(animated)
         timer = Timer.scheduledTimer(timeInterval: 1, target: self, selector: #selector(updateCounter), userInfo: nil, repeats: true)
     }
+    
+//    override var canBecomeFirstResponder: Bool {
+//        get {
+//            return true
+//        }
+//    }
+//
+//    override func motionEnded(_ motion: UIEvent.EventSubtype, with event: UIEvent?) {
+//        if motion == .motionShake {
+//            switch self.chulTeginSegmentControl.selectedSegmentIndex {
+//            case 0:
+//                self.chulTeginSegmentControl.selectedSegmentIndex = 1
+//            case 1:
+//                self.chulTeginSegmentControl.selectedSegmentIndex = 0
+//            default:
+//                break
+//            }
+//            self.chulTeginSegmentControl.sendActions(for: UIControl.Event.valueChanged)
+//        }
+//    }
 }
 
 extension InOutAttendanceController {

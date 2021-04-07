@@ -60,13 +60,11 @@ class MainPageController: UIViewController {
         return label
     }()
     
-    let startButton: UIButton = {
-        let button = UIButton(type: .system)
-        button.clipsToBounds = true
-        button.contentMode = .scaleAspectFit
-        let attributedText = NSAttributedString(string: "출퇴근", attributes: [.foregroundColor: mainColor,.font: UIFont(name: "Verdana", size: 18) as Any])
-        button.setAttributedTitle(attributedText, for: .normal)
-        return button
+    let logoImageView: UIImageView = {
+        let iv = UIImageView(image: #imageLiteral(resourceName: "Logo_Orange"))
+        iv.clipsToBounds = true
+        iv.contentMode = .scaleAspectFit
+        return iv
     }()
     
     var setting: Setting? {
@@ -104,21 +102,31 @@ extension MainPageController {
     fileprivate func setupViews() {
         setupMainViews()
         headerView.addSubview(qrLabel)
-        qrLabel.text = applicationDelegate.getCurrentPage()
+        
+        if applicationDelegate.getCurrentPage() != nil {
+            if applicationDelegate.getCurrentPage() == "Default" {
+                qrLabel.text = "출퇴근인증"
+            } else {
+                qrLabel.text = applicationDelegate.getCurrentPage()
+            }
+        }
+        
         qrLabel.centerXInSuperview()
         qrLabel.anchor(top: nil, leading: nil, bottom: headerView.bottomAnchor, trailing: nil, padding: .init(top: 0, left: 0, bottom: 0, right: 0), size: CGSize(width: 150, height: 50))
         headerView.addSubview(menuButton)
         menuButton.anchor(top: nil, leading: headerView.leadingAnchor, bottom: headerView.bottomAnchor, trailing: nil, padding: .init(top: 0, left: 15, bottom: 12, right: 0), size: CGSize(width: 25, height: 25))
         menuButton.addTarget(self, action: #selector(handleMenuButton), for: .touchUpInside)
         
-        footerView.addSubview(startButton)
-        startButton.centerXInSuperview()
-        startButton.anchor(top: footerView.topAnchor, leading: nil, bottom: nil, trailing: nil, padding: .init(top: 5, left: 0, bottom: 0, right: 0), size: CGSize(width: 100, height: 50))
+        footerView.addSubview(logoImageView)
+        logoImageView.centerXInSuperview()
+        logoImageView.anchor(top: footerView.topAnchor, leading: nil, bottom: nil, trailing: nil, padding: .init(top: 0, left: 0, bottom: 0, right: 0), size: CGSize(width: 100, height: 50))
     }
 }
 
 extension MainPageController {
     func showController(indexPath: IndexPath? , currentPageString: String?) {
+        
+        
         
         if indexPath != nil {
             removeQrScannerController()
@@ -189,6 +197,9 @@ extension MainPageController {
     }
     
     func controllerCreation(viewController: UIViewController) {
+        viewController.removeFromParent()
+        viewController.view.removeFromSuperview()
+        
         addChild(viewController)
         view.addSubview(viewController.view)
         viewController.view.anchor(top: headerLine.bottomAnchor, leading: view.leadingAnchor, bottom: footerLine.topAnchor, trailing: view.trailingAnchor, padding: .init(top: 0, left: 0, bottom: 10, right: 0), size: CGSize(width: 0, height: 0))
@@ -211,16 +222,25 @@ extension MainPageController {
     }
     
     override func motionEnded(_ motion: UIEvent.EventSubtype, with event: UIEvent?) {
+//        self.controllerCreation(viewController: inOutController)
+
+        let date = Date()
+        let dateFormatter = DateFormatter()
+        dateFormatter.dateFormat = "yyyy-MM-dd'T'HH:mm:ss Z"
+        let currentDateString = dateFormatter.string(from: date).capitalized.substring(with: 11..<19)
+
+        
         if motion == .motionShake {
             Vibration.heavy.vibrate()
             switch inOutController.chulTeginSegmentControl.selectedSegmentIndex {
             case 0:
-                print("Chulgin")
+                self.inOutController.chulTeginSegmentControl.selectedSegmentIndex = 1
             case 1:
-                print("Twegin")
+                self.inOutController.chulTeginSegmentControl.selectedSegmentIndex = 0
             default:
                 break
             }
+            self.inOutController.chulTeginSegmentControl.sendActions(for: UIControl.Event.valueChanged)
         }
     }
     

@@ -26,20 +26,17 @@ class SettingsController: UIViewController {
     override func viewDidLoad() {
         super.viewDidLoad()
         view.backgroundColor = mainBackgroundDarkColor
-        
         setupButton()
-        
-        DispatchQueue.main.async { [self] in
-            if applicationDelegate.getCurrentPage() != nil {
-                firstPageButton.setTitle(applicationDelegate.getCurrentPage(), for: .normal)
-            }
-        }
     }
     
     fileprivate func setupButton() {
         view.addSubview(firstPageButton)
         firstPageButton.anchor(top: view.topAnchor, leading: view.leadingAnchor, bottom: nil, trailing: view.trailingAnchor, padding: .init(top: 30, left: 30, bottom: 0, right: 30), size: CGSize(width: 0, height: 40))
         firstPageButton.addTarget(self, action: #selector(handleFirstPageButton), for: .touchUpInside)
+        
+        if applicationDelegate.getCurrentPage() != nil {
+            firstPageButton.setTitle(applicationDelegate.getCurrentPage(), for: .normal)
+        }
     }
 
     func addFrames(frames: CGRect) {
@@ -87,7 +84,6 @@ extension SettingsController: UITableViewDelegate, UITableViewDataSource {
         chosenPageName = dataSource[indexPath.row]
         selectedButton.setTitle(chosenPageName, for: .normal)
         applicationDelegate.saveCurrentPage(dataSource[indexPath.row])
-        
         let cell = tableView.cellForRow(at: indexPath)
         cell?.textLabel?.textColor = mainColor
         
@@ -99,6 +95,4 @@ extension SettingsController: UITableViewDelegate, UITableViewDataSource {
     func tableView(_ tableView: UITableView, heightForRowAt indexPath: IndexPath) -> CGFloat {
         return 50
     }
-    
-    
 }

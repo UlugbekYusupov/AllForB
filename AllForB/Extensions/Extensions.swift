@@ -123,6 +123,9 @@ let superUserEmail: String = "rock0211@slacknsoft.com"
 var userInfo: UserInfo?
 var dataSource = [String]()
 
+let startTime: String = "09:00:00"
+let finishTime: String = "18:00:00"
+
 //class SharedClass: NSObject {
 //
 //    static let sharedInstance = SharedClass()

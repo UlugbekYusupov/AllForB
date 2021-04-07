@@ -159,8 +159,31 @@ extension LoginController {
                 }
                 else {
                     DispatchQueue.main.async {
-                        SCLAlertView().showError("Incorrect !", subTitle: "아이디와 비밀번호 확인 해주세요.", closeButtonTitle: "Ok") // Error
+                        let alertView = SCLAlertView()
+                        alertView.iconTintColor = mainColor
+                        alertView.view.backgroundColor = .init(white: 1, alpha: 0.1)
+                        
+                        
+                        alertView.view.subviews.forEach { (v) in
+                            
+                            v.backgroundColor = .clear // mainView
+                            
+                            v.subviews.forEach { (vv) in // vv is alertView rectangular
+                                vv.backgroundColor = mainColor
+                                vv.layer.borderColor = mainColor.cgColor
 
+                                vv.subviews.forEach { (vvv) in
+                                    vvv.backgroundColor = .clear
+                                }
+                                
+                                let labels = vv.subviews.compactMap { $0 as? UILabel }
+                                for label in labels {
+                                    label.textColor = mainBackgroundDarkColor
+                                    label.font = UIFont(name: "Verdana", size: 18)
+                                }
+                            }
+                        }
+                        alertView.showError("Incorrect !", subTitle: "아이디와 비밀번호 확인 해주세요.", closeButtonTitle: "Ok", animationStyle: .noAnimation)
                     }
                 }
             }
