@@ -18,6 +18,7 @@ class CalendarController: UIViewController {
     
     var issueDate: String?
     var inOutTimeInfo: String?
+    var desectedFlag: Bool = false
     
     let homeLabel: UILabel = {
         let label = UILabel()
@@ -73,7 +74,9 @@ class CalendarController: UIViewController {
 
 
 extension CalendarController: FSCalendarDelegate, FSCalendarDataSource {
+    
     func calendar(_ calendar: FSCalendar, didSelect date: Date, at monthPosition: FSCalendarMonthPosition) {
+
         formatter.dateFormat = "yyyy-MM-dd"
         let formattedString = formatter.string(from: date)
         APIService.shared.getDailyList(userId: userId!, fromDate: formattedString + " 00:00:00", toDate: formattedString + " 00:00:00") { (result, error) in
@@ -85,11 +88,8 @@ extension CalendarController: FSCalendarDelegate, FSCalendarDataSource {
     }
 
     func calendar(_ calendar: FSCalendar, subtitleFor date: Date) -> String? {
-
         formatter.dateFormat = "yyyy-MM-dd"
         let dateString = formatter.string(from: date).capitalized
-
-        
         underLineSymbol.text = ""
         resultList.forEach { (result) in
             if dateString == result.IssueDate {
@@ -101,10 +101,21 @@ extension CalendarController: FSCalendarDelegate, FSCalendarDataSource {
     
     func calendarCurrentPageDidChange(_ calendar: FSCalendar) {
         setupMonthFormattedString()
+        if desectedFlag == false {
+            desectedFlag = true
+        } else {
+            desectedFlag = false
+        }
         DispatchQueue.main.async {
             self.fetchCall()
             self.dailyListCollectionTable?.reloadData()
+            self.calendar.reloadData()
         }
+    }
+    
+    func calendar(_ calendar: FSCalendar, shouldDeselect date: Date, at monthPosition: FSCalendarMonthPosition) -> Bool {
+        calendar.deselect(date)
+        return desectedFlag
     }
 }
 

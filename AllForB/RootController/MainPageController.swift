@@ -126,10 +126,12 @@ extension MainPageController {
 extension MainPageController {
     func showController(indexPath: IndexPath? , currentPageString: String?) {
         
+        removeQrScannerController()
+        settingsController.uiViewAnimation(frames: settingsController.selectedButton.frame)
+        settingsController.selectButtonTapped = false
         
         
         if indexPath != nil {
-            removeQrScannerController()
             switch indexPath!.row {
             case 0:
                 let homeController = HomeController()
@@ -157,7 +159,6 @@ extension MainPageController {
         }
         
         if currentPageString != nil {
-            removeQrScannerController()
             switch currentPageString {
             case "홈":
                 let homeController = HomeController()

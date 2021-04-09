@@ -17,7 +17,6 @@ class SceneDelegate: UIResponder, UIWindowSceneDelegate {
         
         if applicationDelegate.getCurrentLoginToken() != nil {
             userId = (applicationDelegate.getAnyValueFromCoreData(applicationDelegate.getCurrentLoginToken()!, "userId") as! Int)
-  
             let mainPageController = MainPageController()
             window?.rootViewController = mainPageController
             mainPageController.showController(indexPath: nil, currentPageString: applicationDelegate.getCurrentPage())

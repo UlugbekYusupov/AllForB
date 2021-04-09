@@ -22,6 +22,7 @@ class SettingsController: UIViewController {
     var chosenPageName: String?
     let tableView = UITableView()
     var selectedButton = UIButton()
+    var selectButtonTapped: Bool = false
     
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -57,9 +58,20 @@ class SettingsController: UIViewController {
     
     
     @objc func handleFirstPageButton(_ sender: Any) {
-        dataSource = ["홈", "프로필", "근무일정", "출퇴근인증", "Default"]
-        selectedButton = firstPageButton
-        addFrames(frames: firstPageButton.frame)
+        if selectButtonTapped == false {
+            selectButtonTapped = true
+            dataSource = ["홈", "프로필", "근무일정", "출퇴근인증", "Default"]
+            selectedButton = firstPageButton
+            addFrames(frames: firstPageButton.frame)
+        } else {
+            selectButtonTapped = false
+            uiViewAnimation(frames: firstPageButton.frame)
+        }
+    }
+    func uiViewAnimation(frames: CGRect) {
+        UIView.animate(withDuration: 0.5, delay: 0, usingSpringWithDamping: 1, initialSpringVelocity: 1, options: .curveEaseInOut) {
+            self.tableView.frame = CGRect(x: frames.origin.x, y: frames.origin.y + frames.height, width: frames.width, height: 0)
+        } completion: { (flag) in}
     }
 }
 
@@ -84,12 +96,11 @@ extension SettingsController: UITableViewDelegate, UITableViewDataSource {
         chosenPageName = dataSource[indexPath.row]
         selectedButton.setTitle(chosenPageName, for: .normal)
         applicationDelegate.saveCurrentPage(dataSource[indexPath.row])
+        selectButtonTapped = false
+        
         let cell = tableView.cellForRow(at: indexPath)
         cell?.textLabel?.textColor = mainColor
-        
-        UIView.animate(withDuration: 0.5, delay: 0, usingSpringWithDamping: 1, initialSpringVelocity: 1, options: .curveEaseInOut) {
-            self.tableView.frame = CGRect(x: frames.origin.x, y: frames.origin.y + frames.height, width: frames.width, height: 0)
-        } completion: { (flag) in}
+        uiViewAnimation(frames: frames)
     }
     
     func tableView(_ tableView: UITableView, heightForRowAt indexPath: IndexPath) -> CGFloat {
