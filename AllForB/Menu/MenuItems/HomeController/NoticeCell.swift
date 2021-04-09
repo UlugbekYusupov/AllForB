@@ -44,6 +44,14 @@ class NoticeCell: UICollectionViewCell {
     
     override init(frame: CGRect) {
         super.init(frame: frame)
+        setupCellItems()
+    }
+    
+    required init?(coder: NSCoder) {
+        fatalError("init(coder:) has not been implemented")
+    }
+    
+    fileprivate func setupCellItems(){
         addSubview(containerView)
         containerView.fillSuperview(padding: .init(top: 5, left: 15, bottom: 5, right: 15))
         containerView.addSubview(nameOfNotice)
@@ -53,9 +61,5 @@ class NoticeCell: UICollectionViewCell {
         containerView.addSubview(descriptionOfNotice)
         descriptionOfNotice.centerXInSuperview()
         descriptionOfNotice.anchor(top: nameOfNotice.bottomAnchor, leading: nil, bottom: nil, trailing: nil, padding: .init(top: 10, left: 0, bottom: 0, right: 0), size: CGSize(width: 300, height: 50))
-    }
-    
-    required init?(coder: NSCoder) {
-        fatalError("init(coder:) has not been implemented")
     }
 }

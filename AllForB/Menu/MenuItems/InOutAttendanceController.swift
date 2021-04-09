@@ -85,6 +85,10 @@ class InOutAttendanceController: UIViewController {
         return button
     }()
     
+}
+
+extension InOutAttendanceController {
+    
     fileprivate func generateQRCode(qrString: String) -> UIImage? {
         let string_data = qrString.data(using: String.Encoding.ascii)
         if let filter = CIFilter(name: "CIQRCodeGenerator") {
@@ -96,9 +100,7 @@ class InOutAttendanceController: UIViewController {
         }
         return nil
     }
-}
-
-extension InOutAttendanceController {
+    
     fileprivate func handleCreateQRCode(_ userId: Int, _ companyId: Int, _ phoneNo: String, _ inOutTypeId: Int) {
         APIService.shared.qrCodeCreate(userId: userId, companyId: companyId, phoneNo: phoneNo, inOutTypeId: inOutTypeId) { (result, error) in
             if let result = result {

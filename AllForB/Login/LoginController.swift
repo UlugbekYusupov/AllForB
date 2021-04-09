@@ -193,23 +193,6 @@ extension LoginController {
         }
     }
     
-    func checkReturnCode(){
-        let returnCode = applicationDelegate.getReturnCode()!
-        if returnCode == 0 {
-            DispatchQueue.main.async { [self] in
-                let mainController  = MainPageController()
-                mainController.modalPresentationStyle = .fullScreen
-                present(mainController, animated: false, completion: nil)
-                yourPasswordTextField.text?.removeAll()
-                yourUsernameTextField.text?.removeAll()
-                loginButton.isEnabled = false
-                loginButton.backgroundColor = .init(red: 241/244, green: 170/244, blue: 76/244, alpha: 0.6)
-            }
-         } else {
-            SCLAlertView().showError("Incorrect !", subTitle: "아이디와 비밀번호 확인 해주세요.", closeButtonTitle: "Ok") // Error
-         }
-    }
-    
     @objc fileprivate func handleLogin() {
         guard let username = yourUsernameTextField.text else {return}
         guard let password = yourPasswordTextField.text else {return}
@@ -289,7 +272,8 @@ extension LoginController {
     }
 }
 
-extension UIViewController {
+extension LoginController {
+    
     func hideKeyboardWhenTappedAround() {
         let tap: UITapGestureRecognizer = UITapGestureRecognizer(target: self, action: #selector(dismissKeyboardView))
         tap.cancelsTouchesInView = false
@@ -298,5 +282,22 @@ extension UIViewController {
 
     @objc func dismissKeyboardView() {
         view.endEditing(true)
+    }
+    
+    func checkReturnCode(){
+        let returnCode = applicationDelegate.getReturnCode()!
+        if returnCode == 0 {
+            DispatchQueue.main.async { [self] in
+                let mainController  = MainPageController()
+                mainController.modalPresentationStyle = .fullScreen
+                present(mainController, animated: false, completion: nil)
+                yourPasswordTextField.text?.removeAll()
+                yourUsernameTextField.text?.removeAll()
+                loginButton.isEnabled = false
+                loginButton.backgroundColor = .init(red: 241/244, green: 170/244, blue: 76/244, alpha: 0.6)
+            }
+         } else {
+            SCLAlertView().showError("Incorrect !", subTitle: "아이디와 비밀번호 확인 해주세요.", closeButtonTitle: "Ok") // Error
+         }
     }
 }

@@ -151,15 +151,17 @@ class MenuLauncher: NSObject {
     
     override init() { super.init() }
 
+}
+
+extension MenuLauncher {
+    
     fileprivate func uiViewAnimation() {
         if let window = UIApplication.shared.windows.first(where: { $0.isKeyWindow }) {
             self.blackView.alpha = 0
             self.menuView.frame = CGRect(x: -window.frame.width, y: 0, width: self.menuView.frame.width, height: self.menuView.frame.height)
         }
     }
-}
-
-extension MenuLauncher {
+    
     func setupContainerViews() {
         menuView.addSubview(headerView)
         headerView.anchor(top: menuView.topAnchor, leading: menuView.leadingAnchor, bottom: nil, trailing: menuView.trailingAnchor,size: CGSize(width: 0, height: 150))
@@ -220,18 +222,6 @@ extension MenuLauncher {
 
     }
     
-    fileprivate func fetchUserInfo() {
-        APIService.shared.getInfo(userId: userId!, companyId: 1) { [self] (result, error) in
-            guard let result = result else {return}
-            userInfo = result
-            if let error = error {
-                print(error)
-            }
-            DispatchQueue.main.async { [self] in
-                profileName.text = userInfo?.PersonName
-            }
-        }
-    }
 
     fileprivate func setupTabelView() {
         menuTableView = UITableView(frame: .zero, style: .plain)
@@ -343,6 +333,21 @@ extension MenuLauncher {
         UIView.animate(withDuration: 0.5, delay: 0, usingSpringWithDamping: 1, initialSpringVelocity: 1, options: .curveEaseOut) {
             self.uiViewAnimation()
         } completion: { (flag) in
+        }
+    }
+}
+
+extension MenuLauncher {
+    fileprivate func fetchUserInfo() {
+        APIService.shared.getInfo(userId: userId!, companyId: 1) { [self] (result, error) in
+            guard let result = result else {return}
+            userInfo = result
+            if let error = error {
+                print(error)
+            }
+            DispatchQueue.main.async { [self] in
+                profileName.text = userInfo?.PersonName
+            }
         }
     }
 }

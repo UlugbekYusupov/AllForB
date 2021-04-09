@@ -18,7 +18,6 @@ class CalendarController: UIViewController {
     
     var issueDate: String?
     var inOutTimeInfo: String?
-    var desectedFlag: Bool = false
     
     let homeLabel: UILabel = {
         let label = UILabel()
@@ -54,29 +53,12 @@ class CalendarController: UIViewController {
         c.appearance.headerTitleFont = UIFont(name: "Verdana-Bold", size: 16)
         return c
     }()
-    
-    fileprivate func setupCalendar() {
-        let weekDayLabel = calendar.calendarWeekdayView.weekdayLabels
-        for weekDay in weekDayLabel {
-            weekDay.textColor = mainColor
-            weekDay.font = UIFont(name: "Verdana", size: 15)
-        }
-        
-        view.addSubview(calendar)
-        calendar.delegate = self
-        calendar.dataSource = self
-        calendar.anchor(top: view.topAnchor, leading: view.leadingAnchor, bottom: nil, trailing: view.trailingAnchor,padding: .init(top: 10, left: 0, bottom: 0, right: 0),size: CGSize(width: 0, height: view.frame.size.height / 2.5))
-        DispatchQueue.main.async {
-            self.calendar.reloadData()
-        }
-    }
 }
 
 
 extension CalendarController: FSCalendarDelegate, FSCalendarDataSource {
     
     func calendar(_ calendar: FSCalendar, didSelect date: Date, at monthPosition: FSCalendarMonthPosition) {
-
         formatter.dateFormat = "yyyy-MM-dd"
         let formattedString = formatter.string(from: date)
         APIService.shared.getDailyList(userId: userId!, fromDate: formattedString + " 00:00:00", toDate: formattedString + " 00:00:00") { (result, error) in
@@ -88,34 +70,15 @@ extension CalendarController: FSCalendarDelegate, FSCalendarDataSource {
     }
 
     func calendar(_ calendar: FSCalendar, subtitleFor date: Date) -> String? {
-        formatter.dateFormat = "yyyy-MM-dd"
-        let dateString = formatter.string(from: date).capitalized
-        underLineSymbol.text = ""
-        resultList.forEach { (result) in
-            if dateString == result.IssueDate {
-                underLineSymbol.text = "__"
-            }
-        }
-        return underLineSymbol.text
+        return getUnderLineForDate(date: date)
     }
     
     func calendarCurrentPageDidChange(_ calendar: FSCalendar) {
         setupMonthFormattedString()
-        if desectedFlag == false {
-            desectedFlag = true
-        } else {
-            desectedFlag = false
-        }
         DispatchQueue.main.async {
             self.fetchCall()
             self.dailyListCollectionTable?.reloadData()
-            self.calendar.reloadData()
         }
-    }
-    
-    func calendar(_ calendar: FSCalendar, shouldDeselect date: Date, at monthPosition: FSCalendarMonthPosition) -> Bool {
-        calendar.deselect(date)
-        return desectedFlag
     }
 }
 
@@ -126,13 +89,10 @@ extension CalendarController: UICollectionViewDelegate, UICollectionViewDataSour
     
     func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
         let cell = collectionView.dequeueReusableCell(withReuseIdentifier: "cellID", for: indexPath) as! CalendarCell
-        
         issueDate = resultList[indexPath.row].IssueDate
         inOutTimeInfo = resultList[indexPath.row].InOutTimeInfo
-        
         cell.nalchaLabel.text = "날짜: " + issueDate!
         cell.chulTweginLabel.text = inOutTimeInfo
-
         return cell
     }
     
@@ -142,16 +102,13 @@ extension CalendarController: UICollectionViewDelegate, UICollectionViewDataSour
 }
 
 extension CalendarController {
-
     override func viewDidLoad() {
         super.viewDidLoad()
         view.backgroundColor = mainBackgroundDarkColor
-        calendar.register(FSCalendarCell.self, forCellReuseIdentifier: "cellid")
         setupCalendar()
         setupCollectionView()
         setupMonthFormattedString()
         fetchCall()
-        setupUnderline()
     }
 }
 
@@ -198,7 +155,32 @@ extension CalendarController {
         self.toDate = formatter.string(from: previosMonth!)
     }
     
-    fileprivate func setupUnderline(){
+    fileprivate func getUnderLineForDate(date: Date) -> String {
+        formatter.dateFormat = "yyyy-MM-dd"
+        let dateString = formatter.string(from: date).capitalized
+        underLineSymbol.text = ""
+        resultList.forEach { (result) in
+            if dateString == result.IssueDate {
+                underLineSymbol.text = "__"
+            }
+        }
+        return underLineSymbol.text!
+    }
+    
+    fileprivate func setupCalendar() {
+        let weekDayLabel = calendar.calendarWeekdayView.weekdayLabels
+        for weekDay in weekDayLabel {
+            weekDay.textColor = mainColor
+            weekDay.font = UIFont(name: "Verdana", size: 15)
+        }
         
+        view.addSubview(calendar)
+        calendar.delegate = self
+        calendar.dataSource = self
+        calendar.register(FSCalendarCell.self, forCellReuseIdentifier: "cellid")
+        calendar.anchor(top: view.topAnchor, leading: view.leadingAnchor, bottom: nil, trailing: view.trailingAnchor,padding: .init(top: 10, left: 0, bottom: 0, right: 0),size: CGSize(width: 0, height: view.frame.size.height / 2.5))
+        DispatchQueue.main.async {
+            self.calendar.reloadData()
+        }
     }
 }

@@ -49,7 +49,7 @@ class MainPageController: UIViewController {
         return button
     }()
     
-    let qrLabel: UILabel = {
+    let pageLabelName: UILabel = {
         let label = UILabel()
         label.clipsToBounds = true
         label.contentMode = .scaleAspectFit
@@ -69,15 +69,10 @@ class MainPageController: UIViewController {
     
     var setting: Setting? {
         didSet {
-            qrLabel.text = setting?.name
+            pageLabelName.text = setting?.name
         }
     }
     
-    @objc fileprivate func handleMenuButton() {
-        menuLauncher.showSettings()
-        menuLauncher.qrScannerController?.captureSession.stopRunning()
-        menuLauncher.mainPageController = self
-    }
 }
 
 extension MainPageController {
@@ -101,18 +96,18 @@ extension MainPageController {
     
     fileprivate func setupViews() {
         setupMainViews()
-        headerView.addSubview(qrLabel)
+        headerView.addSubview(pageLabelName)
         
         if applicationDelegate.getCurrentPage() != nil {
             if applicationDelegate.getCurrentPage() == "Default" {
-                qrLabel.text = "출퇴근인증"
+                pageLabelName.text = "출퇴근인증"
             } else {
-                qrLabel.text = applicationDelegate.getCurrentPage()
+                pageLabelName.text = applicationDelegate.getCurrentPage()
             }
         }
         
-        qrLabel.centerXInSuperview()
-        qrLabel.anchor(top: nil, leading: nil, bottom: headerView.bottomAnchor, trailing: nil, padding: .init(top: 0, left: 0, bottom: 0, right: 0), size: CGSize(width: 150, height: 50))
+        pageLabelName.centerXInSuperview()
+        pageLabelName.anchor(top: nil, leading: nil, bottom: headerView.bottomAnchor, trailing: nil, padding: .init(top: 0, left: 0, bottom: 0, right: 0), size: CGSize(width: 150, height: 50))
         headerView.addSubview(menuButton)
         menuButton.anchor(top: nil, leading: headerView.leadingAnchor, bottom: headerView.bottomAnchor, trailing: nil, padding: .init(top: 0, left: 15, bottom: 12, right: 0), size: CGSize(width: 25, height: 25))
         menuButton.addTarget(self, action: #selector(handleMenuButton), for: .touchUpInside)
@@ -205,6 +200,12 @@ extension MainPageController {
         view.addSubview(viewController.view)
         viewController.view.anchor(top: headerLine.bottomAnchor, leading: view.leadingAnchor, bottom: footerLine.topAnchor, trailing: view.trailingAnchor, padding: .init(top: 0, left: 0, bottom: 10, right: 0), size: CGSize(width: 0, height: 0))
         viewController.didMove(toParent: self)
+    }
+    
+    @objc fileprivate func handleMenuButton() {
+        menuLauncher.showSettings()
+        menuLauncher.qrScannerController?.captureSession.stopRunning()
+        menuLauncher.mainPageController = self
     }
 }
 

@@ -51,19 +51,6 @@ class RootController: UIViewController {
         return button
     }()
     
-    @objc fileprivate func handleLogin() {
-        if applicationDelegate.getCurrentLoginToken() == nil {
-            let login = LoginController()
-            login.modalPresentationStyle = .fullScreen
-            present(login, animated: true, completion: nil)
-        }
-        else {
-            userId = (applicationDelegate.getAnyValueFromCoreData(applicationDelegate.getCurrentLoginToken()!, "userId") as! Int)
-            let mainPageController = MainPageController()
-            mainPageController.modalPresentationStyle = .fullScreen
-            present(mainPageController, animated: true, completion: nil)
-        }
-    }
 }
 
 extension RootController {
@@ -93,5 +80,21 @@ extension RootController {
         loginButon.centerXInSuperview()
         loginButon.anchor(top: nil, leading: nil, bottom: containerView.bottomAnchor, trailing: nil, padding: .init(top: 0, left: 0, bottom: 30, right: 0),size: CGSize(width: 150, height: 50))
         loginButon.layer.cornerRadius = 50/2
+    }
+}
+
+extension RootController {
+    @objc fileprivate func handleLogin() {
+        if applicationDelegate.getCurrentLoginToken() == nil {
+            let login = LoginController()
+            login.modalPresentationStyle = .fullScreen
+            present(login, animated: true, completion: nil)
+        }
+        else {
+            userId = (applicationDelegate.getAnyValueFromCoreData(applicationDelegate.getCurrentLoginToken()!, "userId") as! Int)
+            let mainPageController = MainPageController()
+            mainPageController.modalPresentationStyle = .fullScreen
+            present(mainPageController, animated: true, completion: nil)
+        }
     }
 }

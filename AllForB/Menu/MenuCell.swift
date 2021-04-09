@@ -40,15 +40,21 @@ class MenuCell: UITableViewCell {
     override init(style: UITableViewCell.CellStyle, reuseIdentifier: String?) {
         super.init(style: style, reuseIdentifier: reuseIdentifier)
         backgroundColor = .clear
+        setupCellItems()
+    }
+    
+    required init?(coder: NSCoder) {
+        fatalError("init(coder:) has not been implemented")
+    }
+}
+
+extension MenuCell {
+    fileprivate func setupCellItems() {
         addSubview(itemImageView)
         itemImageView.centerYInSuperview()
         itemImageView.anchor(top: nil, leading: leadingAnchor, bottom: nil, trailing: nil, padding: .init(), size: CGSize(width:35, height: 35))
         addSubview(itemLabel)
         itemLabel.centerYInSuperview()
         itemLabel.anchor(top: nil, leading: itemImageView.trailingAnchor, bottom: nil, trailing: nil, padding: .init(top: 0, left: 20, bottom: 0, right: 0), size: CGSize(width: 100, height: 30))
-    }
-    
-    required init?(coder: NSCoder) {
-        fatalError("init(coder:) has not been implemented")
     }
 }

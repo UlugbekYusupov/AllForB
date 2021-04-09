@@ -15,49 +15,7 @@ class QRScannerController : UIViewController {
     var qrCodeFrameView: UIView?
     var qrString: String!
     
-    func failed() {
-        let ac = UIAlertController(title: "Scanning not supported", message: "Your device does not support scanning a code from an item. Please use a device with a camera.", preferredStyle: .alert)
-        ac.addAction(UIAlertAction(title: "OK", style: .default))
-        present(ac, animated: true)
-    }
-}
-
-extension QRScannerController {
     
-    override func viewDidLoad() {
-        super.viewDidLoad()
-        let deviceDiscoverySession = AVCaptureDevice.DiscoverySession(deviceTypes: [.builtInWideAngleCamera], mediaType: AVMediaType.video, position: .front)
-        guard let captureDevice = deviceDiscoverySession.devices.first else {
-            failed()
-            return
-        }
-
-        do {
-            let input = try AVCaptureDeviceInput(device: captureDevice)
-            captureSession.addInput(input)
-            let captureMetadataOutput = AVCaptureMetadataOutput()
-            captureSession.addOutput(captureMetadataOutput)
-            captureMetadataOutput.setMetadataObjectsDelegate(self, queue: DispatchQueue.main)
-            captureMetadataOutput.metadataObjectTypes = [AVMetadataObject.ObjectType.qr]
-            previewLayer = AVCaptureVideoPreviewLayer(session: captureSession)
-            previewLayer?.videoGravity = AVLayerVideoGravity.resize
-            previewLayer?.frame = view.layer.bounds
-            view.layer.addSublayer(previewLayer!)
-            captureSession.startRunning()
-            
-            qrCodeFrameView = UIView()
-            if let qrCodeFrameView = qrCodeFrameView {
-                qrCodeFrameView.layer.borderColor = mainColor.cgColor
-                qrCodeFrameView.layer.borderWidth = 5
-                view.addSubview(qrCodeFrameView)
-                view.bringSubviewToFront(qrCodeFrameView)
-            }
-        }
-        catch {
-            print(error)
-            return
-        }
-    }
     func displaySoundsAlert() {
         let alert = UIAlertController(title: "Play Sound", message: nil, preferredStyle: UIAlertController.Style.alert)
         for i in 1000...1010 {
@@ -68,6 +26,13 @@ extension QRScannerController {
         }
         alert.addAction(UIAlertAction(title: "Cancel", style: .cancel, handler: nil))
         self.present(alert, animated: true, completion: nil)
+    }
+}
+
+extension QRScannerController {
+    override func viewDidLoad() {
+        super.viewDidLoad()
+        setupCamera()
     }
     
     override func viewWillAppear(_ animated: Bool) {
@@ -124,6 +89,12 @@ extension QRScannerController {
             }
         }
     }
+    
+    func failed() {
+        let ac = UIAlertController(title: "Scanning not supported", message: "Your device does not support scanning a code from an item. Please use a device with a camera.", preferredStyle: .alert)
+        ac.addAction(UIAlertAction(title: "OK", style: .default))
+        present(ac, animated: true)
+    }
 }
 
 extension QRScannerController: AVCaptureMetadataOutputObjectsDelegate {
@@ -146,6 +117,42 @@ extension QRScannerController: AVCaptureMetadataOutputObjectsDelegate {
             guard let stringValue = readableObject.stringValue else { return }
             qrString = stringValue
             found(stringCode: stringValue)
+        }
+    }
+}
+
+extension QRScannerController {
+    fileprivate func setupCamera() {
+        let deviceDiscoverySession = AVCaptureDevice.DiscoverySession(deviceTypes: [.builtInWideAngleCamera], mediaType: AVMediaType.video, position: .front)
+        guard let captureDevice = deviceDiscoverySession.devices.first else {
+            failed()
+            return
+        }
+
+        do {
+            let input = try AVCaptureDeviceInput(device: captureDevice)
+            captureSession.addInput(input)
+            let captureMetadataOutput = AVCaptureMetadataOutput()
+            captureSession.addOutput(captureMetadataOutput)
+            captureMetadataOutput.setMetadataObjectsDelegate(self, queue: DispatchQueue.main)
+            captureMetadataOutput.metadataObjectTypes = [AVMetadataObject.ObjectType.qr]
+            previewLayer = AVCaptureVideoPreviewLayer(session: captureSession)
+            previewLayer?.videoGravity = AVLayerVideoGravity.resize
+            previewLayer?.frame = view.layer.bounds
+            view.layer.addSublayer(previewLayer!)
+            captureSession.startRunning()
+            
+            qrCodeFrameView = UIView()
+            if let qrCodeFrameView = qrCodeFrameView {
+                qrCodeFrameView.layer.borderColor = mainColor.cgColor
+                qrCodeFrameView.layer.borderWidth = 5
+                view.addSubview(qrCodeFrameView)
+                view.bringSubviewToFront(qrCodeFrameView)
+            }
+        }
+        catch {
+            print(error)
+            return
         }
     }
 }

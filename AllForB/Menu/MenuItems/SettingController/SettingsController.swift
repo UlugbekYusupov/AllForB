@@ -24,39 +24,6 @@ class SettingsController: UIViewController {
     var selectedButton = UIButton()
     var selectButtonTapped: Bool = false
     
-    override func viewDidLoad() {
-        super.viewDidLoad()
-        view.backgroundColor = mainBackgroundDarkColor
-        setupButton()
-    }
-    
-    fileprivate func setupButton() {
-        view.addSubview(firstPageButton)
-        firstPageButton.anchor(top: view.topAnchor, leading: view.leadingAnchor, bottom: nil, trailing: view.trailingAnchor, padding: .init(top: 30, left: 30, bottom: 0, right: 30), size: CGSize(width: 0, height: 40))
-        firstPageButton.addTarget(self, action: #selector(handleFirstPageButton), for: .touchUpInside)
-        
-        if applicationDelegate.getCurrentPage() != nil {
-            firstPageButton.setTitle(applicationDelegate.getCurrentPage(), for: .normal)
-        }
-    }
-
-    func addFrames(frames: CGRect) {
-        tableView.frame = CGRect(x: frames.origin.x, y: frames.origin.y + frames.height, width: frames.width, height: 0)
-        view.addSubview(tableView)
-        tableView.register(OptionsCell.self, forCellReuseIdentifier: "cellid")
-        tableView.backgroundColor = mainBackgroundDarkColor
-        tableView.layer.cornerRadius = 5
-        tableView.dataSource = self
-        tableView.delegate = self
-        tableView.separatorStyle = .none
-        tableView.reloadData()
-        
-        UIView.animate(withDuration: 0.4, delay: 0, usingSpringWithDamping: 1, initialSpringVelocity: 1, options: .curveEaseInOut) { [self] in
-            tableView.frame = CGRect(x: frames.origin.x, y: frames.origin.y + frames.height + 5, width: frames.width, height: CGFloat(dataSource.count * 50))
-        } completion: { (flag) in}
-    }
-    
-    
     @objc func handleFirstPageButton(_ sender: Any) {
         if selectButtonTapped == false {
             selectButtonTapped = true
@@ -67,11 +34,6 @@ class SettingsController: UIViewController {
             selectButtonTapped = false
             uiViewAnimation(frames: firstPageButton.frame)
         }
-    }
-    func uiViewAnimation(frames: CGRect) {
-        UIView.animate(withDuration: 0.5, delay: 0, usingSpringWithDamping: 1, initialSpringVelocity: 1, options: .curveEaseInOut) {
-            self.tableView.frame = CGRect(x: frames.origin.x, y: frames.origin.y + frames.height, width: frames.width, height: 0)
-        } completion: { (flag) in}
     }
 }
 
@@ -105,5 +67,47 @@ extension SettingsController: UITableViewDelegate, UITableViewDataSource {
     
     func tableView(_ tableView: UITableView, heightForRowAt indexPath: IndexPath) -> CGFloat {
         return 50
+    }
+}
+
+extension SettingsController {
+    override func viewDidLoad() {
+        super.viewDidLoad()
+        view.backgroundColor = mainBackgroundDarkColor
+        setupButton()
+    }
+}
+
+extension SettingsController {
+    fileprivate func setupButton() {
+        view.addSubview(firstPageButton)
+        firstPageButton.anchor(top: view.topAnchor, leading: view.leadingAnchor, bottom: nil, trailing: view.trailingAnchor, padding: .init(top: 30, left: 30, bottom: 0, right: 30), size: CGSize(width: 0, height: 40))
+        firstPageButton.addTarget(self, action: #selector(handleFirstPageButton), for: .touchUpInside)
+        
+        if applicationDelegate.getCurrentPage() != nil {
+            firstPageButton.setTitle(applicationDelegate.getCurrentPage(), for: .normal)
+        }
+    }
+
+    func addFrames(frames: CGRect) {
+        tableView.frame = CGRect(x: frames.origin.x, y: frames.origin.y + frames.height, width: frames.width, height: 0)
+        view.addSubview(tableView)
+        tableView.register(OptionsCell.self, forCellReuseIdentifier: "cellid")
+        tableView.backgroundColor = mainBackgroundDarkColor
+        tableView.layer.cornerRadius = 5
+        tableView.dataSource = self
+        tableView.delegate = self
+        tableView.separatorStyle = .none
+        tableView.reloadData()
+        
+        UIView.animate(withDuration: 0.4, delay: 0, usingSpringWithDamping: 1, initialSpringVelocity: 1, options: .curveEaseInOut) { [self] in
+            tableView.frame = CGRect(x: frames.origin.x, y: frames.origin.y + frames.height + 5, width: frames.width, height: CGFloat(dataSource.count * 50))
+        } completion: { (flag) in}
+    }
+    
+    func uiViewAnimation(frames: CGRect) {
+        UIView.animate(withDuration: 0.5, delay: 0, usingSpringWithDamping: 1, initialSpringVelocity: 1, options: .curveEaseInOut) {
+            self.tableView.frame = CGRect(x: frames.origin.x, y: frames.origin.y + frames.height, width: frames.width, height: 0)
+        } completion: { (flag) in}
     }
 }

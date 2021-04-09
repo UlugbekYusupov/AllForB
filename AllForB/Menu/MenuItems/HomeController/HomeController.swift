@@ -16,18 +16,6 @@ class HomeController: UIViewController {
         view.backgroundColor = mainBackgroundDarkColor
         setupCollectionView()
     }
-    
-    fileprivate func setupCollectionView() {
-        let layout: UICollectionViewFlowLayout = UICollectionViewFlowLayout()
-        noticesCollectionView = UICollectionView(frame: .zero, collectionViewLayout: layout)
-        noticesCollectionView?.backgroundColor = .clear
-        noticesCollectionView?.register(NoticeCell.self, forCellWithReuseIdentifier: "cellID")
-        noticesCollectionView?.dataSource = self
-        noticesCollectionView?.delegate = self
-        noticesCollectionView?.showsVerticalScrollIndicator = false
-        view.addSubview(noticesCollectionView!)
-        noticesCollectionView?.fillSuperview(padding: .init(top: 10, left: 10, bottom: 0, right: 10))
-    }
 }
 
 extension HomeController: UICollectionViewDelegate, UICollectionViewDataSource, UICollectionViewDelegateFlowLayout {
@@ -43,5 +31,19 @@ extension HomeController: UICollectionViewDelegate, UICollectionViewDataSource, 
     
     func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, sizeForItemAt indexPath: IndexPath) -> CGSize {
         return CGSize(width: view.frame.size.width, height: 150)
+    }
+}
+
+extension HomeController {
+    fileprivate func setupCollectionView() {
+        let layout: UICollectionViewFlowLayout = UICollectionViewFlowLayout()
+        noticesCollectionView = UICollectionView(frame: .zero, collectionViewLayout: layout)
+        noticesCollectionView?.backgroundColor = .clear
+        noticesCollectionView?.register(NoticeCell.self, forCellWithReuseIdentifier: "cellID")
+        noticesCollectionView?.dataSource = self
+        noticesCollectionView?.delegate = self
+        noticesCollectionView?.showsVerticalScrollIndicator = false
+        view.addSubview(noticesCollectionView!)
+        noticesCollectionView?.fillSuperview(padding: .init(top: 10, left: 10, bottom: 0, right: 10))
     }
 }
