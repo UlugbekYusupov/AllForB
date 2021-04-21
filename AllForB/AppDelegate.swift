@@ -145,7 +145,6 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
         }
     }
     
-    
     func getAnyValueFromCoreData(_ loginToken:String,_ key:String) -> Any? { // key = data you want to retrieve the value of
 
         guard let appDel = UIApplication.shared.delegate as? AppDelegate else { return nil }

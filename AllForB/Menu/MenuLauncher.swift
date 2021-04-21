@@ -327,7 +327,7 @@ extension MenuLauncher {
             self.uiViewAnimation()
         } completion: { (flag) in
             self.mainPageController?.showQRScannerController()
-            self.mainPageController?.qrLabel.text = "QR Scanner"
+            self.mainPageController?.pageLabelName.text = "QR Scanner"
         }
     
         UIView.animate(withDuration: 0.5, delay: 0, usingSpringWithDamping: 1, initialSpringVelocity: 1, options: .curveEaseOut) {

@@ -21,8 +21,9 @@
 		5C2C1A5E25E8F0EE00CEBE3A /* AllForBTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5C2C1A5D25E8F0EE00CEBE3A /* AllForBTests.swift */; };
 		5C2C1A6925E8F0EE00CEBE3A /* AllForBUITests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5C2C1A6825E8F0EE00CEBE3A /* AllForBUITests.swift */; };
 		5C2C1A7D25E8F1ED00CEBE3A /* RootController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5C2C1A7C25E8F1ED00CEBE3A /* RootController.swift */; };
-		5C2C1A9C25E8F54E00CEBE3A /* Extensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5C2C1A9B25E8F54E00CEBE3A /* Extensions.swift */; };
+		5C2C1A9C25E8F54E00CEBE3A /* Extensions - main.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5C2C1A9B25E8F54E00CEBE3A /* Extensions - main.swift */; };
 		5C43F95A25FF51EB0020715A /* GetInfoModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5C43F95925FF51EB0020715A /* GetInfoModel.swift */; };
+		5C48759D261FFD7600D88078 /* Extensions - color.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5C48759C261FFD7600D88078 /* Extensions - color.swift */; };
 		5C56C91A25EF3D50000CEF1B /* LoginController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5C56C91925EF3D50000CEF1B /* LoginController.swift */; };
 		5CC64BDB25F710A400E1FF25 /* QRCodeModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5CC64BDA25F710A400E1FF25 /* QRCodeModel.swift */; };
 		5CC64BE125F71BFA00E1FF25 /* MenuLauncher.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5CC64BE025F71BFA00E1FF25 /* MenuLauncher.swift */; };
@@ -83,8 +84,9 @@
 		5C2C1A6825E8F0EE00CEBE3A /* AllForBUITests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AllForBUITests.swift; sourceTree = "<group>"; };
 		5C2C1A6A25E8F0EE00CEBE3A /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		5C2C1A7C25E8F1ED00CEBE3A /* RootController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RootController.swift; sourceTree = "<group>"; };
-		5C2C1A9B25E8F54E00CEBE3A /* Extensions.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Extensions.swift; sourceTree = "<group>"; };
+		5C2C1A9B25E8F54E00CEBE3A /* Extensions - main.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Extensions - main.swift"; sourceTree = "<group>"; };
 		5C43F95925FF51EB0020715A /* GetInfoModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GetInfoModel.swift; sourceTree = "<group>"; };
+		5C48759C261FFD7600D88078 /* Extensions - color.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Extensions - color.swift"; sourceTree = "<group>"; };
 		5C56C91925EF3D50000CEF1B /* LoginController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LoginController.swift; sourceTree = "<group>"; };
 		5CC64BDA25F710A400E1FF25 /* QRCodeModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = QRCodeModel.swift; sourceTree = "<group>"; };
 		5CC64BE025F71BFA00E1FF25 /* MenuLauncher.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MenuLauncher.swift; sourceTree = "<group>"; };
@@ -247,7 +249,8 @@
 		5C2C1A9A25E8F54100CEBE3A /* Extensions */ = {
 			isa = PBXGroup;
 			children = (
-				5C2C1A9B25E8F54E00CEBE3A /* Extensions.swift */,
+				5C2C1A9B25E8F54E00CEBE3A /* Extensions - main.swift */,
+				5C48759C261FFD7600D88078 /* Extensions - color.swift */,
 			);
 			path = Extensions;
 			sourceTree = "<group>";
@@ -579,9 +582,10 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				5C48759D261FFD7600D88078 /* Extensions - color.swift in Sources */,
 				5C1C92A725F0BDAB00C0AA9E /* MainPageController.swift in Sources */,
 				5CC64C5C25FB517500E1FF25 /* CalendarCell.swift in Sources */,
-				5C2C1A9C25E8F54E00CEBE3A /* Extensions.swift in Sources */,
+				5C2C1A9C25E8F54E00CEBE3A /* Extensions - main.swift in Sources */,
 				5CC64BDB25F710A400E1FF25 /* QRCodeModel.swift in Sources */,
 				5CC64C4E25FB1E8C00E1FF25 /* DailyListModel.swift in Sources */,
 				5CD64E8A25F5C93A002CD116 /* LoginInfo+CoreDataClass.swift in Sources */,
